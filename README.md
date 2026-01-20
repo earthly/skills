@@ -1,23 +1,18 @@
-# Lunar Skills
+# Earthly Skills
 
-Agent skills for creating Earthly Lunar collectors and policies.
+Agent skills for working with Earthly tools and platforms.
 
 ## Available Skills
 
 | Skill | Description |
 |-------|-------------|
-| [lunar-collector](skills/lunar-collector/) | Create collector plugins (Bash scripts) that gather SDLC metadata |
-| [lunar-policy](skills/lunar-policy/) | Create policy plugins (Python scripts) that enforce engineering standards |
-
-## What is Lunar?
-
-Earthly Lunar is a guardrails engine for your engineering stack. It automatically enforces your organization's engineering standards across all code repositories and CI/CD pipelines by delivering contextual feedback directly in pull requests.
-
-**Collectors** gather data from repositories, CI pipelines, and external APIs, writing it to a Component JSON. **Policies** evaluate that data and produce pass/fail checks.
+| [lunar-collector](skills/lunar-collector/) | Create Lunar collector plugins (Bash scripts) that gather SDLC metadata |
+| [lunar-policy](skills/lunar-policy/) | Create Lunar policy plugins (Python scripts) that enforce engineering standards |
+| [earthfile](skills/earthfile/) | Write Earthfiles for repeatable, containerized builds with Earthly |
 
 ## Usage
 
-These skills are designed to be used with AI agents that support the Codex skill format. Each skill contains:
+These skills are designed to be used with AI agents that support the Claude/Codex skill format. Each skill contains:
 
 - `SKILL.md` - Main instructions and quick-start guide
 - `references/` - Detailed documentation for the AI to consult as needed
@@ -26,3 +21,4 @@ These skills are designed to be used with AI agents that support the Codex skill
 
 - [Lunar Documentation](https://docs-lunar.earthly.dev/)
 - [lunar-lib Repository](https://github.com/earthly/lunar-lib) - Reference collectors and policies
+- [Earthly Documentation](https://docs.earthly.dev/)
