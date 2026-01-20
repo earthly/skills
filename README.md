@@ -6,8 +6,8 @@ Agent skills for creating Earthly Lunar collectors and policies.
 
 | Skill | Description |
 |-------|-------------|
-| [lunar-collector](lunar-collector/) | Create collector plugins (Bash scripts) that gather SDLC metadata |
-| [lunar-policy](lunar-policy/) | Create policy plugins (Python scripts) that enforce engineering standards |
+| [lunar-collector](skills/lunar-collector/) | Create collector plugins (Bash scripts) that gather SDLC metadata |
+| [lunar-policy](skills/lunar-policy/) | Create policy plugins (Python scripts) that enforce engineering standards |
 
 ## What is Lunar?
 
