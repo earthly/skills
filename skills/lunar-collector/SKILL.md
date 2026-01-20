@@ -110,10 +110,14 @@ For detailed information, read these files in the `references/` directory:
 | [about-lunar.md](references/about-lunar.md) | Platform overview, why Lunar exists |
 | [core-concepts.md](references/core-concepts.md) | Architecture, Component JSON, hooks, enforcement levels |
 | [collector-reference.md](references/collector-reference.md) | **Complete collector guide** - hooks, environment variables, patterns |
-| [component-json-conventions.md](references/component-json-conventions.md) | Schema design principles, presence detection, source metadata |
-| [component-json-structure.md](references/component-json-structure.md) | Standard categories (.repo, .k8s, .sca, etc.) with examples |
+| [component-json/conventions.md](references/component-json/conventions.md) | Component JSON schema design principles, presence detection, source metadata |
+| [component-json/structure.md](references/component-json/structure.md) | Component JSON schema categories (.repo, .k8s, .sca, etc.) with examples |
 | [strategies.md](references/strategies.md) | Implementation strategies (CI detection, file parsing, API integration) |
 | [collector-README-template.md](references/collector-README-template.md) | README template for collector plugins |
+
+## Full Lunar Documentation
+
+For the complete Lunar platform documentation including installation, configuration, CLI reference, and SDK details, see [docs/SUMMARY.md](docs/SUMMARY.md).
 
 ## Local Development & Testing
 

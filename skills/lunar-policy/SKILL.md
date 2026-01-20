@@ -155,10 +155,14 @@ For detailed information, read these files in the `references/` directory:
 | [about-lunar.md](references/about-lunar.md) | Platform overview, why Lunar exists |
 | [core-concepts.md](references/core-concepts.md) | Architecture, Component JSON, enforcement levels |
 | [policy-reference.md](references/policy-reference.md) | **Complete policy guide** - Check class API, patterns, testing |
-| [component-json-conventions.md](references/component-json-conventions.md) | Schema conventions, presence detection, boolean vs object patterns |
-| [component-json-structure.md](references/component-json-structure.md) | Standard categories (.repo, .k8s, .sca, etc.) with policy paths |
+| [component-json/conventions.md](references/component-json/conventions.md) | Component JSON schema conventions, presence detection, boolean vs object patterns |
+| [component-json/structure.md](references/component-json/structure.md) | Component JSON schema categories (.repo, .k8s, .sca, etc.) with policy paths |
 | [strategies.md](references/strategies.md) | Implementation strategies |
 | [policy-README-template.md](references/policy-README-template.md) | README template for policy plugins |
+
+## Full Lunar Documentation
+
+For the complete Lunar platform documentation including installation, configuration, CLI reference, and SDK details, see [docs/SUMMARY.md](docs/SUMMARY.md).
 
 ## Local Development & Testing
 
