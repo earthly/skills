@@ -20,9 +20,16 @@ jobs:
 
       - name: Configure Earthly git credentials for private lunar repo
         run: |
-          earthly config git.github.com.auth https
-          earthly config git.github.com.user x-access-token
-          earthly config git.github.com.password "${{ secrets.LUNAR_REPO_PAT }}"
+          mkdir -p ~/.earthly
+          cat > ~/.earthly/config.yml << EOF
+          git:
+            github.com:
+              auth: https
+              user: x-access-token
+              password: ${LUNAR_REPO_PAT}
+          EOF
+        env:
+          LUNAR_REPO_PAT: ${{ secrets.LUNAR_REPO_PAT }}
 
       - name: Run update-all
         run: earthly +update-all
