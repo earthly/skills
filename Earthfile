@@ -7,7 +7,7 @@ update-all:
     BUILD --pass-args +update-lunar-references
 
 update-lunar-docs:
-    COPY github.com/earthly/lunar:vlad/docs-export+docs/docs docs
+    COPY github.com/earthly/lunar:main+docs/docs docs
     SAVE ARTIFACT docs AS LOCAL skills/lunar-policy/docs
     SAVE ARTIFACT docs AS LOCAL skills/lunar-collector/docs
 
