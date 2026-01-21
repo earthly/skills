@@ -15,3 +15,11 @@ update-lunar-references:
     COPY github.com/earthly/lunar-lib:main+ai-context/ai-context references
     SAVE ARTIFACT references AS LOCAL skills/lunar-policy/references
     SAVE ARTIFACT references AS LOCAL skills/lunar-collector/references
+
+install-skills:
+    LOCALLY
+    ARG CODEX_HOME=$HOME/.codex
+    RUN rm -rf $CODEX_HOME/skills/earthfile $CODEX_HOME/skills/lunar-collector $CODEX_HOME/skills/lunar-policy
+    RUN cp -r skills/earthfile $CODEX_HOME/skills/earthfile
+    RUN cp -r skills/lunar-collector $CODEX_HOME/skills/lunar-collector
+    RUN cp -r skills/lunar-policy $CODEX_HOME/skills/lunar-policy
