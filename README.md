@@ -19,6 +19,12 @@ git clone https://github.com/earthly/skills.git
 cp -r skills/skills/* ~/.codex/skills/
 ```
 
+Or if you have [Earthly](https://earthly.dev/earthfile) installed:
+
+```bash
+earthly github.com/earthly/skills+install-skills
+```
+
 ## Usage
 
 These skills are designed to be used with AI agents that support the Claude/Codex skill format. Each skill contains:
