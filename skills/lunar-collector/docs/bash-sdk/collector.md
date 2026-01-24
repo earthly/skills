@@ -53,7 +53,7 @@ For `ci-{before,after}-command` hooks the following entries are also available:
 
 * Form:
   ```bash
-  lunar collect [--component <component-name>] [--json] <json-path> <value>
+  lunar collect [--component <component-name>] [--json] [--array-append] <json-path> <value>
   ```
 
 The `lunar collect` command is used to collect SDLC metadata from within a collector. The command takes a JSON path and a value as arguments. The JSON path is used to specify the location in the JSON object where the value should be stored.
@@ -70,6 +70,59 @@ If the collect command is executed outside of a collector, the component name mu
 #### `--json`
 
 The `--json` flag is used to specify that the value should be interpreted as a JSON object, JSON array, or JSON scalar (string, number, etc). If the flag is not provided, the value is interpreted as a raw string.
+
+Example:
+
+```bash
+lunar collect --json '.foo.bar1' 'true'        # interprets as a JSON scalar
+lunar collect '.foo.bar2' 'true'               # interprets as a raw string
+lunar collect '.foo.bar3' '{"baz": "value 3"}' # interprets as a JSON object
+lunar collect '.foo.bar4' '["value 4"]'        # interprets as a JSON array
+```
+
+Will result in:
+
+```json
+{
+  "foo": {
+    "bar1": true,
+    "bar2": "true",
+    "bar3": {"baz": "value 3"},
+    "bar4": ["value 4"]
+  }
+}
+```
+
+#### `--array-append`
+
+The `--array-append` flag is used to specify that the value should be appended to an array at the specified JSON path. If the path does not exist, a new array will be created. If the path exists and is not an array, the value will be replaced with a new array containing the existing value and the new value.
+
+Since arrays are concatenated during the component JSON merge, using `--array-append` is equivalent to wrapping the value in a JSON array. The following two commands are equivalent:
+
+```bash
+lunar collect --array-append '.foo.bar' 'a value'
+lunar collect --json '.foo.bar' '["a value"]'
+```
+
+Example:
+
+```bash
+lunar collect --json --array-append '.foo.bar' '{"baz": "value 1"}'
+lunar collect --json --array-append '.foo.bar' '{"baz": "value 2"}'
+```
+
+Will result in:
+
+```json
+{
+  "foo": {
+    "bar": [
+      {"baz": "value 1"},
+      {"baz": "value 2"}
+    ]
+  }
+}
+```
 
 #### `<json-path>`
 
