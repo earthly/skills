@@ -17,6 +17,8 @@ jobs:
 
       - name: Setup Earthly
         uses: earthly/actions-setup@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Earthly git credentials for private lunar repo
         run: |
