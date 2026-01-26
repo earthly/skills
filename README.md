@@ -8,6 +8,7 @@ Agent skills for working with Earthly tools and platforms.
 |-------|-------------|
 | [lunar-collector](skills/lunar-collector/) | Create Lunar collector plugins (Bash scripts) that gather SDLC metadata |
 | [lunar-policy](skills/lunar-policy/) | Create Lunar policy plugins (Python scripts) that enforce engineering standards |
+| [lunar-sql](skills/lunar-sql/) | Query Lunar's SQL API for components, checks, policies, domains, and PRs |
 | [earthfile](skills/earthfile/) | Write Earthfiles for repeatable, containerized builds with Earthly |
 
 ## Installation
