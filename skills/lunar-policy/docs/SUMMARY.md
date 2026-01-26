@@ -7,6 +7,7 @@
     * [Helm Charts](install/helm-charts.md)
   * [Lunar CLI](install/cli.md)
   * [Lunar CI Agent](install/agent.md)
+  * [AI Skills](install/skills.md)
 * [Learn the basics](basics/basics.md)
 
 ## 📖 Docs

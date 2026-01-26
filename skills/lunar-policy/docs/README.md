@@ -26,6 +26,10 @@ Earthly Lunar helps organizations maintain high engineering standards by:
 * **Extensible Platform**: Create custom collectors and policies using Bash or Python SDKs
 * **SQL API**: Query and analyze your engineering data
 
+## AI Skills
+
+To get started quickly with developing guardrails, see the [AI skills](install/skills.md) compatible with Claude Code, Codex, and Cursor.
+
 ## Getting Started
 
 1. [Learn the basics](basics/basics.md)

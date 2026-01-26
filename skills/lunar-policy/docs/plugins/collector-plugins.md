@@ -115,7 +115,7 @@ The collectors field is used to specify the configuration of the collector. The 
 
 The inputs field is used to specify the inputs required by the collector. Each input is defined as a key-value pair, where the key is the input name.
 
-Inputs are passed to the collector when invoked in the form of environment variables.
+Inputs are passed to the collector when invoked as environment variables with the prefix `LUNAR_VAR_` and the input name in uppercase. For example, an input named `api_url` is accessible as `$LUNAR_VAR_API_URL`.
 
 ### `description`
 

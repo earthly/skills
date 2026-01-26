@@ -93,7 +93,7 @@ The policies field is used to specify the configuration of the policy. The forma
 
 The inputs field is used to specify the inputs that the policy requires. Each input is defined as a key-value pair, where the key is the input name.
 
-Inputs are passed to the policy when invoked in the form of environment variables.
+Inputs are accessed in policies using the `variable_or_default` function from the `lunar_policy` SDK. For example, an input named `threshold` is accessible as `variable_or_default("threshold", "10")` where the second argument is the fallback default value.
 
 ### `description`
 
