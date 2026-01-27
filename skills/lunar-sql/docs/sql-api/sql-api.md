@@ -31,3 +31,9 @@ For detailed information about available views, explore these pages:
 * [checks](views/checks.md)
 * [prs](views/prs.md)
 * [catalog](views/catalog.md)
+
+## AI Skill
+
+An AI skill is available to help you craft SQL queries against the Lunar data model. The [lunar-sql](https://github.com/earthly/skills/tree/main/skills/lunar-sql) skill provides your AI assistant with knowledge of the view schemas, JSONB query patterns, and common query examples.
+
+See [Installing AI Skills](../install/skills.md) for setup instructions.

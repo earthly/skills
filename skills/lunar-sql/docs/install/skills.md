@@ -8,6 +8,7 @@ The [earthly/skills](https://github.com/earthly/skills) repository provides AI a
 |-------|-------------|
 | [lunar-collector](https://github.com/earthly/skills/tree/main/skills/lunar-collector) | Create Lunar collector plugins (Bash scripts) that gather SDLC metadata |
 | [lunar-policy](https://github.com/earthly/skills/tree/main/skills/lunar-policy) | Create Lunar policy plugins (Python scripts) that enforce engineering standards |
+| [lunar-sql](https://github.com/earthly/skills/tree/main/skills/lunar-sql) | Craft SQL queries against Lunar's data model (components, checks, policies, PRs) |
 
 ## Installation
 
@@ -17,7 +18,7 @@ Clone the repository and copy the skill folders to your agent's skills directory
 
 ```bash
 git clone https://github.com/earthly/skills.git
-cp -r skills/skills/lunar-{collector,policy} ~/.codex/skills/
+cp -r skills/skills/lunar-{collector,policy,sql} ~/.codex/skills/
 ```
 
 ### Option 2: Using Earthly
@@ -42,4 +43,5 @@ Once installed, your AI assistant will automatically detect and use these skills
 
 - [Bash SDK](../bash-sdk/bash-sdk.md) - Manual reference for building collectors
 - [Python SDK](../python-sdk/python-sdk.md) - Manual reference for building policies
+- [SQL API](../sql-api/sql-api.md) - Manual reference for querying Lunar data
 - [lunar-lib Repository](https://github.com/earthly/lunar-lib) - Reference collectors and policies
