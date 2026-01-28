@@ -2,6 +2,16 @@
 
 The Lunar CLI is primarily an administration tool for platform engineers, with developer-focused capabilities secondarily. It uses the same `lunar` binary as the CI agent but provides different subcommands for interactive CLI usage versus CI instrumentation. It can be used to manage configurations, inspect components, run collectors, and test policies.
 
+### Prerequisites
+
+**Docker** is required for local development commands since collectors and policies run inside containers.
+
+{% hint style='info' %}
+##### macOS Users
+
+If using Docker Desktop, you must enable the default Docker socket. Go to **Docker Desktop → Settings → Advanced** and enable **"Allow the default Docker socket to be used"**, then click **Apply & Restart**.
+{% endhint %}
+
 ### Installation
 
 1. Download the latest release from the [Lunar GitHub release page](https://github.com/earthly/lunar-dist/releases).
