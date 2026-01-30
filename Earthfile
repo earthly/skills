@@ -18,11 +18,19 @@ update-lunar-references:
     SAVE ARTIFACT references AS LOCAL skills/lunar-collector/references
     SAVE ARTIFACT references AS LOCAL skills/lunar-sql/references
 
+skills:
+    COPY --dir \
+        skills/earthfile \
+        skills/lunar-collector \
+        skills/lunar-policy \
+        skills/lunar-sql \
+        ./skills/
+    SAVE ARTIFACT skills/earthfile
+    SAVE ARTIFACT skills/lunar-collector
+    SAVE ARTIFACT skills/lunar-policy
+    SAVE ARTIFACT skills/lunar-sql
+
 install-skills:
     LOCALLY
     ARG CODEX_HOME=$HOME/.codex
-    RUN rm -rf $CODEX_HOME/skills/earthfile $CODEX_HOME/skills/lunar-collector $CODEX_HOME/skills/lunar-policy $CODEX_HOME/skills/lunar-sql
-    RUN cp -r skills/earthfile $CODEX_HOME/skills/earthfile
-    RUN cp -r skills/lunar-collector $CODEX_HOME/skills/lunar-collector
-    RUN cp -r skills/lunar-policy $CODEX_HOME/skills/lunar-policy
-    RUN cp -r skills/lunar-sql $CODEX_HOME/skills/lunar-sql
+    COPY +skills/* $CODEX_HOME/skills/
