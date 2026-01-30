@@ -33,4 +33,8 @@ skills:
 install-skills:
     LOCALLY
     ARG CODEX_HOME=$HOME/.codex
-    COPY +skills/* $CODEX_HOME/skills/
+    RUN mkdir -p $CODEX_HOME/skills
+    RUN mkdir -p skills-install
+    COPY +skills/* ./tmp-skills-install/
+    RUN cp -r tmp-skills-install/* $CODEX_HOME/skills/
+    RUN rm -rf tmp-skills-install
