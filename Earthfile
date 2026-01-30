@@ -34,7 +34,8 @@ install-skills:
     LOCALLY
     ARG CODEX_HOME=$HOME/.codex
     RUN mkdir -p $CODEX_HOME/skills
-    RUN mkdir -p skills-install
-    COPY +skills/* ./tmp-skills-install/
-    RUN cp -r tmp-skills-install/* $CODEX_HOME/skills/
-    RUN rm -rf tmp-skills-install
+    RUN rm -rf $CODEX_HOME/skills/earthfile $CODEX_HOME/skills/lunar-collector $CODEX_HOME/skills/lunar-policy $CODEX_HOME/skills/lunar-sql
+    COPY +skills/earthfile $CODEX_HOME/skills/earthfile
+    COPY +skills/lunar-collector $CODEX_HOME/skills/lunar-collector
+    COPY +skills/lunar-policy $CODEX_HOME/skills/lunar-policy
+    COPY +skills/lunar-sql $CODEX_HOME/skills/lunar-sql
