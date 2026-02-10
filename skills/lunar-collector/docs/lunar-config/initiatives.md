@@ -56,7 +56,7 @@ An initiative represents a collection of policies organized around a specific go
 * Type: `string`
 * Required
 
-The name field is used to specify the unique identifier for the initiative.
+The name field is used to specify the unique identifier for the initiative. The name `default` is reserved and cannot be used; a built-in "default" initiative is always created automatically for policies that don't specify an initiative.
 
 ### `description`
 

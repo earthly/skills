@@ -73,6 +73,34 @@ binary `lunar`. Follow these steps:
    For production usage, consider running and monitoring the `lunar` process with a process supervisor such as `systemd`. This helps ensure the agent is automatically restarted if it fails. See [the Systemd configuration page](systemd.md) for guidance on creating a unit file.
    {% endhint %}
 
+### GitHub Token Permissions
+
+The agent's GitHub token (`LUNAR_GITHUB_TOKEN`) is used for runner registration,
+CI workflow introspection, and fetching snippet configuration. The table below
+lists the minimum permissions required.
+
+#### Fine-Grained PAT / GitHub App
+
+| Scope | Level | Purpose |
+|---|---|---|
+| **Organization: Self-hosted runners** | Write | Register self-hosted runners (`POST /orgs/{org}/actions/runners/registration-token`) |
+| **Repository: Actions** | Read | Read workflow run details |
+| **Repository: Contents** | Read | Read workflow and action definition files, clone snippet/plugin repos |
+| **Repository: Metadata** | Read | Read repository metadata (e.g. default branch) |
+
+{% hint style='info' %}
+Contents and Actions read access must cover all repositories referenced by your
+workflows (including third-party action repos, if private). Public action
+repositories do not require additional permissions.
+{% endhint %}
+
+#### Classic PAT
+
+| Scope | Purpose |
+|---|---|
+| `repo` | Repository contents, actions, and metadata |
+| `manage_runners:org` | Runner registration token creation |
+
 ### Configuring the CI Agent
 
 The CI Agent will communicate with Hub and update its local copy of the
