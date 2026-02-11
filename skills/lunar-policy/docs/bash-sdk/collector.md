@@ -7,6 +7,9 @@ The Collector Bash SDK is a set of Lunar CLI subcommands that allow you to colle
 Earthly Lunar executes collectors in an environment set up with the following variables:
 
 - `LUNAR_HUB_HOST`: The host of the Lunar Hub.
+- `LUNAR_HUB_TOKEN`: The authentication token for the Lunar Hub.
+- `LUNAR_HUB_GRPC_PORT`: The gRPC port of the Lunar Hub.
+- `LUNAR_HUB_HTTP_PORT`: The HTTP port of the Lunar Hub.
 - `LUNAR_HUB_INSECURE`: Whether to skip SSL verification of the Lunar Hub.
 - `LUNAR_BIN_DIR`: The directory where the Lunar CLI is installed.
 - `LUNAR_COLLECTOR_NAME`: The name of the collector.
@@ -17,7 +20,7 @@ Earthly Lunar executes collectors in an environment set up with the following va
 - `LUNAR_COMPONENT_HEAD_BRANCH`: The head branch of the PR (branch that contains the changes), if applicable.
 - `LUNAR_COMPONENT_BASE_BRANCH`: The base branch of the PR (branch to merge the changes into), if applicable.
 - `LUNAR_COMPONENT_PR`: The PR number of the component, if applicable.
-- `LUNAR_COMPONENT_TAGS`: The tags of the component.
+- `LUNAR_COMPONENT_TAGS`: The tags of the component as a JSON array.
 - `LUNAR_COMPONENT_GIT_SHA`: The Git SHA of the component that the collector is running for.
 - `LUNAR_COMPONENT_META`: The metadata of the component as a JSON object.
 - `LUNAR_SECRET_<name>`: Any secret set in the Lunar Hub for the collectors, via `HUB_COLLECTOR_SECRETS=<name>=<value>;...`.
@@ -44,7 +47,7 @@ For `ci-{before,after}-step` and `ci-{before,after}-command` hooks the following
 
 For `ci-{before,after}-command` hooks the following entries are also available:
 
-- `LUNAR_CI_COMMAND`: Command and arguments of the hooked command.
+- `LUNAR_CI_COMMAND`: Command and arguments of the hooked command, as a JSON string.
 - `LUNAR_CI_COMMAND_PID`: Process ID of the hooked command.
 - `LUNAR_CI_COMMAND_PPID`: Parent process PID of the hooked command.
 

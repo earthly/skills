@@ -99,7 +99,7 @@ repositories do not require additional permissions.
 | Scope | Purpose |
 |---|---|
 | `repo` | Repository contents, actions, and metadata |
-| `manage_runners:org` | Runner registration token creation |
+| `admin:org` | Organization admin permissions |
 
 ### Configuring the CI Agent
 
