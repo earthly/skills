@@ -23,7 +23,7 @@ Earthly Lunar executes collectors in an environment set up with the following va
 - `LUNAR_COMPONENT_TAGS`: The tags of the component as a JSON array.
 - `LUNAR_COMPONENT_GIT_SHA`: The Git SHA of the component that the collector is running for.
 - `LUNAR_COMPONENT_META`: The metadata of the component as a JSON object.
-- `LUNAR_SECRET_<name>`: Any secret set in the Lunar Hub for the collectors, via `HUB_COLLECTOR_SECRETS=<name>=<value>;...`.
+- `LUNAR_SECRET_<name>`: Any secret configured for collectors — either via `HUB_COLLECTOR_SECRETS=<name>=<value>;...` or at runtime using `lunar secret set <name> <value>`.
 
 #### CI collector environment
 
@@ -48,6 +48,9 @@ For `ci-{before,after}-step` and `ci-{before,after}-command` hooks the following
 For `ci-{before,after}-command` hooks the following entries are also available:
 
 - `LUNAR_CI_COMMAND`: Command and arguments of the hooked command, as a JSON string.
+- `LUNAR_CI_COMMAND_BIN`: Binary name only (no directory).
+- `LUNAR_CI_COMMAND_BIN_DIR`: Directory containing the binary.
+- `LUNAR_CI_COMMAND_ARGS`: Command arguments (excluding the binary) as a JSON array.
 - `LUNAR_CI_COMMAND_PID`: Process ID of the hooked command.
 - `LUNAR_CI_COMMAND_PPID`: Parent process PID of the hooked command.
 

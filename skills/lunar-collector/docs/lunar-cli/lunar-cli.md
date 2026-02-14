@@ -642,3 +642,73 @@ psql $(lunar sql connection-string) -t -c "
 ```
 
 For more examples of the SQL API in action, see the [SQL API](../sql-api/sql-api.md) documentation.
+
+### `lunar secret set`
+
+```bash
+  lunar secret set <name> [value]
+```
+
+Set a secret that will be available to collectors, policies, or catalogers as `LUNAR_SECRET_<NAME>`.
+
+If `value` is omitted, it is read from stdin (recommended for sensitive values to avoid shell history exposure).
+
+Secrets are encrypted at rest using AES-256-GCM. The Hub must have `HUB_SECRETS_ENCRYPTION_KEY` configured.
+
+#### Options
+
+* `--scope <scope>` — Secret scope: `collector` (default), `policy`, or `cataloger`.
+
+#### Examples
+
+```bash
+# Set a collector secret (value as argument)
+lunar secret set GH_TOKEN ghp_abc123
+
+# Set a secret from stdin (recommended)
+echo "ghp_abc123" | lunar secret set GH_TOKEN
+
+# Set a policy secret
+lunar secret set --scope policy JIRA_API_KEY my-api-key
+```
+
+### `lunar secret delete`
+
+```bash
+  lunar secret delete <name>
+```
+
+Delete a previously configured secret.
+
+#### Options
+
+* `--scope <scope>` — Secret scope: `collector` (default), `policy`, or `cataloger`.
+
+#### Examples
+
+```bash
+lunar secret delete GH_TOKEN
+lunar secret delete --scope policy JIRA_API_KEY
+```
+
+### `lunar secret list`
+
+```bash
+  lunar secret list
+```
+
+List the names of configured secrets for a given scope. Values are never displayed.
+
+#### Options
+
+* `--scope <scope>` — Secret scope: `collector` (default), `policy`, or `cataloger`.
+
+#### Examples
+
+```bash
+# List collector secrets
+lunar secret list
+
+# List policy secrets
+lunar secret list --scope policy
+```
