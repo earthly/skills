@@ -171,8 +171,13 @@ lunar collector dev <collector-name> --fake-ci-cmd "npm test" --component github
 The command outputs the resulting Component JSON to stdout, which can be piped to `lunar policy dev` for end-to-end testing:
 
 ```bash
+# Against a local repo directory
+lunar collector dev my-collector --component-dir ../path/to/repo | \
+  lunar policy dev my-policy --verbose --component-json -
+
+# Against a remote component
 lunar collector dev my-collector --component github.com/org/repo | \
-  lunar policy dev my-policy --component-json -
+  lunar policy dev my-policy --verbose --component-json -
 ```
 
 ## Best Practices

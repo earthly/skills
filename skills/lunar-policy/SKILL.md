@@ -190,7 +190,12 @@ lunar policy dev <policy-name> --verbose --component github.com/org/repo
 
 **End-to-end testing** by piping collector output to policy:
 ```bash
-lunar collector dev my-collector --verbose --component github.com/org/repo | \
+# Against a local repo directory
+lunar collector dev my-collector --component-dir ../path/to/repo | \
+  lunar policy dev my-policy --verbose --component-json -
+
+# Against a remote component
+lunar collector dev my-collector --component github.com/org/repo | \
   lunar policy dev my-policy --verbose --component-json -
 ```
 
