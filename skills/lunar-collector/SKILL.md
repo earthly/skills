@@ -72,6 +72,30 @@ inputs:
 | `ci-after-command` | After CI command | Capture test coverage, scan results |
 | `ci-after-job` | After CI job | Job-level artifact collection |
 
+### CI Command Hooks — Structured Matching
+
+Command hooks (`ci-before-command` / `ci-after-command`) use **structured matching** instead of regex:
+
+```yaml
+hook:
+  type: ci-after-command
+  binary:
+    name: go          # Exact binary name (or name_pattern for regex)
+  args:
+    - value: test     # Positional arg (or value_pattern for regex)
+    - flag: --cover   # Flag arg (or flag_pattern for regex)
+```
+
+**Key points:**
+- `binary.name` / `binary.name_pattern`: match the binary (exact or regex)
+- `args[].value` / `args[].value_pattern`: match positional args (in order)
+- `args[].flag` / `args[].flag_pattern`: match flags (any order)
+- `envs[].name` + `envs[].value`: match environment variables
+- All matchers are AND-ed; use regex alternation for OR (e.g., `flag_pattern: ^(-f|--file)$`)
+- Omitting binary/args matches all commands
+
+> The old `pattern: <regex>` form for command hooks is **deprecated**. Always use the structured form.
+
 ## The `lunar collect` Command
 
 ```bash
@@ -172,7 +196,7 @@ inputs:
 
 **CI artifact collection:**
 ```bash
-# Hook: ci-after-command with pattern: ^go test.*
+# Hook: ci-after-command, binary.name: go, args: [{value: test}]
 if [ -f coverage.out ]; then
   COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | tr -d '%')
   lunar collect -j ".testing.coverage.percentage" "$COVERAGE"
