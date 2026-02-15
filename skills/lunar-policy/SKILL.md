@@ -32,9 +32,8 @@ with Check("readme-exists", "Repository should have a README.md") as c:
 ```
 my-policy/
 ├── lunar-policy.yml       # Required: plugin config
-├── checks/                # One file per check (recommended)
-│   ├── check_one.py
-│   └── check_two.py
+├── check_one.py           # One file per check
+├── check_two.py
 ├── requirements.txt       # Must include lunar-policy
 ├── Dockerfile             # Optional: for custom dependencies
 └── README.md              # Documentation
@@ -52,11 +51,11 @@ default_image: earthly/lunar-scripts:1.0.0
 policies:
   - name: check-one
     description: Validates X exists
-    mainPython: checks/check_one.py
+    mainPython: check_one.py
 
   - name: check-two
     description: Ensures Y meets threshold
-    mainPython: checks/check_two.py
+    mainPython: check_two.py
 
 inputs:
   min_coverage:
