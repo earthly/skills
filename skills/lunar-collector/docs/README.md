@@ -22,7 +22,8 @@ Earthly Lunar helps organizations maintain high engineering standards by:
 * **Component Monitoring**: Track the health and status of individual software components
 * **SDLC Instrumentation**: Collect data from various stages of your software development lifecycle
 * **Policy Enforcement**: Define and enforce engineering standards across your organization
-* **Flexible Integration**: Works with existing CI/CD pipelines and tools
+* **[100+ Pre-Built Guardrails](https://earthly.dev/lunar/guardrails/)**: Ready-to-use policies for testing, security, compliance, and operational readiness
+* **[30+ Integrations](https://earthly.dev/lunar/integrations/)**: Connect to GitHub, Kubernetes, Docker, Codecov, Snyk, and more
 * **Extensible Platform**: Create custom collectors and policies using Bash or Python SDKs
 * **SQL API**: Query and analyze your engineering data
 

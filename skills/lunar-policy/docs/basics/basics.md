@@ -105,4 +105,5 @@ Congratulations! You've just set up your first Lunar collector and policy.
 
 1. Learn more about [key concepts](../key-concepts/key-concepts.md)
 2. Explore [configuration options](../lunar-config/lunar-config.md)
-3. Install [AI skills](../install/skills.md) for Claude Code, Codex, or Cursor to help build collectors and policies
+3. Browse [100+ pre-built guardrails](https://earthly.dev/lunar/guardrails/) and [30+ integrations](https://earthly.dev/lunar/integrations/) instead of writing everything from scratch
+4. Install [AI skills](../install/skills.md) for Claude Code, Codex, or Cursor to help build collectors and policies

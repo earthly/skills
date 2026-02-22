@@ -10,3 +10,5 @@ This section contains step-by-step instructions for setting up:
 - [AI Skills](skills.md) – agent skills for building collectors and policies
 
 Looking to try out Lunar without installing anything? [Get in touch with us](https://earthly.dev/earthly-lunar/demo) for a demo or preview.
+
+Before diving in, browse the [100+ pre-built guardrails](https://earthly.dev/lunar/guardrails/) and [30+ integrations](https://earthly.dev/lunar/integrations/) available out of the box.

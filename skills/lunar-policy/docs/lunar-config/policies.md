@@ -98,7 +98,7 @@ The `name` field is used to specify the name of the policy. If a name is not pro
   * Local form: `./<path-to-policy>`
 * Required in Uses policy form
 
-The `uses` field is used to import an external (plugin) policy from a GitHub repository or a local file. The policy is then associated with a domain.
+The `uses` field is used to import an external (plugin) policy from a GitHub repository or a local file. The policy is then associated with a domain. Browse the [100+ available guardrails](https://earthly.dev/lunar/guardrails/) to find policies for your standards.
 
 ### `with`
 

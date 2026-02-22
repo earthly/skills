@@ -117,7 +117,7 @@ The name of the cataloger. This is used to identify the cataloger in the Lunar U
   * Local form: `./<path-to-cataloger>`
 * Required for Uses cataloger form
 
-The `uses` field specifies an external (plugin) cataloger to use. The cataloger can be a third-party cataloger, or a local cataloger defined in a subdirectory.
+The `uses` field specifies an external (plugin) cataloger to use. The cataloger can be a third-party cataloger, or a local cataloger defined in a subdirectory. Browse the [available integrations](https://earthly.dev/lunar/integrations/) to find catalogers for your tools.
 
 ### `with`
 

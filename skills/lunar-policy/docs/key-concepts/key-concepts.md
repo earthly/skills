@@ -43,7 +43,7 @@ Once a hook is triggered, the collector **executes its custom logic**, which col
 
 Collectors may execute in different **contexts**, depending on the type - for example, in the context of a CI pipeline, or standalone in an ephemeral runner reacting to code changes. The Lunar CI Agent and the Lunar Runner are some of the pieces of the Lunar framework that facilitate the triggering and executions of collectors in such contexts.
 
-To read more about how to configure collectors, see the [Collectors](../lunar-config/collectors.md) page.
+Lunar ships with [30+ pre-built integrations](https://earthly.dev/lunar/integrations/) for tools like GitHub, Kubernetes, Docker, Codecov, Snyk, and more. To read more about how to configure collectors, see the [Collectors](../lunar-config/collectors.md) page.
 
 ### Earthly Lunar CI Agent
 
@@ -67,7 +67,7 @@ Some policies may help provide immediate feedback to developers via the PR statu
 
 Similarly, policies can also be used to block deployments based on the health of the component. This is useful to prevent deploying components that do not meet certain engineering standards of the organization.
 
-For more information on how to configure policies, see the [Policies](../lunar-config/policies.md) page.
+Lunar includes [100+ pre-built guardrails](https://earthly.dev/lunar/guardrails/) covering testing, security, compliance, and operational readiness. For more information on how to configure policies, see the [Policies](../lunar-config/policies.md) page.
 
 ## Checks
 
@@ -82,7 +82,7 @@ Checks might have different outcomes, such as:
 
 ## Catalogers
 
-Catalogers are used to synchronize component and/or domain data from external systems, such as other code repositories, databases, REST APIs, or IDPs, such as Backstage.
+Catalogers are used to synchronize component and/or domain data from external systems, such as other code repositories, databases, REST APIs, or IDPs, such as Backstage. Browse the [available integrations](https://earthly.dev/lunar/integrations/) for pre-built catalogers.
 
 To read more about how to configure catalogers, see the [Catalogers](../lunar-config/catalogers.md) page.
 

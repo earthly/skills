@@ -113,7 +113,7 @@ The `name` field is used to specify the name of the collector. If a name is not 
   * Local form: `./<path-to-collector>`
 * Required in Uses collector form
 
-The `uses` field specifies an external (plugin) collector to use. The collector can be a third-party collector, or a local collector defined in a subdirectory.
+The `uses` field specifies an external (plugin) collector to use. The collector can be a third-party collector, or a local collector defined in a subdirectory. Browse the [30+ available integrations](https://earthly.dev/lunar/integrations/) to find collectors for your tools.
 
 ### `with`
 

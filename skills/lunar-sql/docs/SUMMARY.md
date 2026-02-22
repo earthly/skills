@@ -10,6 +10,11 @@
   * [AI Skills](install/skills.md)
 * [Learn the basics](basics/basics.md)
 
+## 📦 Library
+
+* [100+ Guardrails](https://earthly.dev/lunar/guardrails/)
+* [30+ Integrations](https://earthly.dev/lunar/integrations/)
+
 ## 📖 Docs
 
 * [Key concepts](key-concepts/key-concepts.md)
