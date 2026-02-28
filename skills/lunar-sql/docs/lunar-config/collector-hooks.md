@@ -25,7 +25,6 @@ hooks:
       - value: build
   - type: code
   - type: cron
-    runs_on: [default-branch]
     schedule: "0 2 * * *"
 ```
 
@@ -37,7 +36,6 @@ hooks:
 * Form:
   ```yaml
   type: <hook-type>
-  runs_on: <runs-on-array>
   <options>
   ```
 
@@ -63,20 +61,6 @@ The type of hook. The available values are:
 * `ci-after-command` - triggers after a command is executed
 * `code` - triggers when code changes
 * `cron` - triggers on a schedule
-
-### `runs_on`
-
-* `lunar-config.yml -> collectors.<collector-index>.hooks.<hook-index>.runs_on`
-* Type: `array`
-* Optional
-* Default: `[prs, default-branch]`
-
-Specifies the contexts in which the collector should run. The available values are:
-
-* `prs` - the collector will run on pull requests
-* `default-branch` - the collector will run on the default branch
-
-By default, collectors run in both contexts. To restrict a collector to only run on pull requests, use `runs_on: [prs]`. To restrict a collector to only run on the default branch, use `runs_on: [default-branch]`.
 
 ## Hook Types
 

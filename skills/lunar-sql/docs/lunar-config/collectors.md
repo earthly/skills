@@ -65,6 +65,7 @@ collectors:
       <input-name>: <input-value>
       ...
     on: <domain-array>
+    runs_on: <runs-on-array>
     image: <docker-image>
     ```
   * Run form (define a collector inline):
@@ -72,6 +73,7 @@ collectors:
     name: <collector-name>
     run<language>: <command-string>
     on: <domain-array>
+    runs_on: <runs-on-array>
     image: <docker-image>
     hook: <hook-configuration>
     hooks:
@@ -84,6 +86,7 @@ collectors:
     name: <collector-name>
     main<language>: <main-file-path>
     on: <domain-array>
+    runs_on: <runs-on-array>
     image: <docker-image>
     hook: <hook-configuration>
     hooks:
@@ -219,6 +222,20 @@ The `mainPython` field specifies the path to the python main file to run. Runnin
 The `on` field specifies the tags that the collector should be associated with. The collector will only run when the component has one or more of the specified tags.
 
 For detailed documentation on tag matching syntax, including domain/component targeting, expressions, and cross-references to other collectors or policies, see [Tag Matching with `on`](./on.md).
+
+### `runs_on`
+
+* `lunar-config.yml -> collectors.<collector-index>.runs_on`
+* Type: `array`
+* Optional
+* Default: `[prs, default-branch]`
+
+Specifies the contexts in which the collector should run. The available values are:
+
+* `prs` - the collector will run on pull requests
+* `default-branch` - the collector will run on the default branch
+
+By default, collectors run in both contexts. To restrict a collector to only run on pull requests, use `runs_on: [prs]`. To restrict a collector to only run on the default branch, use `runs_on: [default-branch]`.
 
 ### `hook`
 
