@@ -177,22 +177,67 @@ RUN /tmp/install.sh && rm /tmp/install.sh
 
 This pattern gives you all the benefits of the official image (Python, Bash, `lunar` CLI, `lunar-policy` package) while ensuring your dependencies are baked in for production use.
 
-### Execution Model
+## Image Entrypoint Contract
 
-When a script runs inside a container, the execution follows this pattern:
+Lunar executes snippets by passing two arguments to the image's entrypoint:
 
+```text
+<entrypoint> <language> <main-script-path>
 ```
-<image entrypoint> <main-script>
+
+| Argument | Description | Example |
+|----------|-------------|---------|
+| `$1` | The snippet language | `python`, `bash` |
+| `$2` | Absolute path to the main script file | `/app/exec/main.py` |
+
+The entrypoint is responsible for invoking the correct language runtime on the given script. The official `earthly/lunar-scripts` image ships an entrypoint at `/app/entrypoint.sh` that handles this automatically.
+
+### Requirements for Custom Images
+
+If you build a custom image, it must meet these requirements:
+
+1. **Entrypoint at `/app/entrypoint.sh`** that accepts `(language, script_path)` as `$1` and `$2`. The simplest implementation:
+
+```bash
+#!/bin/bash
+set -e
+exec "$1" "$2"
 ```
 
-The following directories are mounted into the container:
+2. **Language runtime on `PATH`** — the binary matching the snippet's language must be available:
 
-| Host Path | Container Path | Description |
-|-----------|----------------|-------------|
-| Plugin directory | `/app/exec` | Where the script and plugin files are located |
-| Working directory | `/app/work` | The component's code (for collectors and some catalogers) |
+| Language | Required binary |
+|----------|----------------|
+| Python   | `python`       |
+| Bash     | `bash`         |
 
-The container's working directory is set to `/app/work`, so your scripts can access the component's files using relative paths. The main script path (e.g., `/app/exec/main.py`) is passed as an argument to the image's entrypoint.
+> **Note:** Many base images ship `python3` without a `python` symlink. Ensure `python` resolves correctly (e.g., `RUN ln -sf /usr/bin/python3 /usr/bin/python`). The official `earthly/lunar-scripts` image handles this automatically.
+
+**The recommended approach is to inherit from the official image**, which satisfies both requirements out of the box:
+
+```dockerfile
+FROM earthly/lunar-scripts:1.0.0
+# Add your dependencies — the entrypoint and runtimes are already set up.
+RUN pip install --no-cache-dir my-package
+```
+
+### How Execution Works
+
+Both the Docker engine (local development) and the Kubernetes operator use the same entrypoint contract. Lunar passes `[language, script_path]` as arguments to the container, and the image's entrypoint handles dispatching to the correct runtime.
+
+This means a custom image tested locally via the Docker engine will behave identically when deployed to Kubernetes — the entrypoint runs in both environments with the same arguments.
+
+### Mount Points
+
+The following directories are available inside the container in both Docker and Kubernetes execution modes:
+
+| Container Path | Description |
+|----------------|-------------|
+| `/app/exec` | Plugin directory — script and plugin files |
+| `/app/work` | Working directory — the component's code (for collectors and some catalogers) |
+| `/app/lib` | Library directory — bundle data for policies |
+
+The container's working directory is set to `/app/work`, so your scripts can access the component's files using relative paths. The `LUNAR_PLUGIN_ROOT` environment variable is set to `/app/exec`.
 
 ## Private Registry Authentication
 
