@@ -46,3 +46,14 @@ The `repo` type triggers the cataloger when a commit is made to a specified repo
 The `component-repo` type triggers the cataloger when a commit is made to a component repository. This cataloger type is most useful when additional information about components is available in each of the respective repositories.
 
 Although this cataloger type cannot be used to define new components, it can be used to augment the metadata (such as owner, description and tags) associated with existing components.
+
+
+#### `component-cron`
+
+* Form:
+  ```yaml
+  type: component-cron
+  schedule: <cron-schedule>
+  ```
+
+The `component-cron` type triggers a cataloger run for each component, on a specified schedule. Although this cataloger type cannot be used to define new components, it can be used to augment the metadata (such as owner, description and tags) based on its component JSON.

@@ -12,6 +12,7 @@ Earthly Lunar executes catalogers in an environment set up with the following va
 - `LUNAR_CATALOGER_NAME`: The name of the cataloger.
 - `LUNAR_CATALOGER_OWNER`: The owner of the cataloger.
 - `LUNAR_SECRET_<name>`: Any secret set in the Lunar Hub for the cataloger, via `HUB_CATALOGER_SECRETS=<name>=<value>;...`.
+- `LUNAR_COMPONENT_ID`: The ID of the component that the cataloger is running for in `github.com/.../...` format. Only set for `component-repo` and `component-cron` hooks.
 
 ### `lunar catalog` CLI command
 
@@ -54,9 +55,9 @@ If the value is `-`, the value is read from standard input. This is useful for p
 
 The `--name` flag is used to specify the name of the component or domain.
 
-When using the `component-repo` cataloger hook, the name of the component and the domain will be inferred automatically from the cataloger context in which the command is executed.
+When using the `component-repo` or `component-cron` cataloger hooks, the name of the component and the domain will be inferred automatically from the cataloger context in which the command is executed (`LUNAR_COMPONENT_ID` is set for both hooks).
 
-In Component and Domain forms, the name must be provided either via this flag, via the cataloger context (`component-repo` hook only), or via the JSON value.
+In Component and Domain forms, the name must be provided either via this flag, via the cataloger context (`component-repo` and `component-cron` hooks), or via the JSON value.
 
 ### `--owner <owner>`
 

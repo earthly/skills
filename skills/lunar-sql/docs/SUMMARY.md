@@ -6,7 +6,10 @@
     * [Systemd](install/systemd.md)
     * [Helm Charts](install/helm-charts.md)
   * [Lunar CLI](install/cli.md)
-  * [Lunar CI Agent](install/agent.md)
+  * Lunar CI Agent
+    * [Self-Hosted Runners](install/agent-self-hosted.md)
+    * [Managed Runners](install/agent-managed.md)
+    * [Configuration Reference](install/agent-config.md)
   * [AI Skills](install/skills.md)
 * [Learn the basics](basics/basics.md)
 
