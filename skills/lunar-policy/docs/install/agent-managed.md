@@ -1,26 +1,34 @@
-## Managed Runners (GitHub Actions)
+## Lunar CI Action (GitHub Actions)
 
-If your pipelines run on **GitHub-hosted runners** (the default GitHub Actions infrastructure), use the Lunar CI Action instead of installing the agent manually.
+The Lunar CI Action is the easiest way to add the Lunar CI Agent to your GitHub Actions workflows. It works with both **GitHub-hosted** and **self-hosted** runners.
+
+For **GitHub-hosted runners** (managed runners), this action is the only installation method — you cannot modify the runner startup process.
+
+For **self-hosted runners**, you can either use this action or configure the agent to [wrap the runner's `run.sh` command](agent-self-hosted.md) directly, which avoids adding a step to every job.
 
 ### Setup
 
-Add the Lunar CI Action as a step in your workflow:
+Add the Lunar CI Action as an early step in your workflow jobs:
 
 ```yaml
-- name: Run Lunar CI Agent
-  uses: earthly/lunar-ci-action@v1
-  env:
-    LUNAR_HUB_TOKEN: ${{ secrets.LUNAR_HUB_TOKEN }}
-    LUNAR_HUB_HOST: your_hub_host
-    LUNAR_HUB_GRPC_PORT: "443"
-    LUNAR_HUB_HTTP_PORT: "443"
-    LUNAR_CI_TYPE: github
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Lunar CI Agent
+        uses: earthly/lunar-ci-action@<latest-tag>
+        env:
+          LUNAR_HUB_TOKEN: ${{ secrets.LUNAR_HUB_TOKEN }}
+          LUNAR_HUB_HOST: your_hub_host
+
+      - uses: actions/checkout@v4
+      # ... rest of your workflow
 ```
 
-The action installs both the CLI and agent automatically. GitHub API access is handled via the [Earthly Lunar GitHub App](https://github.com/apps/earthly-lunar) installed on your organization.
+The action downloads the Lunar CI Agent, then attaches the agent to the job process. All subsequent steps in the job are automatically instrumented.
 
 ### How It Works
 
-Unlike self-hosted runners where the agent wraps the runner process, the action runs **within** the workflow. It instruments the job from the inside, triggering collectors and policies at the appropriate points during execution.
+The action runs as a step in a job. It attaches to the current shell process via ptrace and traces all commands executed by subsequent steps. The agent exits automatically when the job completes.
 
 The same [configuration reference](agent-config.md) applies. The only difference is that `LUNAR_RUN_CMD` is not needed — the action handles process supervision internally.
