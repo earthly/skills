@@ -15,14 +15,14 @@ You need an existing self-hosted runner infrastructure (e.g. GitHub Actions self
    [Download the latest `lunar` CLI](https://github.com/earthly/lunar-dist/releases/latest):
 
    ```bash
-   curl -LO https://github.com/earthly/lunar-dist/releases/download/v1.0.11/lunar-linux-amd64
+   curl -LO https://github.com/earthly/lunar-dist/releases/download/v1.1.1/lunar-linux-amd64
    chmod +x lunar-linux-amd64 && sudo mv lunar-linux-amd64 /usr/local/bin/lunar
    ```
 
-   [Download the latest `lunar-ci-agent`](https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.0/lunar-ci-agent-linux-amd64):
+   [Download the latest `lunar-ci-agent`](https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.2/lunar-ci-agent-linux-amd64):
 
    ```bash
-   curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.0/lunar-ci-agent-linux-amd64
+   curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.2/lunar-ci-agent-linux-amd64
    chmod +x lunar-ci-agent-linux-amd64 && sudo mv lunar-ci-agent-linux-amd64 /usr/local/bin/lunar-ci-agent
    ```
 
@@ -82,10 +82,10 @@ ENV LUNAR_SCRIPT_LOG_DIR=/home/ubuntu/.lunar/scripts
 ENV LUNAR_BIN_DIR=/home/ubuntu/.lunar/bin
 ENV LUNAR_LOCK_DIR=/home/ubuntu/.lunar/lock
 
-RUN curl -LO https://github.com/earthly/lunar-dist/releases/download/v1.0.11/lunar-linux-amd64 && \
+RUN curl -LO https://github.com/earthly/lunar-dist/releases/download/v1.1.1/lunar-linux-amd64 && \
     chmod +x lunar-linux-amd64 && mv lunar-linux-amd64 /usr/local/bin/lunar
 
-RUN curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.0/lunar-ci-agent-linux-amd64 && \
+RUN curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.2/lunar-ci-agent-linux-amd64 && \
     chmod +x lunar-ci-agent-linux-amd64 && mv lunar-ci-agent-linux-amd64 /usr/local/bin/lunar-ci-agent
 
 ENTRYPOINT ["lunar-ci-agent"]
