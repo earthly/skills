@@ -95,6 +95,22 @@ The inputs field is used to specify the inputs that the policy requires. Each in
 
 Inputs are accessed in policies using the `variable_or_default` function from the `lunar_policy` SDK. For example, an input named `threshold` is accessible as `variable_or_default("threshold", "10")` where the second argument is the fallback default value.
 
+Inputs can also be referenced in the plugin YAML definition itself using the `${{ inputs.NAME }}` syntax. This allows plugin authors to expose configurable fields as explicit settings. For example:
+
+```yaml
+inputs:
+  threshold:
+    description: Score threshold
+    default: "80"
+
+policies:
+  - name: verify-score
+    description: "Verify score meets threshold of ${{ inputs.threshold }}"
+    mainPython: ./main.py
+```
+
+When a consumer imports this plugin and passes `with: { threshold: "95" }`, the variable is substituted before the plugin is processed. Substitution works in any string field of the plugin's snippet definitions.
+
 ### `description`
 
 * `lunar-policy.yml -> inputs.<input-name>.description`

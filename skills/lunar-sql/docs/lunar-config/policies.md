@@ -106,7 +106,9 @@ The `uses` field is used to import an external (plugin) policy from a GitHub rep
 * Type: `object`
 * Optional
 
-The `with` field specifies the inputs to pass to the policy plugin. The inputs are defined in the policy's configuration file.
+The `with` field specifies the inputs to pass to the policy plugin. The inputs are defined in the policy's configuration file. Input values are available to policy scripts via the `variable_or_default` function from the `lunar_policy` SDK.
+
+Plugin authors can also reference inputs in their plugin YAML definitions using the `${{ inputs.NAME }}` syntax. This allows plugins to expose configurable fields as explicit settings. See [policy plugins](../plugins/policy-plugins.md#inputs) for details.
 
 ### `include`
 

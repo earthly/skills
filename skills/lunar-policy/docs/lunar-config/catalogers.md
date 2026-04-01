@@ -125,7 +125,22 @@ The `uses` field specifies an external (plugin) cataloger to use. The cataloger 
 * Type: `object`
 * Optional
 
-The `with` field specifies the inputs to pass to the cataloger plugin. The inputs are defined in the cataloger's configuration file.
+The `with` field specifies the inputs to pass to the cataloger plugin. The inputs are defined in the cataloger's configuration file. Input values are available to cataloger scripts as `LUNAR_VAR_*` environment variables.
+
+Plugin authors can also reference inputs in their plugin YAML definitions using the `${{ inputs.NAME }}` syntax. 
+
+A consumer can then override the schedule via `with`:
+
+```yaml
+# lunar-config.yml
+catalogers:
+  - name: my-sync
+    uses: github://my-org/sync-plugin@v1
+    with:
+      schedule: "*/10 * * * *"
+```
+
+See [cataloger plugins](../plugins/cataloger-plugins.md#inputs) for more details on defining plugin inputs.
 
 ### `include`
 

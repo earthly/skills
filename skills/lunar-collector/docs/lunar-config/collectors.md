@@ -124,7 +124,9 @@ The `uses` field specifies an external (plugin) collector to use. The collector 
 * Type: `object`
 * Optional
 
-The `with` field specifies the inputs to pass to the collector plugin. The inputs are defined in the collector's configuration file.
+The `with` field specifies the inputs to pass to the collector plugin. The inputs are defined in the collector's configuration file. Input values are available to collector scripts as `LUNAR_VAR_*` environment variables.
+
+Plugin authors can also reference inputs in their plugin YAML definitions using the `${{ inputs.NAME }}` syntax. This allows plugins to expose configurable fields -- such as hook parameters -- as explicit settings. See [collector plugins](../plugins/collector-plugins.md#inputs) for details.
 
 ### `include`
 

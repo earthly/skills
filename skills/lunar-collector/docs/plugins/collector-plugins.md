@@ -117,6 +117,25 @@ The inputs field is used to specify the inputs required by the collector. Each i
 
 Inputs are passed to the collector when invoked as environment variables with the prefix `LUNAR_VAR_` and the input name in uppercase. For example, an input named `api_url` is accessible as `$LUNAR_VAR_API_URL`.
 
+Inputs can also be referenced in the plugin YAML definition itself using the `${{ inputs.NAME }}` syntax. This allows plugin authors to expose configurable fields as explicit settings. For example:
+
+```yaml
+inputs:
+  binary_name:
+    description: Binary name to match
+    default: "go"
+
+collectors:
+  - name: check-binary
+    runBash: echo "checking"
+    hook:
+      type: code
+      binary:
+        name: "${{ inputs.binary_name }}"
+```
+
+When a consumer imports this plugin and passes `with: { binary_name: "python3" }`, the variable is substituted before the plugin is processed. Substitution works in any string field of the plugin's snippet definitions.
+
 ### `description`
 
 * `lunar-collector.yml -> inputs.<input-name>.description`
