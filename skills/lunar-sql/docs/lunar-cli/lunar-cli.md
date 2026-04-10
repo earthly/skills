@@ -126,16 +126,16 @@ The `lunar component ls` command is used to list all components.
 
 * Form:
   ```bash
-  lunar component get-json [--git-sha <git-sha>] [--pr <pr-number>] <component-name>
+  lunar component get-json [--git-sha <git-sha>] [--pr <pr-number>] [component-name]
   ```
 
 The `lunar component get-json` command is used to retrieve the component JSON for a specified component.
 
-#### `<component-name>`
+#### `[component-name]`
 
 * Type: `string`
 
-The name of the component to retrieve the JSON for.
+The name of the component to retrieve the JSON for. If not provided, falls back to the `LUNAR_COMPONENT_ID` environment variable.
 
 #### `--git-sha <git-sha>`
 
@@ -326,7 +326,7 @@ The `lunar collector dev` command is used to run a collector for a given compone
 
 * Type: `string`
 
-The name of the component to run collectors for. Mutually exclusive with `--component-dir`.
+The name of the component to run collectors for. If not provided, falls back to the `LUNAR_COMPONENT_ID` environment variable. Mutually exclusive with `--component-dir`.
 
 #### `--component-dir <path>`
 
@@ -503,7 +503,7 @@ The `lunar policy dev` command is used to run a policy against a component for l
 
 * Type: `string`
 
-The name of the component to run the policy against.
+The name of the component to run the policy against. If not provided, falls back to the `LUNAR_COMPONENT_ID` environment variable.
 
 #### `--component-json <path-to-json-or-stdin>`
 
@@ -546,42 +546,48 @@ lunar policy dev --component github.com/my-org/my-repo --pr 123 --script ./path/
 * Form:
   ```bash
   lunar policy ok-release <component> <git_sha>
+  lunar policy ok-release  # uses LUNAR_COMPONENT_ID and GITHUB_SHA
   ```
 
 The `lunar policy ok-release` command is used to check if a component at a specific git SHA passes its release policies.
+
+Either both positional arguments must be provided, or neither. When no arguments are given, both `LUNAR_COMPONENT_ID` and `GITHUB_SHA` environment variables must be set.
 
 #### `<component>`
 
 * Type: `string`
 
-The name of the component to check.
+The name of the component to check. Falls back to the `LUNAR_COMPONENT_ID` environment variable when no arguments are given.
 
 #### `<git_sha>`
 
 * Type: `string`
 
-The git SHA to check.
+The git SHA to check. Falls back to the `GITHUB_SHA` environment variable when no arguments are given.
 
 ### `lunar policy ok-pr`
 
 * Form:
   ```bash
   lunar policy ok-pr <component> <git_sha>
+  lunar policy ok-pr  # uses LUNAR_COMPONENT_ID and GITHUB_SHA
   ```
 
 The `lunar policy ok-pr` command is used to check if a component at a specific git SHA passes its PR policies.
+
+Either both positional arguments must be provided, or neither. When no arguments are given, both `LUNAR_COMPONENT_ID` and `GITHUB_SHA` environment variables must be set.
 
 #### `<component>`
 
 * Type: `string`
 
-The name of the component to check.
+The name of the component to check. Falls back to the `LUNAR_COMPONENT_ID` environment variable when no arguments are given.
 
 #### `<git_sha>`
 
 * Type: `string`
 
-The git SHA to check.
+The git SHA to check. Falls back to the `GITHUB_SHA` environment variable when no arguments are given.
 
 ## SDK Commands
 
