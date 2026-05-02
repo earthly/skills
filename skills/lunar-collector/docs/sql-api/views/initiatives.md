@@ -1,3 +1,7 @@
+---
+description: Schema reference for the initiatives SQL view — one row per initiative grouping policies around a shared goal or compliance requirement.
+---
+
 # Initiatives View
 
 ```

@@ -1,5 +1,8 @@
+---
+description: Define the collectors section of lunar-config.yml — scripts that run on CI, code, or cron triggers to gather component metadata.
+---
 
-## Collectors
+# Collectors
 
 * `lunar-config.yml -> collectors`
 * Type: `array`
@@ -15,6 +18,7 @@ Collectors are used to collect live information from various sources to associat
 
 Example collectors definition:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 collectors:
   - uses: github://third-party/some-collector@v1
@@ -49,6 +53,7 @@ collectors:
       type: cron
       schedule: "0 2 * * *"
 ```
+{% endcode %}
 
 ## Collector
 
@@ -150,6 +155,7 @@ If neither `include` nor `exclude` is specified, all subcollectors are included 
 
 For example, if a collector called `go` includes subcollectors named `version`, `dependencies`, and `build-info`:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 collectors:
   # Include only the version subcollector
@@ -164,6 +170,7 @@ collectors:
   - uses: ./dir/go
     include: [version, dependencies]
 ```
+{% endcode %}
 
 ### `run<language>`
 
@@ -195,7 +202,7 @@ The `runPython` field specifies the python collector script to run. Running Pyth
 * Type: `string`
 * Required in Main collector form
 
-Defines the main file path used to execute when the collector is invoked. Only `Bash` and `Python` are supported. So `mainBash` and `mainPython` are the only valid field.
+Defines the main file path used to execute when the collector is invoked. Only `Bash` and `Python` are supported. So `mainBash` and `mainPython` are the only valid fields.
 
 The file path is relative to the root of the Lunar configuration repository. In the case of an external plugin definition, the path is relative to the plugin directory.
 
@@ -271,6 +278,7 @@ Use the special value `native` to explicitly run the collector without a contain
 
 Example:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 collectors:
   # Run in a container
@@ -288,5 +296,6 @@ collectors:
       pattern: ^.*
     on: [my-tag]
 ```
+{% endcode %}
 
 For more information about default images and container execution, see [Images](./images.md).

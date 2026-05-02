@@ -1,3 +1,7 @@
+---
+description: Earthly Lunar is a guardrails platform for monitoring and enforcing engineering practices across your software development lifecycle.
+---
+
 # Earthly Lunar
 
 Earthly Lunar is a platform for monitoring and enforcing engineering practices across your organization's software development lifecycle.
@@ -12,10 +16,10 @@ Lunar is designed to work with the messy reality of modern engineering. It's not
 
 Earthly Lunar helps organizations maintain high engineering standards by:
 
-- Monitoring components (services, libraries, repositories) across your organization
-- Collecting metadata about your software development lifecycle
-- Enforcing policies and best practices
-- Providing visibility into engineering health through checks
+* Monitoring components (services, libraries, repositories) across your organization
+* Collecting metadata about your software development lifecycle
+* Enforcing policies and best practices
+* Providing visibility into engineering health through checks
 
 ## Key Features
 
@@ -33,6 +37,6 @@ To get started quickly with developing guardrails, see the [AI skills](install/s
 
 ## Getting Started
 
-1. [Learn the basics](basics/basics.md)
-2. [Install Lunar](install/install.md)
+1. [Install Lunar](install/install.md)
+2. [Learn the basics](basics/basics.md)
 3. [Understand key concepts](key-concepts/key-concepts.md)

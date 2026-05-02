@@ -1,3 +1,7 @@
+---
+description: Schema reference for the component_deltas SQL views — per-collector metadata deltas that merge into each component's full JSON over time.
+---
+
 # Component Deltas Views
 
 ```

@@ -1,69 +1,86 @@
-## Installing the Lunar CI Agent
+---
+description: Install the Lunar CI Agent on self-hosted runners to instrument CI/CD pipelines and collect metadata during builds, tests, scans, and deploys.
+---
+
+# Installing the Lunar CI Agent
 
 The Lunar CI Agent instruments CI/CD pipelines to collect metadata during builds, tests, scans, and deployments. It wraps your existing runner process, monitors execution, and triggers scripts at the right moments.
 
 This page covers the most common setup: **self-hosted runners** (including GitHub Actions self-hosted runners). If you're using GitHub-hosted managed runners, see [Managed Runners](agent-managed.md).
 
-### Prerequisites
+## Prerequisites
 
 You need an existing self-hosted runner infrastructure (e.g. GitHub Actions self-hosted runner). Lunar adds instrumentation on top of your existing setup — it does not manage the runner lifecycle.
 
-### Adding to an Existing Runner
+## Adding to an Existing Runner
 
-1. **Download and install the Lunar CLI and CI Agent.**
+{% stepper %}
+{% step %}
+## Download and install the Lunar CLI and CI Agent
 
-   [Download the latest `lunar` CLI](https://github.com/earthly/lunar-dist/releases/latest):
+<a href="https://github.com/earthly/lunar-dist/releases/latest" class="button primary" data-icon="download">Download the Lunar CLI</a>
 
-   ```bash
-   curl -LO https://github.com/earthly/lunar-dist/releases/download/v1.1.1/lunar-linux-amd64
-   chmod +x lunar-linux-amd64 && sudo mv lunar-linux-amd64 /usr/local/bin/lunar
-   ```
+Or via the command line:
 
-   [Download the latest `lunar-ci-agent`](https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.2/lunar-ci-agent-linux-amd64):
+```bash
+curl -LO https://github.com/earthly/lunar-dist/releases/download/v1.1.1/lunar-linux-amd64
+chmod +x lunar-linux-amd64 && sudo mv lunar-linux-amd64 /usr/local/bin/lunar
+```
 
-   ```bash
-   curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.2/lunar-ci-agent-linux-amd64
-   chmod +x lunar-ci-agent-linux-amd64 && sudo mv lunar-ci-agent-linux-amd64 /usr/local/bin/lunar-ci-agent
-   ```
+<a href="https://github.com/earthly/lunar-ci-agent-dist/releases/latest" class="button primary" data-icon="download">Download the Lunar CI Agent</a>
 
-   {% hint style='info' %}
-   Replace the versions above with the latest from the releases pages.
-   {% endhint %}
+Or via the command line:
 
-2. **Set the required environment variables.**
+```bash
+curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1.1.2/lunar-ci-agent-linux-amd64
+chmod +x lunar-ci-agent-linux-amd64 && sudo mv lunar-ci-agent-linux-amd64 /usr/local/bin/lunar-ci-agent
+```
 
-   ```bash
-   export LUNAR_CI_TYPE=github
-   export LUNAR_HUB_TOKEN=your_hub_token
-   export LUNAR_HUB_HOST=your_hub_host
-   export LUNAR_HUB_GRPC_PORT=your_grpc_port
-   export LUNAR_HUB_HTTP_PORT=your_http_port
-   export LUNAR_RUN_CMD=path_to_github_runner_run.sh
+{% hint style="info" %}
+Replace the versions above with the latest from the releases pages.
+{% endhint %}
+{% endstep %}
 
-   # State directories (need to be set for non-root)
-   export LUNAR_STATE_DIR=$HOME/.lunar/state
-   export LUNAR_GIT_CACHE_DIR=$HOME/.lunar/git-cache
-   export LUNAR_BUNDLE_DIR=$HOME/.lunar/bundles
-   export LUNAR_SNIPPET_DIR=$HOME/.lunar/snippets
-   export LUNAR_SCRIPT_LOG_DIR=$HOME/.lunar/scripts
-   export LUNAR_BIN_DIR=$HOME/.lunar/bin
-   export LUNAR_LOCK_DIR=$HOME/.lunar/lock
-   ```
+{% step %}
+## Set the required environment variables
 
-3. **Start the agent.**
+```bash
+export LUNAR_CI_TYPE=github
+export LUNAR_HUB_TOKEN=your_hub_token
+export LUNAR_HUB_HOST=your_hub_host
+export LUNAR_HUB_GRPC_PORT=your_grpc_port
+export LUNAR_HUB_HTTP_PORT=your_http_port
+export LUNAR_RUN_CMD=path_to_github_runner_run.sh
 
-   ```bash
-   lunar-ci-agent
-   ```
+# State directories (need to be set for non-root)
+export LUNAR_STATE_DIR=$HOME/.lunar/state
+export LUNAR_GIT_CACHE_DIR=$HOME/.lunar/git-cache
+export LUNAR_BUNDLE_DIR=$HOME/.lunar/bundles
+export LUNAR_SNIPPET_DIR=$HOME/.lunar/snippets
+export LUNAR_SCRIPT_LOG_DIR=$HOME/.lunar/scripts
+export LUNAR_BIN_DIR=$HOME/.lunar/bin
+export LUNAR_LOCK_DIR=$HOME/.lunar/lock
+```
+{% endstep %}
 
-   {% hint style='info' %}
-   For production usage, run `lunar-ci-agent` under a process supervisor such as `systemd` so it restarts automatically on failure. See [Systemd Configuration](systemd.md) for an example unit file.
-   {% endhint %}
+{% step %}
+## Start the agent
 
-### Using a Custom Runner Image
+```bash
+lunar-ci-agent
+```
+
+{% hint style="info" %}
+For production usage, run `lunar-ci-agent` under a process supervisor such as `systemd` so it restarts automatically on failure. See [Systemd Configuration](systemd.md) for an example unit file.
+{% endhint %}
+{% endstep %}
+{% endstepper %}
+
+## Using a Custom Runner Image
 
 If your runners are containerized, follow the same installation steps inside a `Dockerfile` and override the entrypoint with the agent binary:
 
+{% code title="Dockerfile" %}
 ```Dockerfile
 FROM my-custom-runner-image:ubuntu-slim
 
@@ -90,8 +107,9 @@ RUN curl -LO https://github.com/earthly/lunar-ci-agent-dist/releases/download/v1
 
 ENTRYPOINT ["lunar-ci-agent"]
 ```
+{% endcode %}
 
-{% hint style='info' %}
+{% hint style="info" %}
 The GitHub Actions runner may not work correctly when run as root. See GitHub's [self-hosted runner documentation](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners) for details.
 {% endhint %}
 
@@ -124,4 +142,6 @@ Once installed, you can begin configuring:
 - [Policies](../lunar-config/policies.md) to enforce standards
 - [Domains and Components](../key-concepts/key-concepts.md) to organize your software landscape
 
-For questions or enterprise onboarding, [contact the Earthly team](https://earthly.dev/earthly-lunar/demo).
+For questions or enterprise onboarding:
+
+<a href="https://earthly.dev/earthly-lunar/demo" class="button secondary" data-icon="envelope">Contact the Earthly team</a>

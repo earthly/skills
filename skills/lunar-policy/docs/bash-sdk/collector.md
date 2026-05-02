@@ -1,8 +1,12 @@
-## Collector Bash SDK
+---
+description: Write Lunar collectors in Bash — environment variables and lunar CLI subcommands for emitting SDLC metadata from a collector script.
+---
+
+# Collector Bash SDK
 
 The Collector Bash SDK is a set of Lunar CLI subcommands that allow you to collect SDLC metadata from within a collector, or from external systems, such as your CI system directly.
 
-### Collector environment
+## Collector environment
 
 Earthly Lunar executes collectors in an environment set up with the following variables:
 
@@ -25,11 +29,11 @@ Earthly Lunar executes collectors in an environment set up with the following va
 - `LUNAR_COMPONENT_META`: The metadata of the component as a JSON object.
 - `LUNAR_SECRET_<name>`: Any secret configured for collectors — either via `HUB_COLLECTOR_SECRETS=<name>=<value>;...` or at runtime using `lunar secret set <name> <value>`.
 
-#### CI collector environment
+### CI collector environment
 
 For `ci-{before,after}-job`, `ci-{before,after}-step` and `ci-{before,after}-command` hooks the following entries are also available:
 
-- `LUNAR_CI`: The CI prodiver indentifier (github, buildkite, ...).
+- `LUNAR_CI`: The CI provider identifier (github, buildkite, ...).
 - `LUNAR_CI_PIPELINE_RUN_ID`: Unique identifier for the current pipeline run. Pipeline are the top-level units of execution in a CI system. Also known as "workflow" in some CIs.
 - `LUNAR_CI_PIPELINE_RUN_ATTEMPT`: Pipeline run attempt (1-based).
 - `LUNAR_CI_PIPELINE_DEFINITION_REF`: URL to the pipeline source code.
@@ -55,7 +59,7 @@ For `ci-{before,after}-command` hooks the following entries are also available:
 - `LUNAR_CI_COMMAND_PPID`: Parent process PID of the hooked command.
 
 
-### `lunar collect` CLI command
+## `lunar collect` CLI command
 
 * Form:
   ```bash
@@ -64,7 +68,7 @@ For `ci-{before,after}-command` hooks the following entries are also available:
 
 The `lunar collect` command is used to collect SDLC metadata from within a collector. The command takes a JSON path and a value as arguments. The JSON path is used to specify the location in the JSON object where the value should be stored.
 
-#### `--component <component-name>`
+### `--component <component-name>`
 
 * Type: `string`
 * Optional
@@ -73,7 +77,7 @@ The `--component` flag is used to specify the name of the component that the val
 
 If the collect command is executed outside of a collector, the component name must be provided.
 
-#### `--json`
+### `--json`
 
 The `--json` flag is used to specify that the value should be interpreted as a JSON object, JSON array, or JSON scalar (string, number, etc). If the flag is not provided, the value is interpreted as a raw string.
 
@@ -99,7 +103,7 @@ Will result in:
 }
 ```
 
-#### `--array-append`
+### `--array-append`
 
 The `--array-append` flag is used to specify that the value should be appended to an array at the specified JSON path. If the path does not exist, a new array will be created. If the path exists and is not an array, the value will be replaced with a new array containing the existing value and the new value.
 
@@ -130,13 +134,13 @@ Will result in:
 }
 ```
 
-#### `<json-path>`
+### `<json-path>`
 
 * Type: `string`
 
 The JSON path is used to specify the location in the JSON object where the value should be stored. The path is specified using dot notation, where each level of the object is separated by a dot. For example, `.foo.bar.baz` would specify the `baz` property of the `bar` object, which is a property of the `foo` object.
 
-#### `<value>`
+### `<value>`
 
 By default, the value is interpreted as a raw string. If the `--json` flag is provided, the value is interpreted as a JSON object, JSON array, or JSON scalar (string, number, etc).
 

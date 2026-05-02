@@ -1,5 +1,8 @@
+---
+description: How the Component JSON aggregates SDLC metadata deltas from collectors into a single object that policies evaluate against.
+---
 
-## Component JSON
+# Component JSON
 
 * Type: `JSON`
 

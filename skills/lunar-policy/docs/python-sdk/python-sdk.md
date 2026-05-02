@@ -1,3 +1,7 @@
+---
+description: Overview of Lunar's Python SDK for writing custom Lunar policies (with collector support coming soon).
+---
+
 # Python SDK
 
 The Python SDK provides interfaces for extending Lunar's functionality through Python-based plugins. This SDK enables you to create custom collectors and policies tailored to your organization's needs.

@@ -1,3 +1,8 @@
+---
+description: Overview of Lunar's core concepts — domains, components, collectors, catalogers, policies, and checks — and how they fit together.
+---
+
+# Key Concepts
 
 This page describes the most important concepts in Lunar.
 
@@ -51,7 +56,7 @@ The Earthly Lunar CI Agent allows you to trigger and execute collectors related 
 
 Installation on managed CI runners is also possible, although it requires additional setup in each project via the definition of the CI pipelines (typically the YAML definition). Earthly Lunar comes out of the box with policies to verify that the agent is installed properly in such situations.
 
-The Lunar CI Agent is able to instrument individual processes executing within CI pipelines and is able to surgically inject custom logic safely in a way that does not interfere with the CI pipeline's normal execution. Special hooks are defined to trigger collectors to execute the in the context of specific processes, no matter how deep in the process tree hierarchy these appear.
+The Lunar CI Agent is able to instrument individual processes executing within CI pipelines and is able to surgically inject custom logic safely in a way that does not interfere with the CI pipeline's normal execution. Special hooks are defined to trigger collectors to execute in the context of specific processes, no matter how deep in the process tree hierarchy these appear.
 
 ### Earthly Lunar Runner
 

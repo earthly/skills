@@ -1,5 +1,8 @@
+---
+description: Define the domains section of lunar-config.yml — hierarchical groupings that organize related components for ownership and policy targeting.
+---
 
-## Domains
+# Domains
 
 * `lunar-config.yml -> domains`
 * Type: `object`
@@ -19,6 +22,7 @@ Components under a domain receive the special tag `domain:<domain-name>` automat
 
 Example domains defintion:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 domains:
   saas-product:
@@ -72,6 +76,7 @@ domains:
     description: Logging for common infrastructure
     owner: todd@example.com
 ```
+{% endcode %}
 
 Domains are associated with components using the `domain` field in the [component definition](./components.md).
 

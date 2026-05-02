@@ -1,3 +1,7 @@
+---
+description: Schema reference for the domains SQL view — one row per domain with its description, owner, and metadata for grouping components.
+---
+
 # Domains View
 
 ```

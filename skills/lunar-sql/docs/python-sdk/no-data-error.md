@@ -1,3 +1,7 @@
+---
+description: Reference for the NoDataError exception that signals required component data is not yet collected, marking a Lunar check as pending.
+---
+
 # NoDataError Class Reference
 
 The `NoDataError` exception is used to indicate that there is not enough data to make a determination on whether the check should pass or fail. This is due to the required data not having been collected yet and thus not being present in the component JSON.

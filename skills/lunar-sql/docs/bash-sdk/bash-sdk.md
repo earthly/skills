@@ -1,3 +1,7 @@
+---
+description: Overview of the Lunar Bash SDK for building custom catalogers and collectors with shell scripts.
+---
+
 # Bash SDK
 
 The Bash SDK allows you to create Lunar plugins using Bash scripting. This SDK is particularly useful for building custom catalogers and collectors.

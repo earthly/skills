@@ -1,5 +1,8 @@
+---
+description: Configure default container images for collectors, policies, and catalogers in lunar-config.yml, with override precedence rules.
+---
 
-## Images
+# Images
 
 Lunar supports running collectors, policies, and catalogers inside Docker containers. This provides isolation, reproducibility, and simplifies dependency management. Default images can be configured at multiple levels, with more specific settings overriding more general ones.
 
@@ -16,6 +19,7 @@ The image used to run a script is determined in the following order (first match
 
 Configure default images in `lunar-config.yml`:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 version: 0
 
@@ -27,6 +31,7 @@ default_image_catalogers: yet-another-image:v2.0
 
 # ... rest of configuration
 ```
+{% endcode %}
 
 ### `default_image`
 
@@ -99,6 +104,7 @@ The same settings are available as at the global level. Plugin-level defaults ov
 
 Each individual collector, policy, or cataloger can specify its own `image` to override all defaults:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 collectors:
   - runBash: lunar collect .file-count "$(find . | wc -l)"
@@ -107,6 +113,7 @@ collectors:
       type: code
     on: [my-tag]
 ```
+{% endcode %}
 
 ## The `native` Value
 
@@ -122,10 +129,12 @@ This is useful when:
 
 A common configuration is to use containers for most scripts but run CI collectors natively:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 default_image: earthly/lunar-scripts:1.0.0
 default_image_ci_collectors: native
 ```
+{% endcode %}
 
 This configuration:
 
@@ -160,6 +169,7 @@ The official `earthly/lunar-scripts` image automatically executes any `requireme
 
 The recommended approach is to create a custom Dockerfile that inherits from the official `earthly/lunar-scripts` image and installs your dependencies at build time:
 
+{% code title="Dockerfile" %}
 ```dockerfile
 FROM earthly/lunar-scripts:1.0.0
 
@@ -174,6 +184,7 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.
 COPY install.sh /tmp/install.sh
 RUN /tmp/install.sh && rm /tmp/install.sh
 ```
+{% endcode %}
 
 This pattern gives you all the benefits of the official image (Python, Bash, `lunar` CLI, `lunar-policy` package) while ensuring your dependencies are baked in for production use.
 
@@ -211,15 +222,19 @@ exec "$1" "$2"
 | Python   | `python`       |
 | Bash     | `bash`         |
 
-> **Note:** Many base images ship `python3` without a `python` symlink. Ensure `python` resolves correctly (e.g., `RUN ln -sf /usr/bin/python3 /usr/bin/python`). The official `earthly/lunar-scripts` image handles this automatically.
+{% hint style="info" %}
+Many base images ship `python3` without a `python` symlink. Ensure `python` resolves correctly (e.g., `RUN ln -sf /usr/bin/python3 /usr/bin/python`). The official `earthly/lunar-scripts` image handles this automatically.
+{% endhint %}
 
 **The recommended approach is to inherit from the official image**, which satisfies both requirements out of the box:
 
+{% code title="Dockerfile" %}
 ```dockerfile
 FROM earthly/lunar-scripts:1.0.0
 # Add your dependencies — the entrypoint and runtimes are already set up.
 RUN pip install --no-cache-dir my-package
 ```
+{% endcode %}
 
 ### How Execution Works
 

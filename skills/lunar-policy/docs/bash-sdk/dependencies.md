@@ -1,3 +1,7 @@
+---
+description: How to install dependencies for Bash collectors and catalogers using a custom Docker image or an install.sh script.
+---
+
 # Installing dependencies
 
 If your collector or cataloger requires dependencies, you have two options depending on your execution environment:
@@ -11,6 +15,7 @@ When running in containers, create a custom Docker image with all dependencies p
 
 Create a Dockerfile that inherits from the official `earthly/lunar-scripts` image:
 
+{% code title="Dockerfile" %}
 ```dockerfile
 FROM earthly/lunar-scripts:1.0.0
 
@@ -21,6 +26,7 @@ RUN apt-get update && apt-get install -y jq curl && rm -rf /var/lib/apt/lists/*
 RUN curl -L "https://github.com/keilerkonzept/dockerfile-json/releases/download/v1.2.2/dockerfile-json_Linux_x86_64.tar.gz" | tar xz \
     && mv dockerfile-json /usr/local/bin/
 ```
+{% endcode %}
 
 Then configure your plugin or `lunar-config.yml` to use this image:
 

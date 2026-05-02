@@ -1,5 +1,8 @@
+---
+description: Structure and precedence rules for the Catalog JSON, which merges domains and components from catalogers, lunar.yml, and lunar-config.yml.
+---
 
-## Catalog JSON
+# Catalog JSON
 
 * Type: `JSON`
 * Form:

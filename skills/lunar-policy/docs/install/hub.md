@@ -1,3 +1,7 @@
+---
+description: Install and configure Lunar Hub, the central service that stores metadata, evaluates policies, and provides visibility into engineering health.
+---
+
 # Installing Lunar Hub
 
 Lunar Hub is the central service that, along with its database, stores metadata,
@@ -7,59 +11,75 @@ environment variables for configuration.
 
 ## Installation
 
-1. Pull the latest release image from [Docker Hub](https://hub.docker.com/r/earthly/lunar-hub):
+{% stepper %}
+{% step %}
+## Pull the release image
 
-   ```bash
-   docker pull earthly/lunar-hub:latest
-   ```
+Pull the latest release image from [Docker Hub](https://hub.docker.com/r/earthly/lunar-hub):
 
-2. Set the following environment variables in your environment or `lunar.env` file:
+```bash
+docker pull earthly/lunar-hub:latest
+```
+{% endstep %}
 
-   ```bash
-   # Base configuration (required)
-   export HUB_LOGS_AWS_BUCKET=your_logs_bucket
-   export HUB_DB_NAME=postgres
-   export HUB_DB_USER=postgres
-   export HUB_DB_PASS=postgres
-   export HUB_DB_HOST=localhost
-   export HUB_GITHUB_WEBHOOK_SECRET=your_github_webhook_secret
-   export HUB_GITHUB_TOKEN=your_github_token
-   export HUB_GRAFANA_URL_BASE=your_grafana_url_base
-   export HUB_AUTH_TOKEN=your_auth_token
+{% step %}
+## Set environment variables
 
-   # Elastic logs integration
-   export HUB_ELASTIC_URL=your_elastic_url
-   export HUB_ELASTIC_API_KEY=your_elastic_api_key
-   export HUB_TENANT_ID=your_tenant_id
+Set the following environment variables in your environment or `lunar.env` file:
 
-   # Optional (defaults shown). Tune to your preferences.
-   export HUB_STATE_DIR=/var/lib/lunar
-   export HUB_HTTP_PORT=8001
-   export HUB_GRPC_PORT=8000
-   export HUB_HEALTH_PORT=8002
-   export HUB_LOG_LEVEL=info
-   export HUB_LOG_FORMAT=json
-   ```
+```bash
+# Base configuration (required)
+export HUB_LOGS_AWS_BUCKET=your_logs_bucket
+export HUB_DB_NAME=postgres
+export HUB_DB_USER=postgres
+export HUB_DB_PASS=postgres
+export HUB_DB_HOST=localhost
+export HUB_GITHUB_WEBHOOK_SECRET=your_github_webhook_secret
+export HUB_GITHUB_TOKEN=your_github_token
+export HUB_GRAFANA_URL_BASE=your_grafana_url_base
+export HUB_AUTH_TOKEN=your_auth_token
 
-3. Run the container:
+# Elastic logs integration
+export HUB_ELASTIC_URL=your_elastic_url
+export HUB_ELASTIC_API_KEY=your_elastic_api_key
+export HUB_TENANT_ID=your_tenant_id
 
-   ```bash
-   docker run -d \
-     --name=lunar-hub \
-     --env-file=./lunar.env \
-     -p 8000:8000 \
-     -p 8001:8001 \
-     -p 8002:8002 \
-     earthly/lunar-hub:latest
-   ```
+# Optional (defaults shown). Tune to your preferences.
+export HUB_STATE_DIR=/var/lib/lunar
+export HUB_HTTP_PORT=8001
+export HUB_GRPC_PORT=8000
+export HUB_HEALTH_PORT=8002
+export HUB_LOG_LEVEL=info
+export HUB_LOG_FORMAT=json
+```
+{% endstep %}
 
-4. Run `curl -v http://localhost:8002/health` (or your configured domain) to confirm it's running. You'll see a 200 response.
+{% step %}
+## Run the container
 
-{% hint style='info' %}
+```bash
+docker run -d \
+  --name=lunar-hub \
+  --env-file=./lunar.env \
+  -p 8000:8000 \
+  -p 8001:8001 \
+  -p 8002:8002 \
+  earthly/lunar-hub:latest
+```
+{% endstep %}
+
+{% step %}
+## Verify it's running
+
+Run `curl -v http://localhost:8002/health` (or your configured domain) to confirm it's running. You'll see a 200 response.
+{% endstep %}
+{% endstepper %}
+
+{% hint style="info" %}
 For the full list of configuration options and production deployment guidance, refer to the [Lunar Hub Deployment Guide](https://github.com/earthly/lunar).
 {% endhint %}
 
-{% hint style='info' %}
+{% hint style="info" %}
 For production deployments, you can also run Lunar Hub in a container orchestrator such as Kubernetes. This provides robust process management, scaling, and automated restarts. See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) for guidance on creating a Deployment and managing your service in production.
 {% endhint %}
 
@@ -97,4 +117,6 @@ Once installed, you can begin configuring:
 - [Policies](../lunar-config/policies.md) to enforce standards
 - [Domains and Components](../key-concepts/key-concepts.md) to organize your software landscape
 
-For questions or enterprise onboarding, [contact the Earthly team](https://earthly.dev/earthly-lunar/demo).
+For questions or enterprise onboarding:
+
+<a href="https://earthly.dev/earthly-lunar/demo" class="button secondary" data-icon="envelope">Contact the Earthly team</a>

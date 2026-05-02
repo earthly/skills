@@ -1,3 +1,7 @@
+---
+description: Reference for the Check class in Lunar's Python Policy SDK — the fluent API for asserting on component metadata and tracking results.
+---
+
 # Check Class Reference
 
 The `Check` class provides a fluent interface for making assertions about policy data. The object keeps track of accessed data within the component JSON and records that for traceability purposes. The final result of a check will have not just the status (`pass`, `fail`, `pending`, `error`, or `skipped`), but complete information about which JSON paths were used to reach this conclusion. Designed to be used as a context manager with Python's `with` statement, the `Check` class automatically handles `NoDataError` (turns it into `pending` status), `SkippedError` (turns it into `skipped` status), and tracks result statuses.
@@ -36,11 +40,13 @@ When used as a context manager, the `Check` class:
 
 ## JSONPath Compatibility
 
+{% hint style="info" %}
 We do not support the entirety of JSONPath as defined in RFC 9535. However, we do support a strict subset of the language:
 
 * `$` is implicit at the beginning of paths.
 * You can access members of an object by key using either `.dot.syntax` or `['literal']['syntax']`.
 * You can index into an array by number only. No wildcards or filters allowed.
+{% endhint %}
 
 ## Data Access Methods
 

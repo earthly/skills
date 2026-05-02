@@ -1,5 +1,8 @@
+---
+description: Reference for lunar-collector.yml, the manifest that defines a collector plugin used to gather live information about components from various sources.
+---
 
-## Collector Plugin
+# Collector Plugins
 
 * `lunar-collector.yml`
 * Type: YAML file
@@ -119,6 +122,7 @@ Inputs are passed to the collector when invoked as environment variables with th
 
 Inputs can also be referenced in the plugin YAML definition itself using the `${{ inputs.NAME }}` syntax. This allows plugin authors to expose configurable fields as explicit settings. For example:
 
+{% code title="lunar-collector.yml" %}
 ```yaml
 inputs:
   binary_name:
@@ -133,6 +137,7 @@ collectors:
       binary:
         name: "${{ inputs.binary_name }}"
 ```
+{% endcode %}
 
 When a consumer imports this plugin and passes `with: { binary_name: "python3" }`, the variable is substituted before the plugin is processed. Substitution works in any string field of the plugin's snippet definitions.
 

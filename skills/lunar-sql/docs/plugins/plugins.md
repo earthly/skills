@@ -1,3 +1,7 @@
+---
+description: Overview of the three Lunar plugin types — catalogers, collectors, and policies — that extend the platform's capabilities.
+---
+
 # Lunar Plugins
 
 Lunar supports three types of plugins that extend the platform's capabilities:

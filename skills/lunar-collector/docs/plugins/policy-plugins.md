@@ -1,5 +1,8 @@
+---
+description: Reference for lunar-policy.yml, the manifest that defines a policy plugin used to evaluate the health of components against rules.
+---
 
-## Policy Plugin
+# Policy Plugins
 
 * `lunar-policy.yml`
 * Type: YAML file
@@ -97,6 +100,7 @@ Inputs are accessed in policies using the `variable_or_default` function from th
 
 Inputs can also be referenced in the plugin YAML definition itself using the `${{ inputs.NAME }}` syntax. This allows plugin authors to expose configurable fields as explicit settings. For example:
 
+{% code title="lunar-policy.yml" %}
 ```yaml
 inputs:
   threshold:
@@ -108,6 +112,7 @@ policies:
     description: "Verify score meets threshold of ${{ inputs.threshold }}"
     mainPython: ./main.py
 ```
+{% endcode %}
 
 When a consumer imports this plugin and passes `with: { threshold: "95" }`, the variable is substituted before the plugin is processed. Substitution works in any string field of the plugin's snippet definitions.
 

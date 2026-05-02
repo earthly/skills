@@ -1,8 +1,12 @@
-## Cataloger Bash SDK
+---
+description: Write Lunar catalogers in Bash — environment variables and the lunar catalog CLI commands for saving catalog data.
+---
+
+# Cataloger Bash SDK
 
 The Cataloger Bash SDK is a set of Lunar CLI subcommands that allow you to save catalog-related information from within a cataloger.
 
-### Cataloger environment
+## Cataloger environment
 
 Earthly Lunar executes catalogers in an environment set up with the following variables:
 
@@ -14,7 +18,7 @@ Earthly Lunar executes catalogers in an environment set up with the following va
 - `LUNAR_SECRET_<name>`: Any secret set in the Lunar Hub for the cataloger, via `HUB_CATALOGER_SECRETS=<name>=<value>;...`.
 - `LUNAR_COMPONENT_ID`: The ID of the component that the cataloger is running for in `github.com/.../...` format. Only set for `component-repo` and `component-cron` hooks.
 
-### `lunar catalog` CLI command
+## `lunar catalog` CLI command
 
 * Forms:
   * Raw form:
@@ -32,17 +36,17 @@ Earthly Lunar executes catalogers in an environment set up with the following va
 
 The `lunar catalog` command is used to save catalog-related information from within a cataloger. The command takes a JSON path and a value as arguments. The JSON path is used to specify the location in the JSON object where the value should be stored.
 
-#### `--json`
+### `--json`
 
 The `--json` flag is used to specify that the value should be interpreted as a JSON object, JSON array, or JSON scalar (string, number, etc). If the flag is not provided, the value is interpreted as a raw string.
 
-#### `<json-path>`
+### `<json-path>`
 
 * Type: `string`
 
 The JSON path is used to specify the location in the JSON object where the value should be stored. The path is specified using dot notation, where each level of the object is separated by a dot. For example, `.foo.bar.baz` would specify the `baz` property of the `bar` object, which is a property of the `foo` object.
 
-#### `<value>`
+### `<value>`
 
 By default, the value is interpreted as a raw string. If the `--json` flag is provided, the value is interpreted as a JSON object, JSON array, or JSON scalar (string, number, etc).
 

@@ -1,5 +1,8 @@
+---
+description: Define the catalogers section of lunar-config.yml — scripts that synchronize domain and component metadata from external systems.
+---
 
-## Catalogers
+# Catalogers
 
 * `lunar-config.yml -> catalogers`
 * Type: `array`
@@ -18,6 +21,7 @@ After the cataloger information is merged, the information collected from any [`
 
 Example catalogers definition:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 catalogers:
   - name: GitHub repos
@@ -47,15 +51,15 @@ catalogers:
       cat verticals.toml | ... | lunar catalog --json '.domains' -
       cat services.toml | ... | lunar catalog --json '.components' -
     hook:
-      type: repo
-      repo: github.com/foo/software-catalog
+      type: cron
+      schedule: "0 2 * * *"
   - name: Label any repo that has a certain CI pipeline as "production"
     runBash: |-
       if grep -r --include="*.yaml" --include="*.yml" '^name: Deploy$' ./.github/workflows ; then
         lunar catalog component --tag production
       fi
     hook:
-      type: component-rep
+      type: component-repo
   - name: Complex operation
     mainBash: ./my-script.sh
     hook:
@@ -64,6 +68,7 @@ catalogers:
   - name: Use an external cataloger
     uses: github://third-party/some-cataloger@v1
 ```
+{% endcode %}
 
 ## Cataloger
 
@@ -131,14 +136,15 @@ Plugin authors can also reference inputs in their plugin YAML definitions using 
 
 A consumer can then override the schedule via `with`:
 
+{% code title="lunar-config.yml" %}
 ```yaml
-# lunar-config.yml
 catalogers:
   - name: my-sync
     uses: github://my-org/sync-plugin@v1
     with:
       schedule: "*/10 * * * *"
 ```
+{% endcode %}
 
 See [cataloger plugins](../plugins/cataloger-plugins.md#inputs) for more details on defining plugin inputs.
 
@@ -164,6 +170,7 @@ If neither `include` nor `exclude` is specified, all sub-catalogers are included
 
 For example, if a cataloger called `backstage` includes sub-catalogers named `components`, `domains`, and `users`:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 catalogers:
   # Include only the components sub-cataloger
@@ -178,6 +185,7 @@ catalogers:
   - uses: ./dir/backstage
     include: [components, domains]
 ```
+{% endcode %}
 
 ### `run<language>`
 
@@ -185,7 +193,7 @@ catalogers:
 * Type: `string`
 * Required in Run cataloger form
 
-Defines the command to execute when the cataloger is invoked. Only `Bash` is supported currently. So `runBash` is the only valid fields.
+Defines the command to execute when the cataloger is invoked. Only `Bash` is supported currently. So `runBash` is the only valid field.
 
 Running Bash supports [installing dependencies](../bash-sdk/dependencies.md).
 
@@ -237,6 +245,7 @@ Use the special value `native` to explicitly run the cataloger without a contain
 
 Example:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 catalogers:
   # Run in a container
@@ -255,5 +264,6 @@ catalogers:
       type: cron
       schedule: "0 3 * * *"
 ```
+{% endcode %}
 
 For more information about default images and container execution, see [Images](./images.md).

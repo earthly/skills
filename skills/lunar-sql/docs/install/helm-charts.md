@@ -1,3 +1,7 @@
+---
+description: Deploy Lunar on Kubernetes using Earthly's Helm charts for production-ready, customizable, and repeatable installations.
+---
+
 # Helm Charts
 
 Deploying Lunar on Kubernetes using Helm is one of our recommended production

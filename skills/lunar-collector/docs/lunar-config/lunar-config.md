@@ -1,5 +1,8 @@
+---
+description: Reference for lunar-config.yml — the central configuration file defining hub connection, catalogers, domains, components, collectors, initiatives, and policies.
+---
 
-## Lunar Configuration
+# lunar-config.yml
 
 * `lunar-config.yml`
 * Type: YAML file
@@ -50,7 +53,11 @@
     - ...
   ```
 
-The file `lunar-config.yml` file is used to configure the behavior of Lunar. It is recommended that you create a new code repository for all Lunar configuration and place this file in the root of it.
+The file `lunar-config.yml` is used to configure the behavior of Lunar.
+
+{% hint style="info" %}
+It is recommended that you create a new code repository for all Lunar configuration and place this file in the root of it.
+{% endhint %}
 
 At a high-level, the file contains information about how the Lunar primitives are configured, ranging from how information is collected from the SDLC via collectors, to how components are organized into domains, and how the health of components is evaluated via policies.
 
@@ -71,10 +78,12 @@ These fields configure the default Docker images used to run collectors, policie
 
 A common configuration is:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 default_image: earthly/lunar-scripts:1.0.0
 default_image_ci_collectors: native
 ```
+{% endcode %}
 
 This runs most scripts in containers while keeping CI collectors native for direct access to CI environments.
 

@@ -1,3 +1,7 @@
+---
+description: Run Lunar as a systemd service on Linux hosts with a sample unit file for reliable startup, restarts, and environment configuration.
+---
+
 # Systemd Configuration
 
 Systemd is a system and service manager for Linux that provides a standardized
@@ -8,6 +12,7 @@ automatically started at boot, and cleanly shut down or reloaded when needed.
 
 Here's a simple systemd unit file that will run `lunar` in a resilient way.
 
+{% code title="lunar.service" %}
 ```ini
 [Unit]
 Description=Lunar CI Agent
@@ -24,3 +29,4 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 ```
+{% endcode %}

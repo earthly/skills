@@ -1,3 +1,7 @@
+---
+description: Overview of Lunar's read-only SQL API for querying components, domains, policies, checks, and other Hub data via PostgreSQL clients.
+---
+
 # SQL API Overview
 
 The SQL API provides programmatic access to Lunar's data through SQL queries. Through this interface, you can access and analyze information about your components, domains, policies, and more.

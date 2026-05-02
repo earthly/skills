@@ -1,5 +1,8 @@
+---
+description: Reference for lunar-cataloger.yml, the manifest that defines a cataloger plugin used to sync software catalog information from external systems.
+---
 
-## Cataloger Plugins
+# Cataloger Plugins
 
 * `lunar-cataloger.yml`
 * Type: YAML file
@@ -95,6 +98,7 @@ Inputs are passed to the cataloger when invoked as environment variables with th
 
 Inputs can also be referenced in the plugin YAML definition itself using the `${{ inputs.NAME }}` syntax. This allows plugin authors to expose configurable fields as explicit settings. For example:
 
+{% code title="lunar-cataloger.yml" %}
 ```yaml
 inputs:
   schedule:
@@ -108,6 +112,7 @@ catalogers:
       type: cron
       schedule: "${{ inputs.schedule }}"
 ```
+{% endcode %}
 
 When a consumer imports this plugin and passes `with: { schedule: "*/10 * * * *" }`, the variable is substituted before the plugin is processed. Substitution works in any string field of the plugin's snippet definitions.
 

@@ -1,5 +1,8 @@
+---
+description: Configure collector hooks in lunar-config.yml — triggers like CI commands, code events, or cron schedules that determine when collectors run.
+---
 
-## Collector Hooks
+# Collector Hooks
 
 * `lunar-config.yml -> collectors.<collector-index>.hooks`
 * `lunar-collector.yml -> collectors.<collector-index>.hooks`

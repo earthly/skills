@@ -1,3 +1,6 @@
+---
+description: Schema reference for the prs SQL view — pull request metadata mirrored from GitHub including author, status, and latest commit details.
+---
 
 # PRs View
 

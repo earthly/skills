@@ -1,4 +1,8 @@
-## Initiatives
+---
+description: Define the initiatives section of lunar-config.yml — groupings of policies around shared goals or compliance requirements.
+---
+
+# Initiatives
 
 * `lunar-config.yml -> initiatives`
 * Type: `array`
@@ -20,6 +24,7 @@ Initiatives are used to group policies together around a specific goal or compli
 
 Example initiatives definition:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 initiatives:
   - name: security
@@ -35,6 +40,7 @@ initiatives:
     owner: docs-team@example.com
     on: [all]
 ```
+{% endcode %}
 
 ## Initiative
 

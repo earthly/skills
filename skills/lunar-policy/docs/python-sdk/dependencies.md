@@ -1,3 +1,7 @@
+---
+description: How to install Python dependencies for Lunar policies, using a custom Docker image or native runtime execution.
+---
+
 # Installing dependencies
 
 If your policy requires dependencies, you have two options depending on your execution environment:
@@ -17,6 +21,7 @@ When running in containers, create a custom Docker image with all dependencies p
 
 Create a Dockerfile that inherits from the official `earthly/lunar-scripts` image and installs your dependencies at build time:
 
+{% code title="Dockerfile" %}
 ```dockerfile
 FROM earthly/lunar-scripts:1.0.0
 
@@ -24,6 +29,7 @@ FROM earthly/lunar-scripts:1.0.0
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 ```
+{% endcode %}
 
 Then configure your plugin or `lunar-config.yml` to use this image:
 

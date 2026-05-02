@@ -1,3 +1,7 @@
+---
+description: Reference for the Node class in Lunar's Python Policy SDK — used to navigate, query, and iterate over component JSON data.
+---
+
 # Node Class Reference
 
 The `Node` class represents a specific location in JSON data and allows navigation relative to that location. It provides a way to traverse and explore component data with lazy evaluation, meaning data is only accessed when explicitly requested through methods like `get_value()`, `exists()`, or iteration.

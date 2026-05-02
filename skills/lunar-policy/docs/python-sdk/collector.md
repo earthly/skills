@@ -1,3 +1,7 @@
+---
+description: Placeholder for the upcoming Python Collector SDK used to gather component metadata in Lunar.
+---
+
 # Python Collector SDK
 
 Coming soon! This page will contain documentation for the upcoming Python Collector SDK.

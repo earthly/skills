@@ -1,6 +1,10 @@
-## CI Agent Configuration Reference
+---
+description: Reference for all environment variables that configure the Lunar CI Agent, including required settings, Docker options, and state directories.
+---
 
-### Required
+# CI Agent Configuration Reference
+
+## Required
 
 | Variable | Description |
 |---|---|
@@ -11,7 +15,7 @@
 | `LUNAR_CI_TYPE` | CI platform type. Currently only `github` is supported. |
 | `LUNAR_RUN_CMD` | Command to start the runner process. For GitHub Actions self-hosted runners, this is the path to `run.sh` (e.g. `/home/ubuntu/actions-runner/run.sh`). Not needed when using the [managed runners](agent-managed.md) GitHub Action. |
 
-### Optional
+## Optional
 
 | Variable | Default | Description |
 |---|---|---|
@@ -20,9 +24,9 @@
 | `LUNAR_LOG_LEVEL` | `info` | Log verbosity. Set to `debug` for troubleshooting. |
 | `LUNAR_GIT_BASE_URL` | _(none)_ | GitHub API base URL. Required for GitHub Enterprise Server installations. |
 
-### Advanced
+## Advanced
 
-#### Docker
+### Docker
 
 These options are for environments where collectors or policies run in Docker containers (e.g. private registries, custom networks, or sidecar Docker daemons).
 
@@ -32,7 +36,7 @@ These options are for environments where collectors or policies run in Docker co
 | `LUNAR_DOCKER_REGISTRY_PASS` | _(none)_ | Password for a private Docker registry containing collector/policy images. |
 | `LUNAR_DOCKER_NETWORK` | _(none)_ | Docker network for script container execution. |
 
-#### State Directories
+### State Directories
 
 The agent uses several directories for state, caching, and execution. The defaults require root access. To run as a non-root user, override these to user-writable paths (e.g. under `$HOME/.lunar/`).
 

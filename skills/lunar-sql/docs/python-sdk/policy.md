@@ -1,3 +1,7 @@
+---
+description: Write Lunar policies in Python with the lunar_policy package — load component metadata, make assertions, and handle pending data.
+---
+
 # Python Policy SDK
 
 The `lunar_policy` Python package provides utilities for working with Lunar policies, allowing you to load, query, and make assertions about component metadata, such as the [component JSON](../key-concepts/component-json.md).
@@ -39,16 +43,12 @@ Earthly Lunar executes policies in an environment set up with the following vari
 - `LUNAR_BUNDLE_PATH`: Used internally by Lunar to pass in the component JSON and the deltas to the policy.
 - `LUNAR_SECRET_<name>`: Any secret set in the Lunar Hub for the policy, via `HUB_POLICY_SECRETS=<name>=<value>;...`.
 
-{% hint style='warn' %}
-##### Important
-
-Note that since policies are re-evaluated frequently as each piece of data becomes available, it is strongly recommended to design your policy execution to be fast (no external API calls, no heavy processing, etc.). If you need to perform any expensive operations, consider using a collector instead, and passing the necessary data via the component JSON.
+{% hint style="warning" %}
+Policies are re-evaluated frequently as each piece of data becomes available, so design your policy execution to be fast (no external API calls, no heavy processing, etc.). If you need to perform any expensive operations, consider using a collector instead, and passing the necessary data via the component JSON.
 {% endhint %}
 
-{% hint style='warn' %}
-##### Important
-
-Policies are re-evaluated between component data collections. This means that not all data is available from the beginning, and your policy should correctly report a `pending` status when it cannot make a decision yet. Much of this is handled automatically for you - see [Handling Missing Data](#handling-missing-data) below for more details.
+{% hint style="warning" %}
+Policies are re-evaluated between component data collections. This means that not all data is available from the beginning, and your policy should correctly report a `pending` status when it cannot make a decision yet. Much of this is handled automatically for you — see [Handling Missing Data](#handling-missing-data) below for more details.
 {% endhint %}
 
 ## Core Components
@@ -151,7 +151,9 @@ This means that you should use `get_value` to access data when you are assuming 
 
 Below are examples demonstrating different approaches to handling missing data in policies:
 
-#### Bad Approach: Blindly Assuming Data Exists
+{% columns %}
+{% column %}
+#### Bad: Blindly Assuming Data Exists
 
 This approach incorrectly assumes all fields exist after retrieving an object, which can lead to errors when data is temporarily missing:
 
@@ -166,8 +168,10 @@ with Check("api-security-check") as check:
     check.assert_equals(rate_limit, 100, f"API rate limit should be 100, but found {rate_limit}")
     check.assert_contains(api["security_headers"], "Content-Security-Policy")
 ```
+{% endcolumn %}
 
-#### Good Approach: Using get_value, get_node, exists, and assert_exists for Data Access
+{% column %}
+#### Good: Targeted Access via the Check API
 
 This approach uses targeted field access and relies on the Check API to handle missing data automatically:
 
@@ -190,6 +194,8 @@ with Check("api-security-check") as check:
         check.assert_equals(rate_limit, 100, f"API rate limit should be 100, but found {rate_limit}")
         check.assert_contains(api_node.get_value(".security_headers"), "Content-Security-Policy")
 ```
+{% endcolumn %}
+{% endcolumns %}
 
 ## Writing Unit Tests for Policies
 

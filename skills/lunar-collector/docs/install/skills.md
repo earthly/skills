@@ -1,3 +1,7 @@
+---
+description: Install AI agent skills for Claude Code, Codex, and Cursor to help build Lunar collectors, policies, and SQL queries.
+---
+
 # Installing AI Skills
 
 The [earthly/skills](https://github.com/earthly/skills) repository provides AI agent skills for building Lunar collectors and policies. These skills enable AI assistants to help you create custom plugins using the Bash and Python SDKs.
@@ -12,22 +16,24 @@ The [earthly/skills](https://github.com/earthly/skills) repository provides AI a
 
 ## Installation
 
-### Option 1: Manual Installation
-
+{% tabs %}
+{% tab title="Manual" %}
 Clone the repository and copy the skill folders to your agent's skills directory:
 
 ```bash
 git clone https://github.com/earthly/skills.git
 cp -r skills/skills/lunar-{collector,policy,sql} ~/.codex/skills/
 ```
+{% endtab %}
 
-### Option 2: Using Earthly
-
+{% tab title="Earthly" %}
 If you have [Earthly](https://github.com/earthly/earthly) installed:
 
 ```bash
 earthly github.com/earthly/skills+install-skills
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Usage
 

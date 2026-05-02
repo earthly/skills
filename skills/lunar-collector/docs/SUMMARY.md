@@ -35,6 +35,7 @@
   * [components](lunar-config/components.md)
   * [collectors](lunar-config/collectors.md)
   * [collectors/hooks](lunar-config/collector-hooks.md)
+  * [initiatives](lunar-config/initiatives.md)
   * [policies](lunar-config/policies.md)
   * [on (tag matching)](lunar-config/on.md)
 * [lunar.yml](lunar-yml/lunar-yml.md)

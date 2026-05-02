@@ -1,5 +1,8 @@
+---
+description: Reference for lunar.yml, the optional per-repository file that configures a single component's owner, domain, branch, tags, and CI pipelines.
+---
 
-## Component lunar.yml
+# lunar.yml
 
 * `lunar.yml`
 * Type: YAML file
@@ -20,7 +23,7 @@ The file lunar.yml is optional and it can be used to define the configuration of
 
 If a component is defined in both lunar.yml and lunar-config.yml, the settings are merged, and the configuration in lunar-config.yml takes precedence when a scalar field (`owner`, `domain`, `branch`) is defined in both places. The arrays (`tags`, `ci-pipelines`) are appended to each other.
 
-### `version`
+## `version`
 
 * `lunar.yml -> version`
 * Type: `numeric`
@@ -28,6 +31,6 @@ If a component is defined in both lunar.yml and lunar-config.yml, the settings a
 
 The version field is used to specify the version of the component configuration file. The current version is `0`.
 
-### Other Fields
+## Other Fields
 
 The other fields in `lunar.yml` are the same as those in `lunar-config.yml -> components.<component-name>`. For more information, see the [lunar-config.yml components](../lunar-config/components.md) page.

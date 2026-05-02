@@ -1,3 +1,7 @@
+---
+description: Reference for the CheckStatus enum used to mark Lunar policy outcomes as PASS, FAIL, PENDING, ERROR, or SKIPPED.
+---
+
 # CheckStatus Class Reference
 
 The `CheckStatus` class defines the possible statuses for a check result. It is used to represent the final outcome of a policy check execution.
@@ -18,7 +22,7 @@ CheckStatus.PASS
 
 The check resulted in `pass` status. It passed successfully, so all assertions within the check were satisfied.
 
-### FAIL  
+### FAIL
 
 ```python
 CheckStatus.FAIL
@@ -36,11 +40,11 @@ The check resulted in `pending` status. It could not be completed due to data no
 
 ### ERROR
 
- ```python
- CheckStatus.ERROR
- ```
+```python
+CheckStatus.ERROR
+```
 
- The check resulted in `error` status. It encountered an error during execution. This indicates an unexpected error occurred during the check execution, such as a runtime exception.
+The check resulted in `error` status. It encountered an error during execution. This indicates an unexpected error occurred during the check execution, such as a runtime exception.
 
 ### SKIPPED
 

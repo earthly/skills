@@ -1,3 +1,7 @@
+---
+description: Reference for the SkippedError exception used to skip a Lunar check when it does not apply to the current component.
+---
+
 # SkippedError Class Reference
 
 The `SkippedError` exception is used to indicate that a check should be skipped and not evaluated. This is typically used for applicability detection - when a check is not relevant to the current component (e.g., Go-specific checks on a Java repository, or Kubernetes checks when no manifests are present).

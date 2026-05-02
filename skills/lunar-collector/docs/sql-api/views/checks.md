@@ -1,3 +1,7 @@
+---
+description: Schema reference for the checks and checks_latest SQL views — every policy check evaluation with status, enforcement, component, and PR context.
+---
+
 # Checks Views
 
 ```

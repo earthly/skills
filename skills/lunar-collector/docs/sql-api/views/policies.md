@@ -1,3 +1,7 @@
+---
+description: Schema reference for the policies SQL view — one row per policy with its enforcement level and parent initiative.
+---
+
 # Policies View
 
 ```

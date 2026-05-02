@@ -1,5 +1,8 @@
+---
+description: Define the components section of lunar-config.yml — repositories or monorepo subdirectories that Lunar monitors with metadata and tags.
+---
 
-## Components
+# Components
 
 * `lunar-config.yml -> components`
 * Type: `object`
@@ -21,6 +24,7 @@ Components can be defined here, in the Lunar configuration file, or in a separat
 
 Example components definition:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 components:
   github.com/my-org/my-repo:
@@ -43,6 +47,7 @@ components:
     domain: ui-common
     tags: [react, typescript]
 ```
+{% endcode %}
 
 ## Component
 

@@ -1,5 +1,8 @@
+---
+description: Define the policies section of lunar-config.yml — rules that Lunar evaluates against components to enforce standards and check health.
+---
 
-## Policies
+# Policies
 
 * `lunar-config.yml -> policies`
 * Type: `array`
@@ -15,6 +18,7 @@ Policies are used to define the rules that Lunar uses to evaluate the health of 
 
 Example policies definition:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 policies:
   - uses: github://third-party/some-policy@v1
@@ -35,6 +39,7 @@ policies:
     on: [another-domain]
     enforcement: block-pr-and-release
 ```
+{% endcode %}
 
 ## Policy
 
@@ -132,6 +137,7 @@ If neither `include` nor `exclude` is specified, all sub-policies are included b
 
 For example, if a policy called `security` includes sub-policies named `vulnerability-scan`, `license-check`, and `dependency-audit`:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 policies:
   # Include only the vulnerability-scan sub-policy
@@ -146,6 +152,7 @@ policies:
   - uses: ./dir/security
     include: [vulnerability-scan, license-check]
 ```
+{% endcode %}
 
 ### `description`
 
@@ -163,7 +170,7 @@ The `description` field is used to specify a description of the policy. If a des
 
 Defines the command to execute when the policy is invoked. Only `Python` is supported. So `runPython` is the only valid field.
 
-Running Bash supports [installing dependencies](../bash-sdk/dependencies.md).
+Running Python supports [installing dependencies](../python-sdk/dependencies.md).
 
 #### `runPython`
 
@@ -182,7 +189,7 @@ Defines the main file path used to execute when the policy is invoked. Only `Pyt
 
 The file path is relative to the root of the Lunar configuration repository. In the case of an external plugin definition, the path is relative to the plugin directory.
 
-Running Bash supports [installing dependencies](../bash-sdk/dependencies.md).
+Running Python supports [installing dependencies](../python-sdk/dependencies.md).
 
 #### `mainPython`
 
@@ -231,9 +238,11 @@ The following enforcement levels are supported:
 * `block-release` - the checks under this policy block releases, but not PRs. This level may be useful for checks that don't necessarily run in PRs due to performance reasons, but are nevertheless important to gate the release process.
 * `block-pr-and-release` - the checks under this policy block both PRs and releases
 
+{% hint style="info" %}
 When `block-release` or `block-pr-and-release` levels are used, the Lunar CLI command `lunar policy ok-release <component> <git_sha>` will return a non-zero exit code of `1` if the associated policy is failing for the given component. This command may be used in CD or release pipelines to prevent a deployment to production, or a release package to be published.
 
-When `block-pr` or `block-pr-and-release` levels are used, the Lunar CLI command `lunar policy ok-pr <component> <git_sha>`will return a non-zero exit code of `1` if the associated policy is failing for the given component. This command may be used wherever needed to block PR merges or prevent PR deployment pipelines to staging environments.
+When `block-pr` or `block-pr-and-release` levels are used, the Lunar CLI command `lunar policy ok-pr <component> <git_sha>` will return a non-zero exit code of `1` if the associated policy is failing for the given component. This command may be used wherever needed to block PR merges or prevent PR deployment pipelines to staging environments.
+{% endhint %}
 
 ### `initiative`
 
@@ -257,6 +266,7 @@ Use the special value `native` to explicitly run the policy without a container,
 
 Example:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 policies:
   # Run in a container
@@ -269,5 +279,6 @@ policies:
     image: native
     on: [my-tag]
 ```
+{% endcode %}
 
 For more information about default images and container execution, see [Images](./images.md).

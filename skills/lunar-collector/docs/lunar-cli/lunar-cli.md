@@ -1,10 +1,14 @@
+---
+description: Complete reference for every Lunar CLI command, subcommand, flag, and environment variable across collectors, catalogers, policies, and Hub operations.
+---
+
 # Lunar CLI Reference
 
 This document provides a comprehensive reference for all available options and commands in the Lunar CLI.
 
 ## Global options
 
-#### `--config-dir <config-dir>`, `LUNAR_CONFIG_DIR=<config-dir>`
+### `--config-dir <config-dir>`, `LUNAR_CONFIG_DIR=<config-dir>`
 
 * Type: `string`
 * Optional
@@ -12,42 +16,42 @@ This document provides a comprehensive reference for all available options and c
 
 The path to the directory containing the Lunar configuration files.
 
-#### `--hub-host <hostname>`, `LUNAR_HUB_HOST=<hostname>`
+### `--hub-host <hostname>`, `LUNAR_HUB_HOST=<hostname>`
 
 * Type: `string`
 * Optional
 
 Override the URL of the Lunar Hub host name. This setting is inferred from the Lunar config if not specified.
 
-#### `--hub-grpc-port <port>`, `LUNAR_HUB_GRPC_PORT=<port>`
+### `--hub-grpc-port <port>`, `LUNAR_HUB_GRPC_PORT=<port>`
 
 * Type: `integer`
 * Optional
 
 Override the GRPC port of the Lunar Hub. This setting is inferred from the Lunar config if not specified.
 
-#### `--hub-http-port <port>`, `LUNAR_HUB_HTTP_PORT=<port>`
+### `--hub-http-port <port>`, `LUNAR_HUB_HTTP_PORT=<port>`
 
 * Type: `integer`
 * Optional
 
 Override the HTTP port of the Lunar Hub. This setting is inferred from the Lunar config if not specified.
 
-#### `--hub-insecure`, `LUNAR_HUB_INSECURE=true`
+### `--hub-insecure`, `LUNAR_HUB_INSECURE=true`
 
 * Type: `boolean`
 * Optional
 
 If true, use insecure HTTP connections to the Hub server.
 
-#### `--no-hub`, `LUNAR_NO_HUB=true`
+### `--no-hub`, `LUNAR_NO_HUB=true`
 
 * Type: `boolean`
 * Optional
 
 Skip Hub interactions for dev commands (`lunar collector dev` and `lunar policy dev`). When enabled, the commands will run without connecting to Lunar Hub. Note that `--component-json` is required for `lunar policy dev` when this option is enabled, and `LUNAR_GITHUB_TOKEN` must be set if GitHub access is needed.
 
-#### `LUNAR_HUB_TOKEN`
+### `LUNAR_HUB_TOKEN`
 
 * Type: `string`
 * Required for commands that interact with the Hub server
@@ -201,10 +205,8 @@ Output the resulting catalog JSON.
   lunar cataloger dev
   ```
 
-{% hint style='warn' %}
-##### Warning
-
-Please note that catalogers can be highly environment-dependent. Please be mindful of "works on my machine" types of issues.
+{% hint style="warning" %}
+Catalogers can be highly environment-dependent. Be mindful of "works on my machine" types of issues.
 {% endhint %}
 
 The `lunar cataloger dev` command is used to run the catalogers in development mode without applying changes to the catalog. This command executes locally on the user's machine and outputs the resulting catalog JSON.
@@ -304,10 +306,8 @@ lunar collector run --collector collector-name github.com/my-org/my-repo
     --script <path-to-collector-script>
   ```
 
-{% hint style='warn' %}
-##### Warning
-
-Please note that collectors can be highly environment-dependent. Please be mindful of "works on my machine" types of issues.
+{% hint style="warning" %}
+Collectors can be highly environment-dependent. Be mindful of "works on my machine" types of issues.
 {% endhint %}
 
 The `lunar collector dev` command is used to run a collector for a given component in development mode without applying changes. This command executes locally on the user's machine and outputs the resulting component JSON.
@@ -417,6 +417,7 @@ The `lunar policy run` command is used to rerun all policies for a given compone
 #### `<component-name>`
 
 * Type: `string`
+
 The name of the component to rerun policies for.
 
 #### `--pr <pr-number>`
@@ -481,10 +482,9 @@ lunar policy run --initiative initiative-name github.com/my-org/my-repo
     [--pr <pr-number>] [--git-sha <git-sha>] \
     --script <path-to-policy-script>
   ```
-{% hint style='warn' %}
-##### Warning
 
-Please note that policies can be highly environment-dependent. Please be mindful of "works on my machine" types of issues.
+{% hint style="warning" %}
+Policies can be highly environment-dependent. Be mindful of "works on my machine" types of issues.
 {% endhint %}
 
 The `lunar policy dev` command is used to run a policy against a component for local testing purposes. This command executes locally on the user's machine and outputs the check results in JSON format.
@@ -525,7 +525,7 @@ The PR number to run the policy against. If not specified, the policy will be ru
 
 The specific git SHA to run the policy against. If specified, this takes precedence over `--pr`.
 
-####Example
+#### Example
 
 ```bash
 # Run policy with component JSON from file

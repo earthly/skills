@@ -1,3 +1,7 @@
+---
+description: Walk through your first Lunar setup — populating components, defining policies, and running checks against your repositories.
+---
+
 # Getting Started with Lunar
 
 This guide will help you understand the basic concepts of Lunar and get started with monitoring your engineering practices.
@@ -21,10 +25,13 @@ Lunar operates on a few key concepts:
 
 ## Your First Lunar Setup
 
-### 1. Populate your Lunar Configuration
+{% stepper %}
+{% step %}
+## Populate your Lunar configuration
 
 Start by creating a `lunar-config.yml` file in your project root:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 hub:
   host: <host>:<port>
@@ -55,29 +62,31 @@ collectors:
     hook:
       type: code
 ```
+{% endcode %}
 
 The `default_image` setting runs all collectors and policies inside Docker containers using the official `earthly/lunar-scripts` image. This image includes Python, Bash, the `lunar` CLI, and the `lunar-policy` package pre-installed. For more details on image configuration, see [Images](../lunar-config/images.md).
 
 You will need to replace `github.com/my-org/my-service` with a real repository you want to monitor.
 
-{% hint style='info' %}
-##### Note
-
+{% hint style="info" %}
 Lunar can also auto-discover components from external systems like GitHub, Backstage, and other sources using catalogers. See the [catalogers documentation](../lunar-config/catalogers.md) for details on setting up automated component discovery. For now, this example will focus on manually declared components.
 {% endhint %}
 
 Commit this code to a new repository called `lunar`. To apply this configuration, run the following command:
 
 ```bash
-lunar hub pull -r github.com://my-org/lunar@main
+lunar hub pull -r github://my-org/lunar@main
 ```
 
 You should be able to see the new domain, the new component, and its component JSON being populated in the Lunar UI.
+{% endstep %}
 
-### 2. Define Your First Policy
+{% step %}
+## Define your first policy
 
 Add a policy to check your component:
 
+{% code title="lunar-config.yml" %}
 ```yaml
 policies:
   - name: readme
@@ -86,20 +95,23 @@ policies:
     runPython: |-
       from lunar_policy import Check
       with Check("readme-exists", "Repository should have a README.md file") as c:
-        c.assert_true(c.get(".repo.readme_exists"), "README.md file not found")
+        c.assert_true(c.get_value(".repo.readme_exists"), "README.md file not found")
 ```
+{% endcode %}
 
 Since we're using the official `earthly/lunar-scripts` image (via `default_image`), the [Lunar Policy SDK](../python-sdk/policy.md) is already pre-installed—no `requirements.txt` needed.
 
 Commit the code, and apply the new configuration:
 
 ```bash
-lunar hub pull -r github.com://my-org/lunar@main
+lunar hub pull -r github://my-org/lunar@main
 ```
 
 You should be able to see the new policy, and the checks being populated for this component in the Lunar UI.
 
 Congratulations! You've just set up your first Lunar collector and policy.
+{% endstep %}
+{% endstepper %}
 
 ## See also
 

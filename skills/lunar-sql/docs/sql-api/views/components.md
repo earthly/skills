@@ -1,3 +1,7 @@
+---
+description: Schema reference for the components and components_latest SQL views — time series of tracked components with merged collector metadata per commit.
+---
+
 # Components Views
 
 ```
