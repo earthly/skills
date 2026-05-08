@@ -10,6 +10,7 @@
     * [Self-Hosted Runners](install/agent-self-hosted.md)
     * [Managed Runners](install/agent-managed.md)
     * [Configuration Reference](install/agent-config.md)
+  * [Sync Config GitHub Action](install/github-actions.md)
   * [AI Skills](install/skills.md)
 * [Learn the basics](basics/basics.md)
 

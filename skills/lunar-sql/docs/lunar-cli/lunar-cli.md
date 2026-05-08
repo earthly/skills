@@ -64,10 +64,12 @@ The Lunar Hub token to use for authentication.
 
 * Form:
   ```bash
-  lunar hub pull [--rerun-code-collectors|-r] [--include-pr-commits] [--pr-max-age-days <days>] <repo>
+  lunar hub pull [--rerun-code-collectors|-l] [--include-pr-commits] [--pr-max-age-days <days>] [--rerun-catalogers|-t] <repo>
   ```
 
 The `lunar hub pull` command is used to instruct Lunar Hub to pull the latest configuration from a given repository.
+
+For GitHub Actions workflows, the [`sync-config` action](../install/github-actions.md) is a thin wrapper around this command and exposes the same flags as inputs.
 
 #### `<repo>`
 
@@ -82,7 +84,7 @@ The repository to pull configuration from. This should be the main repository co
 * `github://acme-corp/lunar@main`
 * `github://acme-corp/lunar@de4adbeef`
 
-#### `--rerun-code-collectors` | `-r`
+#### `--rerun-code-collectors` | `-l`
 
 * Type: `boolean`
 * Optional
@@ -103,6 +105,14 @@ Include PR commits when rerunning code collectors.
 * Default: `5`
 
 Ignore PR commits older than this maximum number of days.
+
+#### `--rerun-catalogers` | `-t`
+
+* Type: `boolean`
+* Optional
+* Default: `false`
+
+Rerun global catalogers after pulling the manifest. Catalogers are skipped by default — pulling a manifest no longer triggers them automatically. Per-component catalogers (`component-repo`, `component-cron`) are unaffected and continue to run on their own hooks.
 
 ## Domain Commands
 
