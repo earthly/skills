@@ -51,16 +51,14 @@ export LUNAR_HUB_HOST=your_hub_host
 export LUNAR_HUB_GRPC_PORT=your_grpc_port
 export LUNAR_HUB_HTTP_PORT=your_http_port
 export LUNAR_RUN_CMD=path_to_github_runner_run.sh
-
-# State directories (need to be set for non-root)
-export LUNAR_STATE_DIR=$HOME/.lunar/state
-export LUNAR_GIT_CACHE_DIR=$HOME/.lunar/git-cache
-export LUNAR_BUNDLE_DIR=$HOME/.lunar/bundles
-export LUNAR_SNIPPET_DIR=$HOME/.lunar/snippets
-export LUNAR_SCRIPT_LOG_DIR=$HOME/.lunar/scripts
-export LUNAR_BIN_DIR=$HOME/.lunar/bin
-export LUNAR_LOCK_DIR=$HOME/.lunar/lock
 ```
+
+The agent auto-detects state, cache, and bundle directories based on the running user:
+
+- **Root** → system paths (`/var/lib/lunar`, `/var/cache/lunar/git-repos`, `/var/tmp/lunar/...`).
+- **Non-root** → user paths under `$HOME/.lunar/`.
+
+Override any of them by setting `LUNAR_STATE_DIR`, `LUNAR_GIT_CACHE_DIR`, `LUNAR_BUNDLE_DIR`, `LUNAR_SNIPPET_DIR`, `LUNAR_SCRIPT_LOG_DIR`, `LUNAR_BIN_DIR`, or `LUNAR_LOCK_DIR` — useful for read-only rootfs runners, systemd units with `ProtectHome=`, or non-standard home directories.
 {% endstep %}
 
 {% step %}

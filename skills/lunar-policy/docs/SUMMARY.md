@@ -2,14 +2,17 @@
 
 * [Introduction](README.md)
 * [Install Lunar](install/install.md)
-  * [Lunar Hub](install/hub.md)
-    * [Systemd](install/systemd.md)
-    * [Helm Charts](install/helm-charts.md)
+  * Lunar Hub
+    * [Overview](install/hub-overview.md)
+    * [Prerequisites](install/hub-prereqs.md)
+    * [Install Walkthrough](install/hub-install.md)
+    * [Day-2 Operations](install/hub-day2.md)
   * [Lunar CLI](install/cli.md)
   * Lunar CI Agent
     * [Self-Hosted Runners](install/agent-self-hosted.md)
     * [Managed Runners](install/agent-managed.md)
     * [Configuration Reference](install/agent-config.md)
+    * [Systemd](install/systemd.md)
   * [Sync Config GitHub Action](install/github-actions.md)
   * [AI Skills](install/skills.md)
 * [Learn the basics](basics/basics.md)
