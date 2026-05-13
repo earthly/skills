@@ -11,6 +11,7 @@ Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment.
 
 1. Read [references/about-lunar.md](references/about-lunar.md) and [references/core-concepts.md](references/core-concepts.md).
 2. Fetch <https://docs-lunar.earthly.dev/configuration/lunar-config.md> for the full schema. Index of all docs: <https://docs-lunar.earthly.dev/llms.txt>.
+3. **For a new lunar-config repo**, bootstrap from the official template: <https://github.com/earthly/lunar-config-template>. It ships with a working `lunar-config.yml`, the CI workflow that runs `lunar hub pull`, and the secrets layout already wired up.
 
 ## File Structure
 
