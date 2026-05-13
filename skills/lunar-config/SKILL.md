@@ -11,7 +11,7 @@ Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment: which
 
 1. Read [about-lunar.md](references/about-lunar.md) for platform overview
 2. Read [core-concepts.md](references/core-concepts.md) for architecture and key entities
-3. Read [docs/lunar-config/lunar-config.md](docs/lunar-config/lunar-config.md) for the complete `lunar-config.yml` schema
+3. Fetch <https://docs-lunar.earthly.dev/configuration/lunar-config.md> for the complete `lunar-config.yml` schema (the `.md` suffix returns raw markdown; the index of all docs lives at <https://docs-lunar.earthly.dev/llms.txt>)
 
 ## What `lunar-config.yml` Is
 
@@ -92,9 +92,9 @@ Most real configs are short because they import plugins from `lunar-lib` or anot
 
 The same `uses:` form works for `collectors`, `policies`, and `catalogers`. You can also inline a small collector/policy/cataloger with `runBash` / `runPython` / `mainBash` / `mainPython` instead of `uses:`. See:
 
-- [docs/lunar-config/collectors.md](docs/lunar-config/collectors.md) for collector forms
-- [docs/lunar-config/policies.md](docs/lunar-config/policies.md) for policy forms
-- [docs/lunar-config/catalogers.md](docs/lunar-config/catalogers.md) for cataloger forms
+- <https://docs-lunar.earthly.dev/configuration/lunar-config/collectors.md> for collector forms
+- <https://docs-lunar.earthly.dev/configuration/lunar-config/policies.md> for policy forms
+- <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md> for cataloger forms
 
 ### Filtering Sub-Plugins with `include` / `exclude`
 
@@ -143,7 +143,7 @@ Special tags:
 
 Custom tags (`backend`, `go`, `has-sonarqube`, etc.) come from `components[*].tags` or from catalogers like `github-org` (which auto-tags repos by language and visibility).
 
-See [docs/lunar-config/on.md](docs/lunar-config/on.md) for the full reference.
+See <https://docs-lunar.earthly.dev/configuration/lunar-config/on.md> for the full reference.
 
 ## Common Operations
 
@@ -209,7 +209,7 @@ default_image: earthly/lunar-scripts:1.0.0
 default_image_ci_collectors: native    # CI collectors run on the host
 ```
 
-See [docs/lunar-config/images.md](docs/lunar-config/images.md) for image resolution order.
+See <https://docs-lunar.earthly.dev/configuration/lunar-config/images.md> for image resolution order.
 
 ### Branch Refs (testing) — Cleanup is Mandatory
 
@@ -232,24 +232,25 @@ Values: `prs`, `default-branch`.
 
 ## Reference Documentation
 
-| File | Content |
-|------|---------|
-| [docs/lunar-config/lunar-config.md](docs/lunar-config/lunar-config.md) | Top-level schema (`version`, `hub`, `default_image*`, etc.) |
-| [docs/lunar-config/domains.md](docs/lunar-config/domains.md) | Domain hierarchy and ownership |
-| [docs/lunar-config/components.md](docs/lunar-config/components.md) | Component declaration (owner, domain, branch, tags) |
-| [docs/lunar-config/catalogers.md](docs/lunar-config/catalogers.md) | Cataloger forms and configuration |
-| [docs/lunar-config/cataloger-hooks.md](docs/lunar-config/cataloger-hooks.md) | Cataloger hook types (`cron`, `repo`, `component-repo`, `component-cron`) |
-| [docs/lunar-config/collectors.md](docs/lunar-config/collectors.md) | Collector forms and configuration |
-| [docs/lunar-config/collector-hooks.md](docs/lunar-config/collector-hooks.md) | Collector hook types (`code`, `cron`, `ci-after-command`, etc.) |
-| [docs/lunar-config/policies.md](docs/lunar-config/policies.md) | Policy forms, enforcement levels, initiatives |
-| [docs/lunar-config/initiatives.md](docs/lunar-config/initiatives.md) | Initiative declaration |
-| [docs/lunar-config/on.md](docs/lunar-config/on.md) | Tag-matching syntax (array + expression forms, special prefixes) |
-| [docs/lunar-config/images.md](docs/lunar-config/images.md) | Default images, `native` mode, resolution order |
-| [references/core-concepts.md](references/core-concepts.md) | Component JSON, hooks, enforcement model |
+Lunar's hosted docs serve raw markdown at `docs-lunar.earthly.dev/<path>.md` — fetch any URL below directly:
 
-## Full Lunar Documentation
+| URL | Content |
+|-----|---------|
+| <https://docs-lunar.earthly.dev/llms.txt> | Index of every Lunar doc page (LLM-friendly) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config.md> | Top-level schema (`version`, `hub`, `default_image*`, etc.) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/domains.md> | Domain hierarchy and ownership |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/components.md> | Component declaration (owner, domain, branch, tags) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md> | Cataloger forms and configuration |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/cataloger-hooks.md> | Cataloger hook types (`cron`, `repo`, `component-repo`, `component-cron`) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/collectors.md> | Collector forms and configuration |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/collector-hooks.md> | Collector hook types (`code`, `cron`, `ci-after-command`, etc.) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/policies.md> | Policy forms, enforcement levels, initiatives |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/initiatives.md> | Initiative declaration |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/on.md> | Tag-matching syntax (array + expression forms, special prefixes) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/images.md> | Default images, `native` mode, resolution order |
+| [references/core-concepts.md](references/core-concepts.md) | Component JSON, hooks, enforcement model (LLM-curated summary) |
 
-For the full Lunar platform docs — CLI reference, installation, SDKs — see [docs/SUMMARY.md](docs/SUMMARY.md).
+For the full Lunar platform docs — CLI reference, installation, SDKs — start at <https://docs-lunar.earthly.dev/llms.txt>.
 
 ## Local Validation & Testing
 
