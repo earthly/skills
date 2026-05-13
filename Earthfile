@@ -11,7 +11,6 @@ update-lunar-docs:
     SAVE ARTIFACT docs AS LOCAL skills/lunar-policy/docs
     SAVE ARTIFACT docs AS LOCAL skills/lunar-collector/docs
     SAVE ARTIFACT docs AS LOCAL skills/lunar-sql/docs
-    SAVE ARTIFACT docs AS LOCAL skills/lunar-cataloger/docs
 
 update-lunar-references:
     COPY github.com/earthly/lunar-lib:main+ai-context/ai-context references

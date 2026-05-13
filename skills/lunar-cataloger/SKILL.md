@@ -225,21 +225,27 @@ This means catalogers can bulk-import, and per-component overrides in `lunar-con
 
 ## Reference Documentation
 
+Local LLM-curated summaries (in this skill):
+
 | File | Content |
 |------|---------|
 | [references/about-lunar.md](references/about-lunar.md) | Platform overview |
 | [references/core-concepts.md](references/core-concepts.md) | Architecture, Catalog JSON, Component JSON |
 | [references/cataloger-reference.md](references/cataloger-reference.md) | **Complete cataloger guide** — hooks, env vars, patterns |
 | [references/cataloger-README-template.md](references/cataloger-README-template.md) | README template for cataloger plugins |
-| [docs/lunar-config/catalogers.md](docs/lunar-config/catalogers.md) | `lunar-config.yml -> catalogers` reference |
-| [docs/lunar-config/cataloger-hooks.md](docs/lunar-config/cataloger-hooks.md) | Hook types in detail |
-| [docs/plugins/cataloger-plugins.md](docs/plugins/cataloger-plugins.md) | `lunar-cataloger.yml` plugin manifest reference |
-| [docs/bash-sdk/cataloger.md](docs/bash-sdk/cataloger.md) | `lunar catalog` CLI reference |
-| [docs/key-concepts/catalog-json.md](docs/key-concepts/catalog-json.md) | Catalog JSON model |
 
-## Full Lunar Documentation
+Lunar's hosted docs serve raw markdown at `docs-lunar.earthly.dev/<path>.md` — fetch any URL below directly:
 
-For the full Lunar platform docs — CLI reference, SDKs, installation — see [docs/SUMMARY.md](docs/SUMMARY.md).
+| URL | Content |
+|-----|---------|
+| <https://docs-lunar.earthly.dev/llms.txt> | Index of every Lunar doc page (LLM-friendly) |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md> | `lunar-config.yml -> catalogers` reference |
+| <https://docs-lunar.earthly.dev/configuration/lunar-config/cataloger-hooks.md> | Hook types in detail |
+| <https://docs-lunar.earthly.dev/plugin-sdks/plugins/cataloger-plugins.md> | `lunar-cataloger.yml` plugin manifest reference |
+| <https://docs-lunar.earthly.dev/plugin-sdks/bash-sdk/cataloger.md> | `lunar catalog` CLI reference |
+| <https://docs-lunar.earthly.dev/docs/catalog-json.md> | Catalog JSON model |
+
+For the full Lunar platform docs — CLI reference, SDKs, installation — start at <https://docs-lunar.earthly.dev/llms.txt>.
 
 ## Local Development & Testing
 
@@ -449,4 +455,4 @@ catalogers:
     include: [components, domains]
 ```
 
-See the [lunar-config skill](../lunar-config/SKILL.md) for the surrounding `lunar-config.yml` reference (or if that skill isn't installed, [docs/lunar-config/catalogers.md](docs/lunar-config/catalogers.md)).
+See the [lunar-config skill](../lunar-config/SKILL.md) for the surrounding `lunar-config.yml` reference (or if that skill isn't installed, <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md>).
