@@ -1,6 +1,6 @@
 ---
 name: lunar-cataloger
-description: Create Lunar cataloger plugins (Bash scripts) that build and maintain a software catalog — syncing components and domains from external systems (GitHub, Backstage, ServiceNow, DBs) and/or automatically classifying components from custom signals like repo files, CI config, or each component's existing Component JSON. Covers hook types (cron, repo, component-repo, component-cron), the `lunar catalog` command, plugin structure, and local testing.
+description: Create Lunar cataloger plugins (Bash scripts) that build the software catalog — syncing components and domains from external systems, or classifying them from custom signals like repo files, CI config, or each component's Component JSON.
 ---
 
 # Lunar Cataloger Skill
@@ -197,4 +197,4 @@ catalogers:
     include: [components, domains]                 # pick sub-catalogers
 ```
 
-See the [lunar-config skill](../lunar-config/SKILL.md) for the surrounding schema, or <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md>.
+Full `catalogers:` reference: <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md>.
