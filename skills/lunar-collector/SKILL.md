@@ -139,9 +139,15 @@ For detailed information, read these files in the `references/` directory:
 | [strategies.md](references/strategies.md) | Implementation strategies (CI detection, file parsing, API integration) |
 | [collector-README-template.md](references/collector-README-template.md) | README template for collector plugins |
 
-## Full Lunar Documentation
+## Hosted Documentation Backup
 
-For the complete Lunar platform documentation including installation, configuration, CLI reference, and SDK details, see [docs/SUMMARY.md](docs/SUMMARY.md).
+The `references/` files above are the primary source. Only if they do not answer the question, fetch <https://docs-lunar.earthly.dev/llms.txt> to find the relevant hosted markdown page.
+
+If a page still lacks enough context, ask the docs a specific, self-contained question with `?ask=<question>` on that page URL, for example:
+
+```text
+GET https://docs-lunar.earthly.dev/readme.md?ask=How%20do%20I%20configure%20collector%20hooks%3F
+```
 
 ## Local Development & Testing
 

@@ -20,23 +20,11 @@ psql $(lunar sql connection-string)
 psql $(lunar sql connection-string) -c "SELECT * FROM components_latest LIMIT 5"
 ```
 
-## Documentation References
+## Reference Documentation
 
 ### SQL API Views
 
-For complete schema documentation and examples, read:
-
-| View | Documentation |
-|------|---------------|
-| Overview | [docs/sql-api/sql-api.md](docs/sql-api/sql-api.md) |
-| `components` / `components_latest` | [docs/sql-api/views/components.md](docs/sql-api/views/components.md) |
-| `component_deltas` / `component_deltas_latest` | [docs/sql-api/views/component-deltas.md](docs/sql-api/views/component-deltas.md) |
-| `checks` / `checks_latest` | [docs/sql-api/views/checks.md](docs/sql-api/views/checks.md) |
-| `domains` | [docs/sql-api/views/domains.md](docs/sql-api/views/domains.md) |
-| `initiatives` | [docs/sql-api/views/initiatives.md](docs/sql-api/views/initiatives.md) |
-| `policies` | [docs/sql-api/views/policies.md](docs/sql-api/views/policies.md) |
-| `prs` | [docs/sql-api/views/prs.md](docs/sql-api/views/prs.md) |
-| `catalog` / `catalog_latest` | [docs/sql-api/views/catalog.md](docs/sql-api/views/catalog.md) |
+Use the local `references/` files and embedded core view schemas below first. For full per-view SQL API details not covered there, use the hosted documentation backup below.
 
 ### Component JSON Schema
 
@@ -46,6 +34,30 @@ The `component_json` column contains the merged Component JSON from all collecto
 |-------|---------------|
 | Schema conventions, presence detection, boolean patterns | [references/component-json/conventions.md](references/component-json/conventions.md) |
 | Category reference (`.repo`, `.sca`, `.k8s`, etc.) | [references/component-json/structure.md](references/component-json/structure.md) |
+
+## Hosted Documentation Backup
+
+The `references/` files and embedded schemas below are the primary source. Only if they do not answer the question, fetch <https://docs-lunar.earthly.dev/llms.txt> to find the relevant hosted markdown page.
+
+Relevant hosted pages include:
+
+| View | Documentation |
+|------|---------------|
+| Overview | <https://docs-lunar.earthly.dev/sql-api/sql-api.md> |
+| `components` / `components_latest` | <https://docs-lunar.earthly.dev/sql-api/views/components.md> |
+| `component_deltas` / `component_deltas_latest` | <https://docs-lunar.earthly.dev/sql-api/views/component-deltas.md> |
+| `checks` / `checks_latest` | <https://docs-lunar.earthly.dev/sql-api/views/checks.md> |
+| `domains` | <https://docs-lunar.earthly.dev/sql-api/views/domains.md> |
+| `initiatives` | <https://docs-lunar.earthly.dev/sql-api/views/initiatives.md> |
+| `policies` | <https://docs-lunar.earthly.dev/sql-api/views/policies.md> |
+| `prs` | <https://docs-lunar.earthly.dev/sql-api/views/prs.md> |
+| `catalog` / `catalog_latest` | <https://docs-lunar.earthly.dev/sql-api/views/catalog.md> |
+
+If a page still lacks enough context, ask the docs a specific, self-contained question with `?ask=<question>` on that page URL, for example:
+
+```text
+GET https://docs-lunar.earthly.dev/sql-api/sql-api.md?ask=How%20do%20I%20query%20latest%20checks%20for%20a%20component%3F
+```
 
 ## Core View Schemas
 
