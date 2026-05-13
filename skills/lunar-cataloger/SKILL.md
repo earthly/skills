@@ -143,7 +143,15 @@ For detailed information, read these files in the `references/` directory:
 | [cataloger-patterns.md](references/cataloger-patterns.md) | Worked examples — external API sync, DB sync, central repo, component augmentation, GitHub org sync, multi-source, Component-JSON heuristics |
 | [cataloger-README-template.md](references/cataloger-README-template.md) | README template for cataloger plugins |
 
-If the answer isn't in these files, fall back to the hosted Lunar docs (raw markdown at `docs-lunar.earthly.dev/<path>.md`; index at <https://docs-lunar.earthly.dev/llms.txt>).
+## Hosted Documentation Backup
+
+The `references/` files above are the primary source. Only if they do not answer the question, fetch <https://docs-lunar.earthly.dev/llms.txt> to find the relevant hosted markdown page.
+
+If a page still lacks enough context, ask the docs a specific, self-contained question with `?ask=<question>` on that page URL, for example:
+
+```text
+GET https://docs-lunar.earthly.dev/readme.md?ask=How%20do%20I%20configure%20cataloger%20hooks%3F
+```
 
 ## Local Development & Testing
 

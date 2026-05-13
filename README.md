@@ -33,8 +33,11 @@ earthly github.com/earthly/skills+install-skills
 These skills are designed to be used with AI agents that support the Claude/Codex skill format. Each skill contains:
 
 - `SKILL.md` - Main instructions and quick-start guide
-- `references/` - Summarized documentation for the AI to consult as needed
-- `docs/` - A full copy of the documentation for the skill
+
+Lunar skills also contain:
+
+- `references/` - Curated documentation for the AI to consult first
+- Hosted docs backup - Use <https://docs-lunar.earthly.dev/llms.txt> only when `references/` is insufficient; for targeted answers, ask a specific question with `?ask=<question>` on a docs page URL
 
 ## Quick Links
 
