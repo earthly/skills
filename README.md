@@ -6,6 +6,7 @@ Agent skills for working with Earthly tools and platforms.
 
 | Skill | Description |
 |-------|-------------|
+| [lunar-cataloger](skills/lunar-cataloger/) | Create Lunar cataloger plugins (Bash scripts) that sync software catalog information from external systems |
 | [lunar-collector](skills/lunar-collector/) | Create Lunar collector plugins (Bash scripts) that gather SDLC metadata |
 | [lunar-config](skills/lunar-config/) | Edit `lunar-config.yml` — wire together components, domains, collectors, policies, catalogers, and initiatives |
 | [lunar-policy](skills/lunar-policy/) | Create Lunar policy plugins (Python scripts) that enforce engineering standards |
