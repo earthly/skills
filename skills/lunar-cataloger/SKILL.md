@@ -10,8 +10,7 @@ Create cataloger plugins for Earthly Lunar — Bash scripts that build the softw
 ## Quick Start
 
 1. Read [references/about-lunar.md](references/about-lunar.md) for platform overview and [references/core-concepts.md](references/core-concepts.md) for architecture.
-2. Read [references/cataloger-reference.md](references/cataloger-reference.md) for the full cataloger surface — hooks, env vars, `lunar catalog` forms, landing-page metadata.
-3. For concrete examples by hook type, see [references/cataloger-patterns.md](references/cataloger-patterns.md).
+2. Read [references/cataloger-reference.md](references/cataloger-reference.md) — the full cataloger guide: hooks, env vars, `lunar catalog` forms, landing-page metadata, and Common Patterns.
 
 ## What a Cataloger Is
 
@@ -140,8 +139,7 @@ LLM-curated summaries (in this skill):
 |------|---------|
 | [references/about-lunar.md](references/about-lunar.md) | Platform overview |
 | [references/core-concepts.md](references/core-concepts.md) | Architecture, Catalog JSON, Component JSON |
-| [references/cataloger-reference.md](references/cataloger-reference.md) | **Complete cataloger guide** — hooks, env vars, `lunar catalog` forms, landing-page metadata |
-| [references/cataloger-patterns.md](references/cataloger-patterns.md) | Concrete patterns per hook type (API sync, classification, multi-source) |
+| [references/cataloger-reference.md](references/cataloger-reference.md) | **Complete cataloger guide** — hooks, env vars, `lunar catalog` forms, landing-page metadata, Common Patterns |
 | [references/cataloger-README-template.md](references/cataloger-README-template.md) | README template for cataloger plugins |
 
 Hosted Lunar docs serve raw markdown at `docs-lunar.earthly.dev/<path>.md`:
