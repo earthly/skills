@@ -10,7 +10,7 @@ Create cataloger plugins for Earthly Lunar — Bash scripts that build the softw
 ## Quick Start
 
 1. Read [references/about-lunar.md](references/about-lunar.md) for platform overview and [references/core-concepts.md](references/core-concepts.md) for architecture.
-2. Read [references/cataloger-reference.md](references/cataloger-reference.md) — the full cataloger guide: hooks, env vars, `lunar catalog` forms, landing-page metadata, and Common Patterns.
+2. Read [references/cataloger-reference.md](references/cataloger-reference.md) — the full cataloger guide: hooks, env vars, `lunar catalog` forms, landing-page metadata. See [references/cataloger-patterns.md](references/cataloger-patterns.md) for worked examples.
 
 ## What a Cataloger Is
 
@@ -133,23 +133,17 @@ Cataloger-specific (full list in [cataloger-reference.md](references/cataloger-r
 
 ## Reference Documentation
 
-LLM-curated summaries (in this skill):
+For detailed information, read these files in the `references/` directory:
 
 | File | Content |
 |------|---------|
-| [references/about-lunar.md](references/about-lunar.md) | Platform overview |
-| [references/core-concepts.md](references/core-concepts.md) | Architecture, Catalog JSON, Component JSON |
-| [references/cataloger-reference.md](references/cataloger-reference.md) | **Complete cataloger guide** — hooks, env vars, `lunar catalog` forms, landing-page metadata, Common Patterns |
-| [references/cataloger-README-template.md](references/cataloger-README-template.md) | README template for cataloger plugins |
+| [about-lunar.md](references/about-lunar.md) | Platform overview |
+| [core-concepts.md](references/core-concepts.md) | Architecture, Catalog JSON, Component JSON |
+| [cataloger-reference.md](references/cataloger-reference.md) | **Complete cataloger guide** — hooks, env vars, `lunar catalog` forms, landing-page metadata |
+| [cataloger-patterns.md](references/cataloger-patterns.md) | Worked examples — external API sync, DB sync, central repo, component augmentation, GitHub org sync, multi-source, Component-JSON heuristics |
+| [cataloger-README-template.md](references/cataloger-README-template.md) | README template for cataloger plugins |
 
-Hosted Lunar docs serve raw markdown at `docs-lunar.earthly.dev/<path>.md`:
-
-- <https://docs-lunar.earthly.dev/llms.txt> — Index of every doc page
-- <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md> — `lunar-config.yml -> catalogers` reference
-- <https://docs-lunar.earthly.dev/configuration/lunar-config/cataloger-hooks.md> — Hook types in detail
-- <https://docs-lunar.earthly.dev/plugin-sdks/plugins/cataloger-plugins.md> — `lunar-cataloger.yml` manifest reference
-- <https://docs-lunar.earthly.dev/plugin-sdks/bash-sdk/cataloger.md> — `lunar catalog` CLI reference
-- <https://docs-lunar.earthly.dev/docs/catalog-json.md> — Catalog JSON model
+If the answer isn't in these files, fall back to the hosted Lunar docs (raw markdown at `docs-lunar.earthly.dev/<path>.md`; index at <https://docs-lunar.earthly.dev/llms.txt>).
 
 ## Local Development & Testing
 
@@ -195,4 +189,4 @@ catalogers:
     include: [components, domains]                 # pick sub-catalogers
 ```
 
-Full `catalogers:` reference: <https://docs-lunar.earthly.dev/configuration/lunar-config/catalogers.md>.
+Full `catalogers:` schema is documented in [references/cataloger-reference.md](references/cataloger-reference.md).
