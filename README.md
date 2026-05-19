@@ -15,18 +15,19 @@ Agent skills for working with Earthly tools and platforms.
 
 ## Installation
 
-Copy the skill folders from `skills/` to your agent's skills directory:
+Install with the [`skills`](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
-git clone https://github.com/earthly/skills.git
-cp -r skills/skills/* ~/.codex/skills/
+# Install all Earthly skills globally
+npx skills add earthly/skills -g
+
+# Or install a specific skill globally
+npx skills add earthly/skills -g --skill lunar-policy
 ```
 
-Or if you have [Earthly](https://earthly.dev/earthfile) installed:
+The CLI auto-detects which coding agents you have installed (Claude Code, Codex, Cursor, and 50+ more) and copies the skills to the right location. See the [`skills` CLI docs](https://github.com/vercel-labs/skills) for more commands like `list`, `update`, and `remove`.
 
-```bash
-earthly github.com/earthly/skills+install-skills
-```
+Drop `-g` to install into the current project's `.claude/skills/` (or equivalent) instead — useful if you want to commit the skills into a shared team repo.
 
 ## Usage
 
