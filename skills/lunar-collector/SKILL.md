@@ -12,6 +12,7 @@ Create collector plugins for Earthly Lunar—Bash scripts that gather SDLC metad
 1. Read [about-lunar.md](references/about-lunar.md) for platform overview
 2. Read [core-concepts.md](references/core-concepts.md) for architecture and key entities
 3. Read [collector-reference.md](references/collector-reference.md) for comprehensive collector documentation
+4. **To run or test a collector locally, use the `lunar collector dev` CLI** (see "Run & Test Your Collector Locally" below) — don't run `main.sh` by hand.
 
 ## Collector Basics
 
@@ -30,6 +31,31 @@ else
   lunar collect -j ".repo.readme_exists" false
 fi
 ```
+
+## Run & Test Your Collector Locally (`lunar collector dev`)
+
+**This is the dev loop. Run a collector with the `lunar collector dev` CLI — don't invoke `main.sh` by hand or reach for `python`/other runners to "test" it.** `lunar collector dev` clones the component, sets the `LUNAR_*` environment, runs your script, and prints the resulting Component JSON — exactly what Lunar does in production. Running the script bare skips all of that.
+
+Run from a directory containing `lunar-config.yml`, with `LUNAR_HUB_TOKEN` set:
+
+```bash
+# Against a local repo directory
+lunar collector dev <collector-name> --component-dir ../path/to/repo --verbose
+
+# Against a remote component (clones from GitHub)
+lunar collector dev <collector-name> --component github.com/org/repo --verbose
+
+# Test a CI hook by simulating the CI command
+lunar collector dev <collector-name> --fake-ci-cmd "go test ./..." --component github.com/org/repo
+
+# End-to-end: pipe the collected Component JSON straight into a policy
+lunar collector dev <collector-name> --component-dir ../path/to/repo \
+  | lunar policy dev <policy-name> --component-json - --verbose
+```
+
+- **Collector names** are dot-separated (e.g. `k8s.yaml-collection`, `dockerfile.base-images`); the name argument prefix-matches, so `my-plugin` runs every `my-plugin.*` sub-collector.
+- The command prints the resulting Component JSON to stdout — that's your ground truth for "did it write the paths I expected?".
+- Compare against real production data with `lunar component get-json github.com/org/repo`.
 
 ## Plugin Structure
 
@@ -142,43 +168,6 @@ For detailed information, read these files in the `references/` directory:
 ## Full Lunar Documentation
 
 For the complete Lunar platform documentation including installation, configuration, CLI reference, and SDK details, see [docs/SUMMARY.md](docs/SUMMARY.md).
-
-## Local Development & Testing
-
-Run collectors locally to test before deploying. Commands must be run from a directory containing `lunar-config.yml`.
-
-**Prerequisites:**
-- Set `LUNAR_HUB_TOKEN` environment variable for authentication
-- Be in a directory with a valid `lunar-config.yml`
-
-**Run a collector against a remote component:**
-```bash
-lunar collector dev <collector-name> --verbose --component github.com/org/repo
-```
-
-**Run a collector against a local directory:**
-```bash
-lunar collector dev <collector-name> --verbose --component-dir ../path/to/local/repo
-```
-
-**Test a CI collector with a fake command:**
-```bash
-lunar collector dev <collector-name> --fake-ci-cmd "npm test" --component github.com/org/repo
-```
-
-**Collector names** are dot-separated (e.g., `k8s.yaml-collection`, `dockerfile.base-images`).
-
-The command outputs the resulting Component JSON to stdout, which can be piped to `lunar policy dev` for end-to-end testing:
-
-```bash
-# Against a local repo directory
-lunar collector dev my-collector --component-dir ../path/to/repo | \
-  lunar policy dev my-policy --verbose --component-json -
-
-# Against a remote component
-lunar collector dev my-collector --component github.com/org/repo | \
-  lunar policy dev my-policy --verbose --component-json -
-```
 
 ## Best Practices
 

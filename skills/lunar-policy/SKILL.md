@@ -12,6 +12,7 @@ Create policy plugins for Earthly Lunar—Python scripts that evaluate Component
 1. Read [about-lunar.md](references/about-lunar.md) for platform overview
 2. Read [core-concepts.md](references/core-concepts.md) for architecture and key entities
 3. Read [policy-reference.md](references/policy-reference.md) for comprehensive policy documentation
+4. **To run or test a policy locally, use the `lunar policy dev` CLI** (see "Run & Test Your Policy Locally" below) — not raw `python`.
 
 ## Policy Basics
 
@@ -26,6 +27,33 @@ from lunar_policy import Check
 with Check("readme-exists", "Repository should have a README.md") as c:
     c.assert_true(c.get_value(".repo.readme_exists"), "README.md not found")
 ```
+
+## Run & Test Your Policy Locally (`lunar policy dev`)
+
+**This is the dev loop. Run a policy with the `lunar policy dev` CLI — do NOT run the check with `python check_one.py`.** A policy evaluates the Component JSON that Lunar injects at runtime; run the file bare with `python` and there's no Component JSON to read, so it can't actually test anything. `lunar policy dev` wires the data in for you.
+
+Run from a directory containing `lunar-config.yml`, with `LUNAR_HUB_TOKEN` set:
+
+```bash
+# Against a saved Component JSON file
+lunar policy dev <policy-name> --component-json path/to/component.json --verbose
+
+# Against a remote component's latest data from the Hub
+lunar policy dev <policy-name> --component github.com/org/repo --verbose
+
+# From stdin — pipe a collector's output straight in (the real end-to-end loop)
+lunar collector dev <collector-name> --component-dir ../path/to/repo \
+  | lunar policy dev <policy-name> --component-json - --verbose
+
+# Override inputs while testing
+lunar policy dev <policy-name> --component-json path/to/component.json --with "minReplicas=3"
+```
+
+- **Policy names** are dot-separated (e.g. `k8s.pdb`, `container.no-latest`).
+- Need real data to test against? `lunar component get-json github.com/org/repo > /tmp/component.json`.
+- **Exit codes:** zero when the policy *ran* (even if checks fail), non-zero only on errors (bad syntax, missing deps, uncaught exception).
+
+**Unit tests are optional — not the dev loop.** You *can* test pure check logic in isolation with `Node.from_component_json(...)` + `unittest` (see [policy-reference.md](references/policy-reference.md)), but that's a debugging aid, not how you run the guardrail, and it isn't required in plugin PRs. To actually run a policy, reach for `lunar policy dev`.
 
 ## Plugin Structure
 
@@ -163,46 +191,6 @@ For detailed information, read these files in the `references/` directory:
 
 For the complete Lunar platform documentation including installation, configuration, CLI reference, and SDK details, see [docs/SUMMARY.md](docs/SUMMARY.md).
 
-## Local Development & Testing
-
-Run policies locally to test before deploying. Commands must be run from a directory containing `lunar-config.yml`.
-
-**Prerequisites:**
-- Set `LUNAR_HUB_TOKEN` environment variable for authentication
-- Be in a directory with a valid `lunar-config.yml`
-
-**Run a policy with Component JSON from a file:**
-```bash
-lunar policy dev <policy-name> --verbose --component-json path/to/component.json
-```
-
-**Run a policy with Component JSON from stdin:**
-```bash
-lunar policy dev <policy-name> --verbose --component-json -
-```
-
-**Run a policy against a remote component:**
-```bash
-lunar policy dev <policy-name> --verbose --component github.com/org/repo
-```
-
-**Policy names** are dot-separated (e.g., `k8s.pdb`, `container.no-latest`).
-
-**End-to-end testing** by piping collector output to policy:
-```bash
-# Against a local repo directory
-lunar collector dev my-collector --component-dir ../path/to/repo | \
-  lunar policy dev my-policy --verbose --component-json -
-
-# Against a remote component
-lunar collector dev my-collector --component github.com/org/repo | \
-  lunar policy dev my-policy --verbose --component-json -
-```
-
-The command outputs check results as text showing pass/fail status and failure messages.
-
-**Exit codes:** Zero on success (even if checks fail—policy ran correctly), non-zero only on errors (e.g., invalid syntax, missing dependencies, uncaught exception).
-
 ## Best Practices
 
 1. **One check per policy entry** - Enables selective `include`/`exclude`
@@ -233,7 +221,7 @@ if registry not in allowed:
     c.fail(f"Registry '{registry}' not in allowed list")
 ```
 
-**Testable policy function:**
+**Optional: unit-testing pure check logic.** Structure a check as a function taking an optional `node`, so you can feed it a synthetic Component JSON. This is an *optional* debugging aid — to actually run the policy, use `lunar policy dev` (see "Run & Test Your Policy Locally" above), not `python`.
 ```python
 from lunar_policy import Check, Node, CheckStatus
 
@@ -244,9 +232,9 @@ def check_readme(node=None):
     return c
 
 if __name__ == "__main__":
-    check_readme()
+    check_readme()  # invoked by `lunar policy dev`; bare `python` has no Component JSON
 
-# Test:
+# Optional unit test (logic only):
 def test_readme_passes():
     node = Node.from_component_json({"repo": {"readme_exists": True}})
     check = check_readme(node)

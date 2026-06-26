@@ -11,6 +11,7 @@ Create cataloger plugins for Earthly Lunar — Bash scripts that build the softw
 
 1. Read [references/about-lunar.md](references/about-lunar.md) for platform overview and [references/core-concepts.md](references/core-concepts.md) for architecture.
 2. Read [references/cataloger-reference.md](references/cataloger-reference.md) — the full cataloger guide: hooks, env vars, `lunar catalog` forms, landing-page metadata. See [references/cataloger-patterns.md](references/cataloger-patterns.md) for worked examples.
+3. **To run or test a cataloger locally, use the `lunar cataloger dev` CLI** (see "Local Development & Testing" below) — not by running `main.sh` by hand.
 
 ## What a Cataloger Is
 
@@ -147,7 +148,7 @@ If the answer isn't in these files, fall back to the hosted Lunar docs (raw mark
 
 ## Local Development & Testing
 
-Run from a directory containing `lunar-config.yml`. Set `LUNAR_HUB_TOKEN` for authentication, and reference the cataloger via `uses: ./catalogers/my-cataloger`.
+**Run a cataloger with the `lunar cataloger dev` CLI — that's the dev loop.** It runs your cataloger the way Lunar does and prints the resulting Catalog JSON. Run from a directory containing `lunar-config.yml`, with `LUNAR_HUB_TOKEN` set and the cataloger referenced via `uses: ./catalogers/my-cataloger`.
 
 ```bash
 # Run all catalogers and output the merged Catalog JSON
@@ -155,12 +156,9 @@ lunar cataloger dev --output-json
 
 # View the current catalog state
 lunar cataloger get-json
-
-# Iterate on a single cataloger directly
-LUNAR_VAR_ORG_NAME=acme bash ./catalogers/my-cataloger/main.sh
 ```
 
-For dry-runs, swap `lunar catalog` for `cat` or `jq` so nothing hits the hub.
+Only as a quick inner-loop check can you run the script directly (`LUNAR_VAR_ORG_NAME=acme bash ./catalogers/my-cataloger/main.sh`) — that won't set up the full `LUNAR_*` environment, so always validate with `lunar cataloger dev` before calling it done. For dry-runs, swap `lunar catalog` for `cat` or `jq` so nothing hits the hub.
 
 ## Best Practices
 
