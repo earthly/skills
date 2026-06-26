@@ -100,24 +100,18 @@ hook: { type: component-cron, schedule: "0 3 * * *" }
 
 ## The `lunar catalog` Command
 
-Three forms for writing to the Catalog JSON:
+Write to the Catalog JSON with the raw form:
 
 ```bash
-# Raw form — arbitrary JSON
-lunar catalog --json '.components' '{"github.com/acme/api": {"owner": "jane@acme.com"}}'
-gh repo list my-org --json name,owner,url | jq '...' | lunar catalog --json '.components' -
+# Write components
+lunar catalog raw --json '.components' '{"github.com/acme/api": {"owner": "jane@acme.com"}}'
 
-# Component form — structured flags for one component
-lunar catalog component \
-  --name "github.com/acme/api" \
-  --owner "jane@acme.com" --domain "platform.backend" \
-  --tag "go" --tag "production" --meta tier=1
+# Pipe from command output
+gh repo list my-org --json name,owner,url | jq '...' | lunar catalog raw --json '.components' -
 
-# Domain form — structured flags for one domain
-lunar catalog domain --name "platform" --owner "platform-team@acme.com"
+# Write domains
+lunar catalog raw --json '.domains' '{"platform": {"owner": "platform-team@acme.com"}}'
 ```
-
-In `component-repo` / `component-cron` hooks, `--name` is inferred from `LUNAR_COMPONENT_ID`, so `lunar catalog component --tag production` is enough.
 
 Multiple `lunar catalog` calls within a single run layer onto the catalog cumulatively. **Merge precedence across catalogers** (later wins): catalogers in declared order → `lunar.yml` in component repos → `domains:` / `components:` in `lunar-config.yml`.
 
@@ -127,7 +121,6 @@ Cataloger-specific (full list in [cataloger-reference.md](references/cataloger-r
 
 | Variable | When set |
 |----------|----------|
-| `LUNAR_CATALOGER_NAME` | Always |
 | `LUNAR_COMPONENT_ID` | Only in `component-repo` / `component-cron` hooks |
 | `LUNAR_SECRET_<NAME>` | Per declared secret |
 | `LUNAR_VAR_<INPUT>` | Per declared input (uppercase name) |
@@ -144,7 +137,15 @@ For detailed information, read these files in the `references/` directory:
 | [cataloger-patterns.md](references/cataloger-patterns.md) | Worked examples — external API sync, DB sync, central repo, component augmentation, GitHub org sync, multi-source, Component-JSON heuristics |
 | [cataloger-README-template.md](references/cataloger-README-template.md) | README template for cataloger plugins |
 
-If the answer isn't in these files, fall back to the hosted Lunar docs (raw markdown at `docs-lunar.earthly.dev/<path>.md`; index at <https://docs-lunar.earthly.dev/llms.txt>).
+## Hosted Documentation Backup
+
+The `references/` files above are the primary source. Only if they do not answer the question, fetch <https://docs-lunar.earthly.dev/llms.txt> to find the relevant hosted markdown page.
+
+If a page still lacks enough context, ask the docs a specific, self-contained question with `?ask=<question>` on that page URL, for example:
+
+```text
+GET https://docs-lunar.earthly.dev/readme.md?ask=How%20do%20I%20configure%20cataloger%20hooks%3F
+```
 
 ## Local Development & Testing
 

@@ -10,7 +10,7 @@ Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment.
 ## Quick Start
 
 1. Read [references/about-lunar.md](references/about-lunar.md) and [references/core-concepts.md](references/core-concepts.md).
-2. Fetch <https://docs-lunar.earthly.dev/configuration/lunar-config.md> for the full schema. Index of all docs: <https://docs-lunar.earthly.dev/llms.txt>.
+2. Use the `references/` files first. If they are insufficient, use the hosted docs backup below to find the full `lunar-config.yml` schema.
 3. **For a new lunar-config repo**, bootstrap from the official template: <https://github.com/earthly/lunar-config-template>. It ships with a working `lunar-config.yml`, the CI workflow that runs `lunar hub pull`, and the secrets layout already wired up.
 
 ## File Structure
@@ -62,7 +62,7 @@ After a config repo commit, CI runs `lunar hub pull <repo>` to push the new conf
 - uses: ./collectors/my-custom-collector                       # Local path
 ```
 
-Inline alternatives: `runBash` / `runPython` / `mainBash` / `mainPython` instead of `uses:`. Per-type reference: <https://docs-lunar.earthly.dev/configuration/lunar-config/collectors.md>, `.../policies.md`, `.../catalogers.md`.
+Inline alternatives: `runBash` / `runPython` / `mainBash` / `mainPython` instead of `uses:`. For per-type details, use the `references/` files first; if needed, see the hosted documentation backup.
 
 ### Filter sub-plugins
 
@@ -92,7 +92,7 @@ on: "domain:engineering AND NOT domain:engineering.experimental"  # expression f
 | `collector:foo` | Same components as collector `foo` |
 | `policy:foo` | Same components as policy `foo` |
 
-Custom tags come from `components[*].tags` or from catalogers (e.g. `github-org` auto-tags by language). Full reference: <https://docs-lunar.earthly.dev/configuration/lunar-config/on.md>.
+Custom tags come from `components[*].tags` or from catalogers (e.g., `github-org` auto-tags by language). For edge cases, use the `references/` files first; if needed, see the hosted documentation backup.
 
 ## `runs_on:` — PRs vs Default Branch
 
@@ -179,11 +179,26 @@ After merging a config-repo PR, verify the CI step that runs `lunar hub pull` su
 
 ## Reference Documentation
 
-Hosted docs serve raw markdown at `docs-lunar.earthly.dev/<path>.md`:
+The `references/` files are the primary source:
+
+- [references/about-lunar.md](references/about-lunar.md) — Platform overview
+- [references/core-concepts.md](references/core-concepts.md) — Component JSON, hooks, enforcement, catalog basics
+- [references/collector-reference.md](references/collector-reference.md) — Collector plugin config
+- [references/policy-reference.md](references/policy-reference.md) — Policy plugin config
+- [references/cataloger-reference.md](references/cataloger-reference.md) — Cataloger plugin config
+
+## Hosted Documentation Backup
+
+Only if `references/` does not answer the question, fetch:
 
 - <https://docs-lunar.earthly.dev/llms.txt> — Index of every Lunar doc page
 - <https://docs-lunar.earthly.dev/configuration/lunar-config.md> — Top-level schema
 - <https://docs-lunar.earthly.dev/configuration/lunar-config/collectors.md> / `.../policies.md` / `.../catalogers.md` — Plugin sections
 - <https://docs-lunar.earthly.dev/configuration/lunar-config/on.md> — Tag-matching syntax
 - <https://docs-lunar.earthly.dev/configuration/lunar-config/images.md> — Default images, `native` mode
-- [references/core-concepts.md](references/core-concepts.md) — Component JSON, hooks, enforcement (LLM-curated summary)
+
+If a page still lacks enough context, ask the docs a specific, self-contained question with `?ask=<question>` on that page URL, for example:
+
+```text
+GET https://docs-lunar.earthly.dev/configuration/lunar-config.md?ask=How%20do%20I%20configure%20collector%20and%20policy%20targeting%3F
+```

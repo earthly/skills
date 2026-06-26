@@ -15,26 +15,30 @@ Agent skills for working with Earthly tools and platforms.
 
 ## Installation
 
-Copy the skill folders from `skills/` to your agent's skills directory:
+Install with the [`skills`](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
-git clone https://github.com/earthly/skills.git
-cp -r skills/skills/* ~/.codex/skills/
+# Install all Earthly skills globally
+npx skills add earthly/skills -g
+
+# Or install a specific skill globally
+npx skills add earthly/skills -g --skill lunar-policy
 ```
 
-Or if you have [Earthly](https://earthly.dev/earthfile) installed:
+The CLI auto-detects which coding agents you have installed (Claude Code, Codex, Cursor, and 50+ more) and copies the skills to the right location. See the [`skills` CLI docs](https://github.com/vercel-labs/skills) for more commands like `list`, `update`, and `remove`.
 
-```bash
-earthly github.com/earthly/skills+install-skills
-```
+Drop `-g` to install into the current project's `.claude/skills/` (or equivalent) instead — useful if you want to commit the skills into a shared team repo.
 
 ## Usage
 
 These skills are designed to be used with AI agents that support the Claude/Codex skill format. Each skill contains:
 
-- `SKILL.md` — Main instructions and quick-start guide (hand-authored in this repo)
-- `references/` — Summarized documentation for the AI to consult as needed (generated)
-- `docs/` — A full copy of the documentation for the skill (generated)
+- `SKILL.md` - Main instructions and quick-start guide
+
+Lunar skills also contain:
+
+- `references/` - Curated documentation for the AI to consult first
+- Hosted docs backup - Use <https://docs-lunar.earthly.dev/llms.txt> only when `references/` is insufficient; for targeted answers, ask a specific question with `?ask=<question>` on a docs page URL
 
 ## Updating the Bundled Docs & References
 

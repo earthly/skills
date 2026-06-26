@@ -3,14 +3,7 @@ VERSION 0.8
 FROM alpine:3.21
 
 update-all:
-    BUILD --pass-args +update-lunar-docs
     BUILD --pass-args +update-lunar-references
-
-update-lunar-docs:
-    COPY github.com/earthly/lunar:main+docs/docs docs
-    SAVE ARTIFACT docs AS LOCAL skills/lunar-policy/docs
-    SAVE ARTIFACT docs AS LOCAL skills/lunar-collector/docs
-    SAVE ARTIFACT docs AS LOCAL skills/lunar-sql/docs
 
 update-lunar-references:
     COPY github.com/earthly/lunar-lib:main+ai-context/ai-context references

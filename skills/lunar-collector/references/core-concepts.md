@@ -155,9 +155,10 @@ Key points:
 from lunar_policy import Check
 
 with Check("readme-exists", "Repository should have a README.md") as c:
+    readme_exists = c.get_node(".repo.readme.exists")
     c.assert_true(
-        c.get_value(".repo.readme_exists"),
-        "README.md file not found"
+        readme_exists.exists() and bool(readme_exists.get_value()),
+        "README.md file not found",
     )
 ```
 
@@ -255,8 +256,8 @@ version: 0
 
 hub:
   host: lunar-hub.internal.example.com
-  grpc_port: 9000
-  http_port: 8080
+  grpcPort: 9000
+  httpPort: 8080
 
 domains:
   payments:

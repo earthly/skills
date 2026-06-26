@@ -5,7 +5,7 @@ description: Craft correct SQL queries against the Lunar data model. Use when qu
 
 # Lunar SQL API Skill
 
-Query Lunar's data using SQL. The SQL API provides read-only PostgreSQL access to components, checks, policies, domains, PRs, and catalog data.
+Query Lunar's data using SQL. The SQL API provides read-only PostgreSQL access to components, checks, policies, domains, and PRs.
 
 ## Quick Start
 
@@ -20,23 +20,11 @@ psql $(lunar sql connection-string)
 psql $(lunar sql connection-string) -c "SELECT * FROM components_latest LIMIT 5"
 ```
 
-## Documentation References
+## Reference Documentation
 
 ### SQL API Views
 
-For complete schema documentation and examples, read:
-
-| View | Documentation |
-|------|---------------|
-| Overview | [docs/sql-api/sql-api.md](docs/sql-api/sql-api.md) |
-| `components` / `components_latest` | [docs/sql-api/views/components.md](docs/sql-api/views/components.md) |
-| `component_deltas` / `component_deltas_latest` | [docs/sql-api/views/component-deltas.md](docs/sql-api/views/component-deltas.md) |
-| `checks` / `checks_latest` | [docs/sql-api/views/checks.md](docs/sql-api/views/checks.md) |
-| `domains` | [docs/sql-api/views/domains.md](docs/sql-api/views/domains.md) |
-| `initiatives` | [docs/sql-api/views/initiatives.md](docs/sql-api/views/initiatives.md) |
-| `policies` | [docs/sql-api/views/policies.md](docs/sql-api/views/policies.md) |
-| `prs` | [docs/sql-api/views/prs.md](docs/sql-api/views/prs.md) |
-| `catalog` / `catalog_latest` | [docs/sql-api/views/catalog.md](docs/sql-api/views/catalog.md) |
+Use the local `references/` files and embedded core view schemas below first. For full per-view SQL API details not covered there, use the hosted documentation backup below.
 
 ### Component JSON Schema
 
@@ -47,6 +35,29 @@ The `component_json` column contains the merged Component JSON from all collecto
 | Schema conventions, presence detection, boolean patterns | [references/component-json/conventions.md](references/component-json/conventions.md) |
 | Category reference (`.repo`, `.sca`, `.k8s`, etc.) | [references/component-json/structure.md](references/component-json/structure.md) |
 
+## Hosted Documentation Backup
+
+The `references/` files and embedded schemas below are the primary source. Only if they do not answer the question, fetch <https://docs-lunar.earthly.dev/llms.txt> to find the relevant hosted markdown page.
+
+Relevant hosted pages include:
+
+| View | Documentation |
+|------|---------------|
+| Overview | <https://docs-lunar.earthly.dev/sql-api/sql-api.md> |
+| `components` / `components_latest` | <https://docs-lunar.earthly.dev/sql-api/views/components.md> |
+| `component_deltas` / `component_deltas_latest` | <https://docs-lunar.earthly.dev/sql-api/views/component-deltas.md> |
+| `checks` / `checks_latest` | <https://docs-lunar.earthly.dev/sql-api/views/checks.md> |
+| `domains` | <https://docs-lunar.earthly.dev/sql-api/views/domains.md> |
+| `initiatives` | <https://docs-lunar.earthly.dev/sql-api/views/initiatives.md> |
+| `policies` | <https://docs-lunar.earthly.dev/sql-api/views/policies.md> |
+| `prs` | <https://docs-lunar.earthly.dev/sql-api/views/prs.md> |
+
+If a page still lacks enough context, ask the docs a specific, self-contained question with `?ask=<question>` on that page URL, for example:
+
+```text
+GET https://docs-lunar.earthly.dev/sql-api/sql-api.md?ask=How%20do%20I%20query%20latest%20checks%20for%20a%20component%3F
+```
+
 ## Core View Schemas
 
 ### components / components_latest
@@ -54,12 +65,12 @@ The `component_json` column contains the merged Component JSON from all collecto
 | Column | Type | Description |
 |--------|------|-------------|
 | `component_id` | TEXT | Component identifier (e.g., `github.com/foo/bar`) |
-| `timestamp` | TIMESTAMPTZ | "Committed at" UTC timestamp of the `git_sha` |
+| `timestamp` | TIMESTAMP | "Committed at" UTC timestamp of the `git_sha` |
 | `git_sha` | TEXT | Git commit SHA |
 | `pr` | BIGINT | PR number (NULL = default branch) |
 | `domain` | TEXT | Domain in dotted format (e.g., `payments.analytics`) |
+| `owner` | TEXT | Component owner |
 | `tags` | TEXT[] | Array of tags |
-| `meta` | JSONB | Arbitrary metadata |
 | `component_json` | JSONB | Merged Component JSON from all collectors |
 
 ### checks / checks_latest
@@ -67,17 +78,18 @@ The `component_json` column contains the merged Component JSON from all collecto
 | Column | Type | Description |
 |--------|------|-------------|
 | `component_id` | TEXT | Component identifier |
-| `timestamp` | TIMESTAMPTZ | Commit timestamp |
+| `committed_at` | TIMESTAMP | Commit timestamp |
 | `git_sha` | TEXT | Git commit SHA |
 | `pr` | BIGINT | PR number (NULL = default branch) |
 | `name` | TEXT | Check name |
 | `description` | TEXT | Check description |
-| `initiative_name` | TEXT | Parent initiative |
-| `policy_name` | TEXT | Parent policy |
+| `manifest_version` | TEXT | Manifest version |
+| `initiative_id` | TEXT | Parent initiative |
+| `policy_id` | TEXT | Parent policy |
 | `enforcement` | TEXT | `draft`, `score`, `block-pr`, `block-release`, `block-pr-and-release` |
 | `status` | TEXT | `pass`, `fail`, `pending`, `error`, `skipped` |
-| `failure_reason` | TEXT[] | Failure reasons (NULL if passed) |
-| `stale` | INTERVAL | Time since last evaluation (NULL if current) |
+| `failure_reasons` | TEXT[] | Failure reasons (NULL if passed) |
+| `staleness` | INTERVAL | Time since last evaluation (NULL if current) |
 
 ## Key Concepts
 
@@ -109,7 +121,7 @@ Views with `_latest` suffix contain only the most recent `git_sha` for each `pr`
 
 ### Timestamp Consistency
 
-The `timestamp` column represents the Git "committed at" time and is consistent across views for the same `component_id` + `git_sha`. Use this for joining time-series data.
+The timestamp column represents the Git "committed at" time and is consistent across views for the same `component_id` + `git_sha` (named `timestamp` on components, `committed_at` on checks). Use this for joining time-series data.
 
 ### Domain Hierarchy
 
@@ -190,14 +202,14 @@ WHERE pr IS NOT NULL
 ### Check Status Time Series
 
 ```sql
-SELECT timestamp,
+SELECT committed_at,
   SUM(CASE WHEN status = 'pass' THEN 1 ELSE 0 END) AS passed,
   SUM(CASE WHEN status = 'fail' THEN 1 ELSE 0 END) AS failed,
   SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS pending
 FROM checks
 WHERE component_id = 'github.com/foo/bar' AND pr IS NULL
-GROUP BY timestamp
-ORDER BY timestamp;
+GROUP BY committed_at
+ORDER BY committed_at;
 ```
 
 ### Components by Tag
