@@ -9,12 +9,9 @@ Create cataloger plugins for Earthly Lunar — Bash scripts that build the softw
 
 ## Check the Library First
 
-**Before writing a new cataloger, check whether [lunar-lib](https://github.com/earthly/lunar-lib) already ships one for that source — and if it does, tell the user before writing any code.**
+Before writing a cataloger, consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case the user is asking for. A close match counts: an existing cataloger for that source is usually better extended than duplicated.
 
-- Browse the catalog: <https://earthly.dev/lunar/guardrails/>
-- Or search the source — manifests carry `keywords:` for this: `grep -ril backstage catalogers/*/lunar-cataloger.yml` in a lunar-lib clone, or skim [`catalogers/`](https://github.com/earthly/lunar-lib/tree/main/catalogers)
-
-On a match — exact or close — stop and report it: the plugin name, the `uses:` line that wires it in, and any `with:` input that closes the gap. The user decides whether to adopt it, extend it, or build their own anyway. Write a new cataloger only when nothing matches, or once they've said to go ahead.
+Found something? Say so before writing any code — the user decides whether to adopt it, extend it, or build new.
 
 ## Quick Start
 

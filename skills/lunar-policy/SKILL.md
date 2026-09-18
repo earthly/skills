@@ -9,12 +9,9 @@ Create policy plugins for Earthly Lunar—Python scripts that evaluate Component
 
 ## Check the Library First
 
-**Before writing a new policy, check whether [lunar-lib](https://github.com/earthly/lunar-lib) already ships one — and if it does, tell the user before writing any code.**
+Before writing a policy, consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case the user is asking for. A close match counts: an existing general plugin (say, `terraform`) is often the right home for a specific new check, rather than a new plugin alongside it.
 
-- Browse the catalog: <https://earthly.dev/lunar/guardrails/>
-- Or search the source — manifests carry `keywords:` for this: `grep -ril coverage policies/*/lunar-policy.yml` in a lunar-lib clone, or skim [`policies/`](https://github.com/earthly/lunar-lib/tree/main/policies)
-
-On a match — exact or close — stop and report it: the plugin and check name, the `uses:` line that wires it in, and any `with:` input that closes the gap. The user decides whether to adopt it, configure it, or build their own anyway. Write a new policy only when nothing matches, or once they've said to go ahead.
+Found something? Say so before writing any code — the user decides whether to adopt it, extend it, or build new.
 
 ## Quick Start
 

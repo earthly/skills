@@ -9,13 +9,9 @@ Create collector plugins for Earthly Lunar—Bash scripts that gather SDLC metad
 
 ## Check the Library First
 
-**Before writing a new collector, check whether [lunar-lib](https://github.com/earthly/lunar-lib) already ships one for that source — and if it does, tell the user before writing any code.**
+Before writing a collector, consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case the user is asking for. A close match counts: an existing collector may already gather the data, or be the right home for a new sub-collector.
 
-- Browse the catalog: <https://earthly.dev/lunar/guardrails/>
-- Or search the source — manifests carry `keywords:` for this: `grep -ril terraform collectors/*/lunar-collector.yml` in a lunar-lib clone, or skim [`collectors/`](https://github.com/earthly/lunar-lib/tree/main/collectors)
-- Check the data, not just the tool: an existing collector may already write the Component JSON path the policy needs (see [component-json/structure.md](references/component-json/structure.md))
-
-On a match — exact or close — stop and report it: the plugin name, the `uses:` line that wires it in, and any `with:` input or sub-collector `include:` that closes the gap. The user decides whether to adopt it, extend it, or build their own anyway. Write a new collector only when nothing matches, or once they've said to go ahead.
+Found something? Say so before writing any code — the user decides whether to adopt it, extend it, or build new.
 
 ## Quick Start
 
