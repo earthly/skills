@@ -7,13 +7,6 @@ description: Edit `lunar-config.yml` — wire together components, domains, coll
 
 Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment.
 
-## Check the Library First
-
-Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the guardrail before adding a local or inline plugin.
-
-- **Already there** — tell the user what you found and let them choose: "a Terraform policy already exists at `github.com/earthly/lunar-lib/policies/terraform` — should we use that instead?"
-- **Close, but not covered** — wire up the local plugin, and if it's generic enough to belong in the library, mention they may want to request it from Earthly.
-
 ## Quick Start
 
 1. Read [references/about-lunar.md](references/about-lunar.md) and [references/core-concepts.md](references/core-concepts.md).
