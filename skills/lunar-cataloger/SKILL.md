@@ -11,10 +11,8 @@ Create cataloger plugins for Earthly Lunar — Bash scripts that build the softw
 
 Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case before writing a cataloger.
 
-- **Exact match** — stop and tell the user, so they can use the library plugin instead of maintaining their own.
-- **Close match** — a library cataloger is in the area but doesn't cover this source, and the case is generic enough that it could: carry on and write the cataloger, and mention they may want to request it in the library from Earthly.
-
-Anything genuinely specific to their setup: just build it.
+- **Already there** — tell the user what you found and let them choose: "a Backstage cataloger already exists at `github.com/earthly/lunar-lib/catalogers/backstage` — should we use that instead?"
+- **Close, but not covered** — write it, and if it's generic enough to belong in the library, mention they may want to request it from Earthly.
 
 ## Quick Start
 

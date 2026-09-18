@@ -11,10 +11,8 @@ Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment.
 
 Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the guardrail before adding a local or inline plugin.
 
-- **Exact match** — stop and tell the user: a pinned `uses:` entry, tuned with `with:` and `include:`/`exclude:`, beats maintaining their own plugin.
-- **Close match** — a library plugin is in the area but doesn't cover this case, and the case is generic enough that it could: carry on with the local plugin, and mention they may want to request it in the library from Earthly.
-
-Anything genuinely specific to their setup: just wire it up locally.
+- **Already there** — tell the user what you found and let them choose: "a Terraform policy already exists at `github.com/earthly/lunar-lib/policies/terraform` — should we use that instead?"
+- **Close, but not covered** — wire up the local plugin, and if it's generic enough to belong in the library, mention they may want to request it from Earthly.
 
 ## Quick Start
 
