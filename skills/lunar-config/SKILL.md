@@ -7,6 +7,12 @@ description: Edit `lunar-config.yml` — wire together components, domains, coll
 
 Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment.
 
+## Check the Library First
+
+**When asked to add a guardrail, check whether [lunar-lib](https://github.com/earthly/lunar-lib) already ships one before writing a local or inline plugin — and if it does, tell the user before writing any code.** Browse the catalog at <https://earthly.dev/lunar/guardrails/>, or skim [`collectors/`](https://github.com/earthly/lunar-lib/tree/main/collectors), [`policies/`](https://github.com/earthly/lunar-lib/tree/main/policies) and [`catalogers/`](https://github.com/earthly/lunar-lib/tree/main/catalogers).
+
+A library plugin is a one-line pinned `uses:` entry, tuned with `with:` and `include:`/`exclude:` — less to maintain than a `./local-plugin` or an inline `runBash`/`runPython`. Write a custom plugin only when nothing in the library fits, or once the user has said to build one anyway.
+
 ## Quick Start
 
 1. Read [references/about-lunar.md](references/about-lunar.md) and [references/core-concepts.md](references/core-concepts.md).

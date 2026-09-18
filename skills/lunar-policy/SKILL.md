@@ -7,6 +7,15 @@ description: Create Lunar policy plugins that enforce engineering standards. Use
 
 Create policy plugins for Earthly Lunar—Python scripts that evaluate Component JSON data and produce pass/fail checks for guardrail enforcement.
 
+## Check the Library First
+
+**Before writing a new policy, check whether [lunar-lib](https://github.com/earthly/lunar-lib) already ships one — and if it does, tell the user before writing any code.**
+
+- Browse the catalog: <https://earthly.dev/lunar/guardrails/>
+- Or search the source — manifests carry `keywords:` for this: `grep -ril coverage policies/*/lunar-policy.yml` in a lunar-lib clone, or skim [`policies/`](https://github.com/earthly/lunar-lib/tree/main/policies)
+
+On a match — exact or close — stop and report it: the plugin and check name, the `uses:` line that wires it in, and any `with:` input that closes the gap. The user decides whether to adopt it, configure it, or build their own anyway. Write a new policy only when nothing matches, or once they've said to go ahead.
+
 ## Quick Start
 
 1. Read [about-lunar.md](references/about-lunar.md) for platform overview
