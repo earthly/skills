@@ -9,9 +9,12 @@ Create collector plugins for Earthly Lunar—Bash scripts that gather SDLC metad
 
 ## Check the Library First
 
-Before writing a collector, consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case the user is asking for. A close match counts: an existing collector may already gather the data, or be the right home for a new sub-collector.
+Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case before writing a collector.
 
-Found something? Say so before writing any code — the user decides whether to adopt it, extend it, or build new.
+- **Exact match** — stop and tell the user, so they can use the library plugin instead of maintaining their own.
+- **Close match** — a library collector is in the area but doesn't gather this data, and the case is generic enough that it could: carry on and write the collector, and mention they may want to request it in the library from Earthly.
+
+Anything genuinely specific to their setup: just build it.
 
 ## Quick Start
 

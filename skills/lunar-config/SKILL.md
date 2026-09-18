@@ -9,9 +9,12 @@ Edit `lunar-config.yml` — the YAML file that defines a Lunar deployment.
 
 ## Check the Library First
 
-Before adding a local or inline plugin, consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the guardrail the user is asking for — a pinned `uses:` entry, tuned with `with:` and `include:`/`exclude:`, is usually the better answer.
+Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the guardrail before adding a local or inline plugin.
 
-Found something? Say so before writing any code — the user decides whether to adopt it, extend it, or build new.
+- **Exact match** — stop and tell the user: a pinned `uses:` entry, tuned with `with:` and `include:`/`exclude:`, beats maintaining their own plugin.
+- **Close match** — a library plugin is in the area but doesn't cover this case, and the case is generic enough that it could: carry on with the local plugin, and mention they may want to request it in the library from Earthly.
+
+Anything genuinely specific to their setup: just wire it up locally.
 
 ## Quick Start
 

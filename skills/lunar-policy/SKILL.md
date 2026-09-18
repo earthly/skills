@@ -9,9 +9,12 @@ Create policy plugins for Earthly Lunar—Python scripts that evaluate Component
 
 ## Check the Library First
 
-Before writing a policy, consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case the user is asking for. A close match counts: an existing general plugin (say, `terraform`) is often the right home for a specific new check, rather than a new plugin alongside it.
+Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case before writing a policy.
 
-Found something? Say so before writing any code — the user decides whether to adopt it, extend it, or build new.
+- **Exact match** — stop and tell the user, so they can use the library plugin instead of maintaining their own.
+- **Close match** — a library plugin is in the area but doesn't cover this case, and the case is generic enough that it could: carry on and write the policy, and mention they may want to request it in the library from Earthly.
+
+Anything genuinely specific to their setup: just build it.
 
 ## Quick Start
 
