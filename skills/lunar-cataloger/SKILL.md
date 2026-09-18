@@ -7,6 +7,13 @@ description: Create Lunar cataloger plugins (Bash scripts) that build the softwa
 
 Create cataloger plugins for Earthly Lunar — Bash scripts that build the software catalog (components, domains, ownership, tags) by syncing from external sources, classifying from signals in each component, or both.
 
+## Check the Library First
+
+Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case before writing a cataloger.
+
+- **Already there** — tell the user what you found and let them choose: "a Backstage cataloger already exists at `github.com/earthly/lunar-lib/catalogers/backstage` — should we use that instead?"
+- **Close, but not covered** — write it, and if it's generic enough to belong in the library, mention they may want to request it from Earthly.
+
 ## Quick Start
 
 1. Read [references/about-lunar.md](references/about-lunar.md) for platform overview and [references/core-concepts.md](references/core-concepts.md) for architecture.
