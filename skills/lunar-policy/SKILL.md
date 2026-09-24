@@ -7,6 +7,13 @@ description: Create Lunar policy plugins that enforce engineering standards. Use
 
 Create policy plugins for Earthly Lunar—Python scripts that evaluate Component JSON data and produce pass/fail checks for guardrail enforcement.
 
+## Check the Library First
+
+Consider whether [lunar-lib](https://github.com/earthly/lunar-lib) already covers the use case before writing a policy.
+
+- **Already there** — tell the user what you found and let them choose: "a Terraform policy already exists at `github.com/earthly/lunar-lib/policies/terraform` — should we use that instead?"
+- **Close, but not covered** — write it, and if it's generic enough to belong in the library, mention they may want to request it from Earthly.
+
 ## Quick Start
 
 1. Read [about-lunar.md](references/about-lunar.md) for platform overview
