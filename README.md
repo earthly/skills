@@ -11,6 +11,7 @@ Agent skills for working with Earthly tools and platforms.
 | [lunar-config](skills/lunar-config/) | Edit `lunar-config.yml` — wire together components, domains, collectors, policies, catalogers, and initiatives |
 | [lunar-policy](skills/lunar-policy/) | Create Lunar policy plugins (Python scripts) that enforce engineering standards |
 | [lunar-sql](skills/lunar-sql/) | Query Lunar's SQL API for components, checks, policies, domains, and PRs |
+| [lunar-uipanel](skills/lunar-uipanel/) | Author `uiPanels` — SQL-backed tabs for dashboard extension points such as the Release Ledger's Release Notes, Compliance, and Artifacts tabs |
 | [earthfile](skills/earthfile/) | Write Earthfiles for repeatable, containerized builds with Earthly |
 
 ## Installation
