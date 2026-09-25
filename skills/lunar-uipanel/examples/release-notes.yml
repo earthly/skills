@@ -1,0 +1,183 @@
+# uiPanels.release-notes: the Release Notes tab of the Release Ledger.
+#
+# The pull requests and tickets recorded across a range of releases, read out
+# of each release commit's `vcs.prs` and `vcs.tickets`. Copy it into the
+# configuration repository and point `uiPanels.release-notes` at it, then
+# change it to match what your collectors record: a deployment that tracks
+# work in Linear rather than Jira changes only the ticket CTEs. Panel file
+# format: https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md
+#
+# The range is (:from_sha, :sha]: every release newer than the baseline the
+# dashboard's "From" picker selects, up to and including the current one. An
+# empty :from_sha opens the range to every release up to the current one, which
+# is what the picker yields when no earlier release qualifies as a baseline.
+# A prefix of at least six characters resolves for either SHA.
+#
+# GitLab references merge requests as !N, GitHub pull requests as #N. The
+# forge is read from the component id's host; add your self-managed GitLab
+# host to the IN list of the `forge` CTE.
+#
+# The Summary tab lists what shipped at a glance; the Notes tab renders the
+# same range as a Markdown document meant to be read or copied out whole.
+tabs:
+  - name: Summary
+    type: table
+    sql: |
+      WITH shas AS (
+        SELECT DISTINCT ON (c.git_sha::text)
+          c.git_sha::text  AS git_sha,
+          c.timestamp      AS ts,
+          c.component_json AS j
+        FROM public.components c
+        WHERE c.pr IS NULL
+          AND c.component_id = :component
+        ORDER BY c.git_sha::text, c.timestamp DESC
+      ),
+      bounds AS (
+        SELECT
+          (SELECT ts FROM shas
+            WHERE git_sha = :sha OR (length(:sha) >= 6 AND git_sha LIKE :sha || '%')
+            ORDER BY ts DESC LIMIT 1) AS cur_ts,
+          (SELECT ts FROM shas
+            WHERE :from_sha <> ''
+              AND (git_sha = :from_sha OR (length(:from_sha) >= 6 AND git_sha LIKE :from_sha || '%'))
+            ORDER BY ts DESC LIMIT 1) AS from_ts
+      ),
+      in_range AS (
+        SELECT s.j
+        FROM shas s CROSS JOIN bounds b
+        WHERE b.cur_ts IS NOT NULL
+          AND s.ts <= b.cur_ts
+          AND s.ts > coalesce(b.from_ts, '-infinity'::timestamptz)
+      ),
+      forge AS (
+        SELECT lower(split_part(:component, '/', 1)) IN ('gitlab.com') AS gitlab
+      ),
+      -- A PR can be recorded on more than one release in the range; keep the
+      -- newest record of each number.
+      prs AS (
+        SELECT DISTINCT ON ((e.p->>'number')::int)
+          CASE WHEN f.gitlab THEN 'MR' ELSE 'PR' END AS kind,
+          CASE WHEN f.gitlab THEN '!' ELSE '#' END
+            || (e.p->>'number') AS ref,
+          coalesce(nullif(btrim(e.p->>'title'), ''), '—') AS title,
+          nullif(e.p->>'url', '') AS url,
+          (e.p->>'number')::int AS ord
+        FROM in_range r
+        CROSS JOIN forge f
+        CROSS JOIN LATERAL jsonb_array_elements(coalesce(r.j->'vcs'->'prs', '[]'::jsonb)) AS e(p)
+        WHERE nullif(e.p->>'number', '') IS NOT NULL
+        ORDER BY (e.p->>'number')::int, e.p->>'merged_at' DESC NULLS LAST
+      ),
+      tickets AS (
+        SELECT DISTINCT ON (e.t->>'id')
+          'Ticket' AS kind,
+          e.t->>'id' AS ref,
+          coalesce(nullif(btrim(e.t->>'summary'), ''), '—') AS title,
+          nullif(e.t->>'url', '') AS url,
+          0 AS ord
+        FROM in_range r
+        CROSS JOIN LATERAL jsonb_array_elements(coalesce(r.j->'vcs'->'tickets', '[]'::jsonb)) AS e(t)
+        WHERE nullif(e.t->>'id', '') IS NOT NULL
+        ORDER BY e.t->>'id'
+      )
+      SELECT kind, ref, title, url
+      FROM (SELECT * FROM prs UNION ALL SELECT * FROM tickets) x
+      ORDER BY kind, ord, ref
+    columns:
+      - sqlId: kind
+        name: Type
+        width: 90
+      - sqlId: ref
+        name: Reference
+        width: 140
+        link: ${url}
+      - sqlId: title
+        name: Title
+
+  - name: Notes
+    type: markdown
+    sqlId: notes
+    sql: |
+      WITH shas AS (
+        SELECT DISTINCT ON (c.git_sha::text)
+          c.git_sha::text  AS git_sha,
+          c.timestamp      AS ts,
+          c.component_json AS j
+        FROM public.components c
+        WHERE c.pr IS NULL
+          AND c.component_id = :component
+        ORDER BY c.git_sha::text, c.timestamp DESC
+      ),
+      bounds AS (
+        SELECT
+          (SELECT ts FROM shas
+            WHERE git_sha = :sha OR (length(:sha) >= 6 AND git_sha LIKE :sha || '%')
+            ORDER BY ts DESC LIMIT 1) AS cur_ts,
+          (SELECT ts FROM shas
+            WHERE :from_sha <> ''
+              AND (git_sha = :from_sha OR (length(:from_sha) >= 6 AND git_sha LIKE :from_sha || '%'))
+            ORDER BY ts DESC LIMIT 1) AS from_ts
+      ),
+      in_range AS (
+        SELECT s.j
+        FROM shas s CROSS JOIN bounds b
+        WHERE b.cur_ts IS NOT NULL
+          AND s.ts <= b.cur_ts
+          AND s.ts > coalesce(b.from_ts, '-infinity'::timestamptz)
+      ),
+      prs AS (
+        SELECT DISTINCT ON ((e.p->>'number')::int)
+          (e.p->>'number')::int AS num,
+          nullif(e.p->>'url', '') AS url,
+          coalesce(nullif(btrim(e.p->>'title'), ''), 'PR #' || (e.p->>'number')) AS title,
+          nullif(btrim(coalesce(e.p->>'description', '')), '') AS descr
+        FROM in_range r
+        CROSS JOIN LATERAL jsonb_array_elements(coalesce(r.j->'vcs'->'prs', '[]'::jsonb)) AS e(p)
+        WHERE nullif(e.p->>'number', '') IS NOT NULL
+        ORDER BY (e.p->>'number')::int, e.p->>'merged_at' DESC NULLS LAST
+      ),
+      tickets AS (
+        SELECT DISTINCT ON (e.t->>'id')
+          e.t->>'id' AS id,
+          nullif(e.t->>'url', '') AS url,
+          nullif(btrim(e.t->>'summary'), '') AS summary,
+          nullif(btrim(coalesce(e.t->>'description', '')), '') AS descr
+        FROM in_range r
+        CROSS JOIN LATERAL jsonb_array_elements(coalesce(r.j->'vcs'->'tickets', '[]'::jsonb)) AS e(t)
+        WHERE nullif(e.t->>'id', '') IS NOT NULL
+        ORDER BY e.t->>'id'
+      ),
+      forge AS (
+        SELECT lower(split_part(:component, '/', 1)) IN ('gitlab.com') AS gitlab
+      ),
+      marker AS (
+        SELECT CASE WHEN f.gitlab THEN '!' ELSE '#' END AS sym,
+               CASE WHEN f.gitlab THEN 'Merge requests' ELSE 'Pull requests' END AS heading
+        FROM forge f
+      )
+      SELECT
+        '## ' || m.heading || E'\n\n'
+        || coalesce(
+             (SELECT string_agg(
+                '- ' || CASE WHEN url IS NOT NULL
+                             THEN '[' || m.sym || num || '](' || url || ')'
+                             ELSE m.sym || num::text END
+                || ' — **' || title || '**'
+                || coalesce(E'\n> ' || replace(replace(descr, E'\r\n', E'\n'), E'\n', E'\n> '), ''),
+                E'\n\n' ORDER BY num)
+              FROM prs),
+             '_Nothing recorded for this range._')
+        || E'\n\n' || '## Tickets' || E'\n\n'
+        || coalesce(
+             (SELECT string_agg(
+                '- ' || CASE WHEN url IS NOT NULL
+                             THEN '[' || id || '](' || url || ')'
+                             ELSE id END
+                || coalesce(' — **' || summary || '**', '')
+                || coalesce(E'\n> ' || replace(replace(descr, E'\r\n', E'\n'), E'\n', E'\n> '), ''),
+                E'\n\n' ORDER BY id)
+              FROM tickets),
+             '_No tickets recorded for this range._')
+        AS notes
+      FROM marker m
