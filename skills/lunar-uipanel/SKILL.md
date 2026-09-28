@@ -29,12 +29,14 @@ With a live session, steps 2 and 5 run against real data. Without one, rely on t
 
 One topic at a time. Use a structured question tool when available.
 
-**Which extension point(s).** Fetch the hosted page and present its extension-point table (ID, where it renders, parameters). The docs site answers a moved page with HTTP 200 and a "Page Not Found" body, so check the content, not the exit status:
+**Which extension point(s).** Query the docs page for its extension-point table (ID, where it renders, parameters) and present it to the user:
 
 ```bash
-curl -fsSL https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md -o /tmp/uipanels.md
-grep -Eq '^\| ID +\| Where it appears +\| Parameters +\|' /tmp/uipanels.md || echo "page moved; use references/uipanels.md"
+curl -fsSL https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md \
+  | awk '/^\| ID +\| Where it appears +\| Parameters +\|/{p=1} p&&/^$/{exit} p'
 ```
+
+Empty output means the page moved (the docs site answers with HTTP 200 and a "Page Not Found" body, so `curl` alone cannot tell); fall back to the table in [references/uipanels.md](references/uipanels.md).
 
 Then check that the installed CLI knows about uiPanels at all, since every later validation depends on it. The dry run checks IDs against a list compiled into the CLI binary and rejects an unknown one with that list. A throwaway config with a bogus ID prints it:
 
