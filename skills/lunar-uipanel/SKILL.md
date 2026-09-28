@@ -38,27 +38,16 @@ curl -fsSL https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md
 
 Empty output means the page moved (the docs site answers with HTTP 200 and a "Page Not Found" body, so `curl` alone cannot tell); fall back to the table in [references/uipanels.md](references/uipanels.md).
 
-Then check that the installed CLI knows about uiPanels at all, since every later validation depends on it. The dry run checks IDs against a list compiled into the CLI binary and rejects an unknown one with that list. A throwaway config with a bogus ID prints it:
+Then require CLI 4.3.0 or newer, the first release with uiPanels. An older CLI drops the whole `uiPanels:` block unread and reports `Configuration is valid.`, so the dry runs in steps 5 and 6 would check no panel at all and the Hub's pull would be the first real validation:
 
 ```bash
-mkdir -p /tmp/uipanel-probe && cd /tmp/uipanel-probe && git init -q
-cat > lunar-config.yml <<'EOF'
-version: 0
-default_image: earthly/lunar-scripts:1.0.0
-hub: {host: lunar.example.com, grpcPort: 443, httpPort: 443}
-collectors: [{name: probe, runBash: "true", on: [probe], hook: {type: code}}]
-policies: [{name: probe, mainPython: "pass", on: [probe]}]
-uiPanels: {probe: probe.yml}
-EOF
-printf 'tabs:\n  - {name: Probe, type: markdown, sql: SELECT 1 AS m, sqlId: m}\n' > probe.yml
-git add -A && git -c user.name=probe -c user.email=probe@example.com commit -qm probe
-lunar hub pull --dry-run /tmp/uipanel-probe
-# Error: ... unknown extension point "probe" (known ids: release-artifacts, release-evidence, release-notes)
+v=$(lunar version | cut -d' ' -f1)
+[ "$(printf '%s\n' 4.3.0 "$v" | sort -V | head -1)" = 4.3.0 ] && echo "lunar $v ok" || echo "lunar $v predates uiPanels; upgrade before continuing"
 ```
 
-If the probe prints `Configuration is valid.` instead, the CLI predates uiPanels: it drops the whole `uiPanels:` block unread, so the dry runs in steps 5 and 6 would check no panel at all and the Hub's pull would be the first real validation. Stop and have the user upgrade the CLI before continuing. An ID from the docs page that is missing from `known ids` means the CLI is behind as well.
+Stop until the user has upgraded. An extension point the docs page lists but the CLI rejects at dry run (`unknown extension point "<id>" (known ids: ...)`) means the CLI is behind that ID's release, so the same applies.
 
-`known ids` says nothing about the Hub. The Hub validates IDs on the real pull, and an unsupported one fails the whole configuration, including CI pulls of config branches, so the Hub must be upgraded before such an ID is added. The Release Ledger tab itself confirms the Hub knows an ID: until the configuration defines its panel, the tab shows a note naming the `uiPanels.<id>` key to add.
+The CLI version says nothing about the Hub. The Hub validates IDs on the real pull, and an unsupported one fails the whole configuration, including CI pulls of config branches, so the Hub must be upgraded before such an ID is added. The Release Ledger tab itself confirms the Hub knows an ID: until the configuration defines its panel, the tab shows a note naming the `uiPanels.<id>` key to add.
 
 **What to show per point.** Whether the point gets one tab or several, and for each tab whether it is a `table` (one row per signal, or one per artifact) or a `markdown` note, plus the signals or columns the user wants in it.
 
