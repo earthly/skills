@@ -15,31 +15,6 @@ Work in a fresh clone under `/tmp` from step 3 on. Never edit the user's working
 2. Skim [references/component-json/structure.md](references/component-json/structure.md) for the paths collectors write.
 3. Follow the six steps below. Validate with `lunar hub pull --dry-run` and `scripts/run-tab.py` before opening the PR.
 
-## How uiPanels Work
-
-```yaml
-# lunar-config.yml
-uiPanels:
-  release-evidence: uipanels/release-evidence.yml
-```
-
-```yaml
-# uipanels/release-evidence.yml
-tabs:
-  - name: Evidence
-    type: table            # or markdown, with sqlId: <column>
-    sql: |
-      SELECT ... FROM public.components
-      WHERE component_id = :component AND git_sha::text = :sha AND pr IS NULL
-    columns:
-      - sqlId: signal
-        name: Signal
-        width: 220
-      - sqlId: detail      # unsized column takes the remaining space
-```
-
-Each extension point passes the named parameters listed on the docs page (`:component` and `:sha` for the Release Ledger tabs). Lunar substitutes each one as a quoted SQL string literal at view time. A `::type` cast is not a parameter.
-
 ## Step 0: Detect the Environment
 
 ```bash
