@@ -45,13 +45,13 @@ The key is the ID of an extension point, and the value is the path of its panel 
 
 | ID                  | Where it appears                                           | Parameters                        |
 | ------------------- | ---------------------------------------------------------- | --------------------------------- |
-| `release-notes`     | The **Release Notes** tab of the Release Ledger dashboard. | `:component`, `:sha`, `:from_sha` |
+| `release-notes`     | The **Release Notes** tab of the Release Ledger dashboard. | `:component`, `:sha`              |
 | `release-evidence`  | The **Compliance** tab of the Release Ledger dashboard.    | `:component`, `:sha`              |
 | `release-artifacts` | The **Artifacts** tab of the Release Ledger dashboard.     | `:component`, `:sha`              |
 
 The dashboard passes the listed parameters to every tab's SQL. Extension-point IDs are validated by the Hub version handling the pull. Upgrade the Hub before adding an ID introduced by a newer release: an unsupported ID fails the entire configuration pull, including pulls of configuration-repository branches in CI, so it cannot be staged on a branch ahead of the Hub upgrade. Until the configuration defines a panel, the tab shows a note naming the key to add.
 
-`:from_sha` is the baseline the Release Ledger's **From** control selects: the release the notes are measured against, so the natural range for a `release-notes` query is every release after `:from_sha` up to and including `:sha`. The control offers previous releases that recorded an approved deployment attempt, and is empty when none qualify — treat an empty `:from_sha` as "no baseline", covering every release up to `:sha`.
+A `release-notes` panel describes what shipped in the release at `:sha`. How far back that reaches is the panel's decision. The example panel in `hub/uipanel/examples/` reads the deployment attempts each release records under `.deployment.attempts`, takes the newest release before `:sha` with an approved attempt as the previous deployment, and lists the pull requests and tickets of every release after it, up to and including `:sha`. When no earlier release was deployed, it lists everything up to `:sha`.
 
 ## Panel file
 
