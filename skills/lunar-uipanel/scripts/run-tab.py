@@ -18,7 +18,7 @@ stdout of `lunar sql connection-string` (SQL API role, `public.*` views).
 
 Usage:
   run-tab.py uipanels/release-evidence.yml --component github.com/org/repo --sha abc1234
-  run-tab.py uipanels/release-notes.yml --component ... --sha ... --param from_sha=
+  run-tab.py panel.yml --component ... --sha ... --param other_param=value
   run-tab.py panel.yml --component ... --sha ... --tab Evidence --conn "$DSN"
 """
 
@@ -43,7 +43,7 @@ def parse_args():
     p.add_argument("--component", help="value for :component")
     p.add_argument("--sha", help="value for :sha")
     p.add_argument("--param", action="append", default=[], metavar="NAME=VALUE",
-                   help="any other parameter, e.g. from_sha= (repeatable)")
+                   help="any other parameter the extension point lists (repeatable)")
     p.add_argument("--tab", help="run only the tab with this name")
     conn = p.add_mutually_exclusive_group()
     conn.add_argument("--conn", help="PostgreSQL connection string")

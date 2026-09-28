@@ -38,7 +38,7 @@ tabs:
       - sqlId: detail      # unsized column takes the remaining space
 ```
 
-Each extension point passes named parameters (`:component`, `:sha`, and `:from_sha` for `release-notes`). Lunar substitutes each one as a quoted SQL string literal at view time. A `::type` cast is not a parameter.
+Each extension point passes the named parameters listed on the docs page (`:component` and `:sha` for the Release Ledger tabs). Lunar substitutes each one as a quoted SQL string literal at view time. A `::type` cast is not a parameter.
 
 ## Step 0: Detect the Environment
 
@@ -61,7 +61,7 @@ curl -fsSL https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md
 grep -Eq '^\| ID +\| Where it appears +\| Parameters +\|' /tmp/uipanels.md || echo "page moved; use references/uipanels.md"
 ```
 
-Cross-check the IDs against the user's installed CLI, which rejects an unknown ID with the list it knows. A throwaway config with a bogus ID prints that list:
+Then check that the installed CLI knows about uiPanels at all, since every later validation depends on it. The dry run checks IDs against a list compiled into the CLI binary and rejects an unknown one with that list. A throwaway config with a bogus ID prints it:
 
 ```bash
 mkdir -p /tmp/uipanel-probe && cd /tmp/uipanel-probe && git init -q
@@ -79,7 +79,9 @@ lunar hub pull --dry-run /tmp/uipanel-probe
 # Error: ... unknown extension point "probe" (known ids: release-artifacts, release-evidence, release-notes)
 ```
 
-An ID on the docs page but missing from `known ids` needs a Hub upgrade first: an unsupported ID fails the whole pull, including CI pulls of config branches.
+If the probe prints `Configuration is valid.` instead, the CLI predates uiPanels: it drops the whole `uiPanels:` block unread, so the dry runs in steps 5 and 6 would check no panel at all and the Hub's pull would be the first real validation. Stop and have the user upgrade the CLI before continuing. An ID from the docs page that is missing from `known ids` means the CLI is behind as well.
+
+`known ids` says nothing about the Hub. The Hub validates IDs on the real pull, and an unsupported one fails the whole configuration, including CI pulls of config branches, so the Hub must be upgraded before such an ID is added. The Release Ledger tab itself confirms the Hub knows an ID: until the configuration defines its panel, the tab shows a note naming the `uiPanels.<id>` key to add.
 
 **What to show per point.** Whether the point gets one tab or several, and for each tab whether it is a `table` (one row per signal, or one per artifact) or a `markdown` note, plus the signals or columns the user wants in it.
 
@@ -127,7 +129,7 @@ Write `uipanels/<extension-point-id>.yml` in the clone. Start from the closest e
 |---|---|---|
 | [examples/release-evidence.yml](examples/release-evidence.yml) | `release-evidence` | One `VALUES` row per signal with present/detail columns |
 | [examples/release-artifacts.yml](examples/release-artifacts.yml) | `release-artifacts` | One row per element of a Component JSON array |
-| [examples/release-notes.yml](examples/release-notes.yml) | `release-notes` | A `(:from_sha, :sha]` range, a table tab and a Markdown tab |
+| [examples/release-notes.yml](examples/release-notes.yml) | `release-notes` | The releases since the previous approved deployment, a table tab and a Markdown tab |
 
 Patterns the examples share:
 
@@ -137,7 +139,7 @@ Patterns the examples share:
 - Every tab references `:component` and `:sha`; a tab that omits one shows the same rows for every component or release.
 - Only `public.*` views, so what `run-tab.py` checks with the SQL API role is what the dashboard runs.
 - Fixed `width` on short columns, the free-text column unsized. `link`, `color` and `alignment` are optional.
-- For `release-notes`, treat an empty `:from_sha` as "no baseline": every release up to `:sha`.
+- For `release-notes`, how far back the notes reach is the panel's decision. The example takes the newest release before `:sha` with an approved attempt under `.deployment.attempts` as the baseline, and covers everything up to `:sha` when there is none.
 
 Then wire it into the clone's `lunar-config.yml` (or the `lunar-config.d/` fragment the repo uses):
 
@@ -158,8 +160,8 @@ Then run each tab the way the dashboard does, against the `(component, sha)` fro
 
 ```bash
 python3 <skill-dir>/scripts/run-tab.py uipanels/<id>.yml --component <component-id> --sha <sha>
-# release-notes also takes the baseline:
-python3 <skill-dir>/scripts/run-tab.py uipanels/release-notes.yml --component <id> --sha <sha> --param from_sha=
+# any further parameter the docs page lists for the point:
+python3 <skill-dir>/scripts/run-tab.py uipanels/<id>.yml --component <id> --sha <sha> --param <name>=<value>
 ```
 
 `run-tab.py` substitutes each `:name` as a quoted literal, strips a trailing `;`, wraps the SQL as a read-only subquery, checks that every declared `sqlId` comes back, applies the 200-row cap and prints a row preview or the Markdown. It reads the connection string from `lunar sql connection-string` (`--conn <dsn>` overrides; admins can pass `--grafana` for the wider dashboard role) and exits non-zero on any failing tab. Fix and re-run until both commands are clean.

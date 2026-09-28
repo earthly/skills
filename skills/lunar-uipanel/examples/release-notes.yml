@@ -7,15 +7,16 @@
 # work in Linear rather than Jira changes only the ticket CTEs. Panel file
 # format: https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md
 #
-# The range is (:from_sha, :sha]: every release newer than the baseline the
-# dashboard's "From" picker selects, up to and including the current one. An
-# empty :from_sha opens the range to every release up to the current one, which
-# is what the picker yields when no earlier release qualifies as a baseline.
-# A prefix of at least six characters resolves for either SHA.
+# The notes cover every release after the previous deployment, up to and
+# including :sha. The previous deployment is the newest release older than :sha
+# with an approved attempt under `.deployment.attempts`, the map keyed by CI run
+# id that lunar-lib's deployment collectors record. When no earlier release was
+# deployed, the notes cover everything up to :sha. A prefix of at least six
+# characters resolves :sha.
 #
 # GitLab references merge requests as !N, GitHub pull requests as #N. The
-# forge is read from the component id's host; add your self-managed GitLab
-# host to the IN list of the `forge` CTE.
+# `forge` CTE reads the forge from `.vcs.provider`, which the gitlab collector
+# writes, falling back to the component id's host for gitlab.com.
 #
 # The Summary tab lists what shipped at a glance; the Notes tab renders the
 # same range as a Markdown document meant to be read or copied out whole.
@@ -33,25 +34,36 @@ tabs:
           AND c.component_id = :component
         ORDER BY c.git_sha::text, c.timestamp DESC
       ),
-      bounds AS (
-        SELECT
-          (SELECT ts FROM shas
-            WHERE git_sha = :sha OR (length(:sha) >= 6 AND git_sha LIKE :sha || '%')
-            ORDER BY ts DESC LIMIT 1) AS cur_ts,
-          (SELECT ts FROM shas
-            WHERE :from_sha <> ''
-              AND (git_sha = :from_sha OR (length(:from_sha) >= 6 AND git_sha LIKE :from_sha || '%'))
-            ORDER BY ts DESC LIMIT 1) AS from_ts
+      cur AS (
+        SELECT ts FROM shas
+        WHERE git_sha = :sha OR (length(:sha) >= 6 AND git_sha LIKE :sha || '%')
+        ORDER BY ts DESC LIMIT 1
+      ),
+      -- The jsonb_typeof guard makes jsonb_each yield no rows, rather than
+      -- error, for a release without `.deployment.attempts`.
+      baseline AS (
+        SELECT s.ts
+        FROM shas s CROSS JOIN cur
+        WHERE s.ts < cur.ts
+          AND EXISTS (
+            SELECT 1
+            FROM jsonb_each(
+              CASE WHEN jsonb_typeof(s.j->'deployment'->'attempts') = 'object'
+                   THEN s.j->'deployment'->'attempts' ELSE '{}'::jsonb END
+            ) AS a
+            WHERE a.value->>'status' = 'approved'
+          )
+        ORDER BY s.ts DESC LIMIT 1
       ),
       in_range AS (
         SELECT s.j
-        FROM shas s CROSS JOIN bounds b
-        WHERE b.cur_ts IS NOT NULL
-          AND s.ts <= b.cur_ts
-          AND s.ts > coalesce(b.from_ts, '-infinity'::timestamptz)
+        FROM shas s CROSS JOIN cur
+        WHERE s.ts <= cur.ts
+          AND s.ts > coalesce((SELECT ts FROM baseline), '-infinity'::timestamp)
       ),
       forge AS (
-        SELECT lower(split_part(:component, '/', 1)) IN ('gitlab.com') AS gitlab
+        SELECT EXISTS (SELECT 1 FROM in_range WHERE j->'vcs'->>'provider' = 'gitlab')
+            OR lower(split_part(:component, '/', 1)) = 'gitlab.com' AS gitlab
       ),
       -- A PR can be recorded on more than one release in the range; keep the
       -- newest record of each number.
@@ -109,22 +121,32 @@ tabs:
           AND c.component_id = :component
         ORDER BY c.git_sha::text, c.timestamp DESC
       ),
-      bounds AS (
-        SELECT
-          (SELECT ts FROM shas
-            WHERE git_sha = :sha OR (length(:sha) >= 6 AND git_sha LIKE :sha || '%')
-            ORDER BY ts DESC LIMIT 1) AS cur_ts,
-          (SELECT ts FROM shas
-            WHERE :from_sha <> ''
-              AND (git_sha = :from_sha OR (length(:from_sha) >= 6 AND git_sha LIKE :from_sha || '%'))
-            ORDER BY ts DESC LIMIT 1) AS from_ts
+      cur AS (
+        SELECT ts FROM shas
+        WHERE git_sha = :sha OR (length(:sha) >= 6 AND git_sha LIKE :sha || '%')
+        ORDER BY ts DESC LIMIT 1
+      ),
+      -- The jsonb_typeof guard makes jsonb_each yield no rows, rather than
+      -- error, for a release without `.deployment.attempts`.
+      baseline AS (
+        SELECT s.ts
+        FROM shas s CROSS JOIN cur
+        WHERE s.ts < cur.ts
+          AND EXISTS (
+            SELECT 1
+            FROM jsonb_each(
+              CASE WHEN jsonb_typeof(s.j->'deployment'->'attempts') = 'object'
+                   THEN s.j->'deployment'->'attempts' ELSE '{}'::jsonb END
+            ) AS a
+            WHERE a.value->>'status' = 'approved'
+          )
+        ORDER BY s.ts DESC LIMIT 1
       ),
       in_range AS (
         SELECT s.j
-        FROM shas s CROSS JOIN bounds b
-        WHERE b.cur_ts IS NOT NULL
-          AND s.ts <= b.cur_ts
-          AND s.ts > coalesce(b.from_ts, '-infinity'::timestamptz)
+        FROM shas s CROSS JOIN cur
+        WHERE s.ts <= cur.ts
+          AND s.ts > coalesce((SELECT ts FROM baseline), '-infinity'::timestamp)
       ),
       prs AS (
         SELECT DISTINCT ON ((e.p->>'number')::int)
@@ -149,7 +171,8 @@ tabs:
         ORDER BY e.t->>'id'
       ),
       forge AS (
-        SELECT lower(split_part(:component, '/', 1)) IN ('gitlab.com') AS gitlab
+        SELECT EXISTS (SELECT 1 FROM in_range WHERE j->'vcs'->>'provider' = 'gitlab')
+            OR lower(split_part(:component, '/', 1)) = 'gitlab.com' AS gitlab
       ),
       marker AS (
         SELECT CASE WHEN f.gitlab THEN '!' ELSE '#' END AS sym,

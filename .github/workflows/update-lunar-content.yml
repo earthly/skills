@@ -33,13 +33,21 @@ jobs:
         env:
           LUNAR_REPO_PAT: ${{ secrets.LUNAR_REPO_PAT }}
 
-      - name: Run update-all
-        run: earthly +update-all
+      - name: Refresh lunar-lib references
+        run: earthly +update-lunar-references
+
+      # Separate step: this target fails when the docs page moves or its
+      # extension-point table changes, and that must not block the step above.
+      - name: Refresh lunar-uipanel references
+        continue-on-error: true
+        run: earthly +update-uipanel-references
 
       - name: Check for changes
         id: changes
         run: |
-          if git diff --quiet && git diff --cached --quiet; then
+          # --porcelain also lists untracked files, which a first refresh of a
+          # new skill's references/ produces.
+          if [ -z "$(git status --porcelain)" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
