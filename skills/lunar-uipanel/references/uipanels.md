@@ -43,11 +43,11 @@ uiPanels:
 
 The key is the ID of an extension point, and the value is the path of its panel file relative to the configuration repository root. The supported IDs are as follows:
 
-| ID                  | Where it appears                                           | Parameters                        |
-| ------------------- | ---------------------------------------------------------- | --------------------------------- |
-| `release-notes`     | The **Release Notes** tab of the Release Ledger dashboard. | `:component`, `:sha`              |
-| `release-evidence`  | The **Compliance** tab of the Release Ledger dashboard.    | `:component`, `:sha`              |
-| `release-artifacts` | The **Artifacts** tab of the Release Ledger dashboard.     | `:component`, `:sha`              |
+| ID                  | Where it appears                                           | Parameters           |
+| ------------------- | ---------------------------------------------------------- | -------------------- |
+| `release-notes`     | The **Release Notes** tab of the Release Ledger dashboard. | `:component`, `:sha` |
+| `release-evidence`  | The **Compliance** tab of the Release Ledger dashboard.    | `:component`, `:sha` |
+| `release-artifacts` | The **Artifacts** tab of the Release Ledger dashboard.     | `:component`, `:sha` |
 
 The dashboard passes the listed parameters to every tab's SQL. Extension-point IDs are validated by the Hub version handling the pull. Upgrade the Hub before adding an ID introduced by a newer release: an unsupported ID fails the entire configuration pull, including pulls of configuration-repository branches in CI, so it cannot be staged on a branch ahead of the Hub upgrade. Until the configuration defines a panel, the tab shows a note naming the key to add.
 
