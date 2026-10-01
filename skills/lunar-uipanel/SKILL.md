@@ -9,10 +9,10 @@ Write `uiPanels` for Earthly Lunar: YAML panel files whose tabs run SQL over the
 
 ## Prerequisites
 
-- `lunar` CLI 4.3.0 or later (`lunar version`). Older versions ignore `uiPanels:` and report the configuration valid.
+- `lunar` CLI 4.3.0 or later (`lunar version`), connected to the Hub: `lunar whoami` succeeds, after `lunar login` or with `LUNAR_HUB_HOST`/`LUNAR_HUB_TOKEN` set. Do not continue without it. Older CLI versions ignore `uiPanels:` and report the configuration valid.
+- `psql`, for executing the tabs through `lunar sql connection-string`.
 - A Hub that supports the extension-point ID. An unsupported ID fails the whole configuration pull. Until a panel is defined, the tab shows a note naming the `uiPanels.<id>` key to add, which confirms the Hub knows it.
 - The extension point to fill, the tabs it gets (`table` or `markdown`) and the Component JSON path behind each value. Check paths against a real release with `lunar component get-json <component-id> --git-sha <sha> --pretty`. [references/component-json/structure.md](references/component-json/structure.md) lists what the lunar-lib collectors write.
-- Optional: SQL API access (`lunar sql connection-string` and `psql`) to execute the tabs before publishing.
 
 Clone the configuration repository into a temporary directory (`mktemp -d`), work there, and delete it when done. The current directory is not necessarily that repository.
 
@@ -36,4 +36,4 @@ uiPanels:
 
 `lunar hub pull --dry-run <checkout>` runs the Hub's panel-file checks with no Hub connection: unknown ID or parameter, duplicate tab names, missing `columns`/`sqlId`, unsafe `link` templates, the 64 KiB cap. It does not execute the SQL, so syntax errors and unknown columns would only appear on the dashboard.
 
-With SQL API access, execute each tab the way the dashboard does: take the tab's `sql`, replace every `:name` parameter with its value as a quoted string literal (a `::type` cast is not a parameter), run it read-only through `lunar sql connection-string` for a component and SHA that have the data, and check that every declared `sqlId` is among the returned columns. For a `markdown` tab, the first row's `sqlId` value is what renders. A table shows at most 200 rows, so add `ORDER BY` when order matters. `psql -v component="'<id>'" -v sha="'<sha>'"` performs that substitution with the same rules.
+Then execute each tab the way the dashboard does: take the tab's `sql`, replace every `:name` parameter with its value as a quoted string literal (a `::type` cast is not a parameter), run it read-only through `lunar sql connection-string` for a component and SHA that have the data, and check that every declared `sqlId` is among the returned columns. For a `markdown` tab, the first row's `sqlId` value is what renders. A table shows at most 200 rows, so add `ORDER BY` when order matters. `psql -v component="'<id>'" -v sha="'<sha>'"` performs that substitution with the same rules.
