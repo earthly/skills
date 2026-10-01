@@ -22,7 +22,9 @@ Clone the configuration repository into a temporary directory (`mktemp -d`), wor
 3. Look at the Component JSONs in the Hub through the SQL API (`psql "$(lunar sql connection-string)"`; `component_json` in `public.components`, `jsonb_object_keys` to see what is collected and how widely), and propose where to read each piece of information from: the path, and the components where you saw it. [references/component-json/structure.md](references/component-json/structure.md) describes what the lunar-lib collectors write.
 4. Iterate with the user on the shape of the tab (`table` columns or a `markdown` note) and on the query that returns it, running the query against the SQL API as you go (see [Validation](#validation)). Write the panel file once they agree.
 
-[examples/](examples/) holds a ready-made panel file per extension point, named after it. Start from the one for the point you are filling and keep its shape:
+[examples/](examples/) holds a ready-made panel file per extension point, named after it. Start from the one for the point you are filling.
+
+Implementation tips:
 
 - Resolve the row for the parameters with a CTE over `public.components` matching `:component` and `:sha` (exact, or a prefix of six or more characters), `pr IS NULL`, `ORDER BY timestamp DESC LIMIT 1`. Not `components_latest`: the commit being viewed need not be the newest one.
 - `coalesce` the resolved JSON to `'{}'::jsonb`, so a tab still renders rows saying what is missing.
