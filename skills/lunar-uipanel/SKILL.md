@@ -24,7 +24,7 @@ Clone the configuration repository into a temporary directory (`mktemp -d`), wor
 
 [examples/](examples/) holds a ready-made panel file per extension point, named after it. Start from the one for the point you are filling and keep its shape:
 
-- Resolve the release with a CTE over `public.components` matching `:component` and `:sha` (exact, or a prefix of six or more characters), `pr IS NULL`, `ORDER BY timestamp DESC LIMIT 1`. Not `components_latest`: the release being viewed need not be the newest commit.
+- Resolve the row for the parameters with a CTE over `public.components` matching `:component` and `:sha` (exact, or a prefix of six or more characters), `pr IS NULL`, `ORDER BY timestamp DESC LIMIT 1`. Not `components_latest`: the commit being viewed need not be the newest one.
 - `coalesce` the resolved JSON to `'{}'::jsonb`, so a tab still renders rows saying what is missing.
 - Every tab references `:component` and `:sha`.
 - Only `public.*` views, filtered by `:component`. Cells render as text, so use symbols (`✅`, `❌`, `—`), not icons.
