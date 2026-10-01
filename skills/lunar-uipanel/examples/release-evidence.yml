@@ -1,0 +1,194 @@
+# uiPanels.release-evidence: the Compliance tab of the Release Ledger.
+#
+# One row per compliance signal, read out of the release commit's Component
+# JSON. Copy it into the configuration repository and point
+# `uiPanels.release-evidence` at it, then add, drop or rename signals to match
+# the collectors your deployment runs. Panel file format:
+# https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md
+#
+# The :sha parameter is the dashboard's release commit; a prefix of at least
+# six characters resolves too, the way the ledger's other panels resolve it.
+tabs:
+  - name: Evidence
+    type: table
+    sql: |
+      WITH resolved AS (
+        SELECT c.component_json AS j
+        FROM public.components c
+        WHERE c.pr IS NULL
+          AND c.component_id = :component
+          AND (c.git_sha::text = :sha
+               OR (length(:sha) >= 6 AND c.git_sha::text LIKE :sha || '%'))
+        ORDER BY c.timestamp DESC
+        LIMIT 1
+      ),
+      -- One row even when nothing was collected for the release, so every
+      -- signal reports what is missing rather than the table coming back empty.
+      blob AS (
+        SELECT coalesce((SELECT j FROM resolved), '{}'::jsonb) AS j
+      ),
+      -- Cell values are rendered as text, so the Present column is a symbol.
+      icons AS (
+        SELECT '✅' AS pass, '❌' AS fail, '⏳' AS pending, '—' AS na
+      )
+      SELECT v.signal, v.present, v.detail
+      FROM blob, icons, LATERAL (VALUES
+        ('Jira tickets',
+          CASE
+            WHEN jsonb_array_length(coalesce(j->'vcs'->'tickets', '[]'::jsonb)) = 0 THEN na
+            WHEN (
+              SELECT bool_and(coalesce((t->>'valid')::boolean, false))
+              FROM jsonb_array_elements(j->'vcs'->'tickets') t
+            ) THEN pass
+            ELSE fail
+          END,
+          CASE
+            WHEN jsonb_array_length(coalesce(j->'vcs'->'tickets', '[]'::jsonb)) = 0
+                 AND jsonb_array_length(coalesce(j->'vcs'->'prs', '[]'::jsonb)) = 0
+              THEN 'no merged-PR / Jira evidence recorded'
+            WHEN jsonb_array_length(coalesce(j->'vcs'->'tickets', '[]'::jsonb)) = 0
+              THEN coalesce(
+                (
+                  SELECT 'PR #' || string_agg(p->>'number', ', #' ORDER BY (p->>'number')::int)
+                  FROM jsonb_array_elements(j->'vcs'->'prs') p
+                ) || ' recorded, but no Jira keys found',
+                'no Jira keys found'
+              )
+            ELSE (
+              SELECT string_agg(
+                (t->>'id')
+                || CASE WHEN coalesce((t->>'valid')::boolean, false) THEN ' ✅' ELSE ' ❌' END
+                || coalesce(' • ' || nullif(t->>'status', ''), '')
+                || coalesce(
+                  ' • PR #' || (
+                    SELECT string_agg(n::text, ', #' ORDER BY n::int)
+                    FROM jsonb_array_elements_text(coalesce(t->'pr_numbers', '[]'::jsonb)) n
+                  ),
+                  ''
+                )
+                || coalesce(' • ' || nullif(t->>'url', ''), ''),
+                ' | '
+                ORDER BY t->>'id'
+              )
+              FROM jsonb_array_elements(j->'vcs'->'tickets') t
+            )
+          END),
+        ('SBOM generated',
+          CASE WHEN j->'sbom' IS NOT NULL THEN pass ELSE fail END,
+          CASE WHEN j->'sbom' IS NULL THEN 'no SBOM recorded'
+            ELSE coalesce(jsonb_array_length(j->'sbom'->'cicd'->'cyclonedx'->'components')::text,
+                          jsonb_array_length(j->'sbom'->'auto'->'cyclonedx'->'components')::text, '0')
+              || ' components • '
+              || coalesce(j->'sbom'->'cicd'->'source'->>'tool', j->'sbom'->'auto'->'source'->>'tool', 'syft/trivy')
+          END),
+        ('API docs published',
+          CASE WHEN jsonb_array_length(coalesce(j->'api'->'spec_files', '[]'::jsonb)) > 0 THEN pass ELSE fail END,
+          CASE WHEN jsonb_array_length(coalesce(j->'api'->'spec_files', '[]'::jsonb)) > 0
+            THEN (j->'api'->'spec_files'->0->>'path') || ' • ' || (j->'api'->'spec_files'->0->>'format') || ' ' || (j->'api'->'spec_files'->0->>'version')
+            ELSE 'no OpenAPI / Swagger spec detected'
+          END),
+        ('SAST executed',
+          CASE WHEN j->'sast' IS NOT NULL THEN pass ELSE na END,
+          CASE WHEN j->'sast' IS NULL THEN 'no SAST scanner recorded'
+            ELSE coalesce(j->'sast'->'source'->>'tool', 'scanner')
+              || coalesce(' • ' || jsonb_array_length(j->'sast'->'issues')::text || ' findings', '')
+          END),
+        ('SCA executed',
+          CASE WHEN j->'sca' IS NOT NULL THEN pass ELSE na END,
+          CASE WHEN j->'sca' IS NULL THEN 'no SCA scanner recorded'
+            ELSE coalesce(j->'sca'->'source'->>'tool', 'scanner')
+              || coalesce(' • ' || (j->'sca'->'vulnerabilities'->>'total') || ' vulns', '')
+          END),
+        ('Secrets clean',
+          CASE
+            WHEN j->'secrets' IS NULL THEN na
+            WHEN jsonb_array_length(coalesce(j->'secrets'->'issues', '[]'::jsonb)) = 0 THEN pass
+            ELSE fail
+          END,
+          CASE WHEN j->'secrets' IS NULL THEN 'secret scanner not enabled'
+            ELSE (j->'secrets'->'source'->>'tool') || ' • '
+              || jsonb_array_length(coalesce(j->'secrets'->'issues', '[]'::jsonb))::text || ' issues'
+          END),
+        ('Tests executed',
+          CASE WHEN j->'testing' IS NOT NULL THEN pass ELSE na END,
+          CASE WHEN j->'testing' IS NULL THEN 'no test data collected'
+            ELSE coalesce(j->'testing'->'source'->>'tool', 'tests')
+              || coalesce(' • ' || (j->'testing'->'results'->>'total') || ' tests', '')
+              || coalesce(' • ' || (j->'testing'->'coverage'->>'percentage') || '% cov', '')
+          END),
+        ('Code quality (SonarQube)',
+          CASE
+            WHEN j->'code_quality' IS NULL THEN na
+            WHEN (j->'code_quality'->'source'->>'analysis_status') = 'pending' THEN pending
+            WHEN (j->'code_quality'->'native'->'sonarqube'->'quality_gate'->>'status') = 'OK' THEN pass
+            WHEN (j->'code_quality'->'native'->'sonarqube'->'quality_gate'->>'status') = 'ERROR' THEN fail
+            WHEN (j->'code_quality'->>'passing') = 'true' THEN pass
+            WHEN (j->'code_quality'->>'passing') = 'false' THEN fail
+            ELSE na
+          END,
+          CASE
+            WHEN j->'code_quality' IS NULL THEN 'no code-quality scanner recorded'
+            WHEN (j->'code_quality'->'source'->>'analysis_status') = 'pending'
+              THEN coalesce(j->'code_quality'->'source'->>'tool', 'sonarqube')
+                || ' • analysis pending on ' || coalesce(j->'code_quality'->'source'->>'project_key', '(unknown project)')
+            ELSE coalesce(j->'code_quality'->'source'->>'tool', 'scanner')
+              || ' • gate ' || coalesce(j->'code_quality'->'native'->'sonarqube'->'quality_gate'->>'status', '?')
+              || coalesce(' • R:' || (j->'code_quality'->'native'->'sonarqube'->'ratings'->>'reliability')
+                        || ' S:' || (j->'code_quality'->'native'->'sonarqube'->'ratings'->>'security')
+                        || ' M:' || (j->'code_quality'->'native'->'sonarqube'->'ratings'->>'maintainability'), '')
+              || ' • ' || coalesce(j->'code_quality'->'issues'->>'total', '0') || ' issues'
+              || coalesce(' • ' || (j->'code_quality'->>'coverage_percentage') || '% cov', '')
+          END),
+        ('DR plan on file',
+          CASE WHEN (j->'oncall'->'disaster_recovery'->'plan'->>'exists')::boolean THEN pass ELSE fail END,
+          coalesce(j->'oncall'->'disaster_recovery'->'plan'->>'path', '—')
+            || ' • reviewed ' || coalesce(j->'oncall'->'disaster_recovery'->'plan'->>'last_reviewed', '?')),
+        ('DR tabletop recent',
+          CASE WHEN j->'oncall'->'disaster_recovery'->>'latest_exercise_date' IS NOT NULL THEN pass ELSE fail END,
+          coalesce(j->'oncall'->'disaster_recovery'->>'latest_exercise_date', '—')
+            || ' • ' || coalesce(j->'oncall'->'disaster_recovery'->>'exercise_count', '0') || ' on file'),
+        ('Compliance docs up to date',
+          CASE
+            WHEN j->'compliance' IS NULL THEN na
+            WHEN (j->'compliance'->>'imported')::boolean = false THEN fail
+            WHEN (
+              coalesce((j->'compliance'->'access_reviews'->>'total_reviews')::int, 0) > 0 AND
+              coalesce((j->'compliance'->'pentest'->>'total_pentests')::int, 0) > 0 AND
+              coalesce((j->'compliance'->'training'->>'total_sessions')::int, 0) > 0 AND
+              coalesce((j->'compliance'->'incidents'->>'total_incidents')::int, 0) > 0 AND
+              coalesce((j->'compliance'->'vendor_reviews'->>'total_reviews')::int, 0) > 0 AND
+              coalesce((j->'compliance'->'policy_freshness'->>'policy_count')::int, 0) > 0
+            ) THEN pass
+            WHEN (
+              coalesce((j->'compliance'->'access_reviews'->>'total_reviews')::int, 0) +
+              coalesce((j->'compliance'->'pentest'->>'total_pentests')::int, 0) +
+              coalesce((j->'compliance'->'training'->>'total_sessions')::int, 0) +
+              coalesce((j->'compliance'->'incidents'->>'total_incidents')::int, 0) +
+              coalesce((j->'compliance'->'vendor_reviews'->>'total_reviews')::int, 0) +
+              coalesce((j->'compliance'->'policy_freshness'->>'policy_count')::int, 0)
+            ) > 0 THEN pending
+            ELSE fail
+          END,
+          CASE
+            WHEN j->'compliance' IS NULL THEN 'no compliance-bundle attached'
+            WHEN (j->'compliance'->>'imported')::boolean = false THEN 'bundle marked not imported'
+            ELSE (
+              (CASE WHEN coalesce((j->'compliance'->'access_reviews'->>'total_reviews')::int, 0) > 0 THEN 1 ELSE 0 END) +
+              (CASE WHEN coalesce((j->'compliance'->'pentest'->>'total_pentests')::int, 0) > 0 THEN 1 ELSE 0 END) +
+              (CASE WHEN coalesce((j->'compliance'->'training'->>'total_sessions')::int, 0) > 0 THEN 1 ELSE 0 END) +
+              (CASE WHEN coalesce((j->'compliance'->'incidents'->>'total_incidents')::int, 0) > 0 THEN 1 ELSE 0 END) +
+              (CASE WHEN coalesce((j->'compliance'->'vendor_reviews'->>'total_reviews')::int, 0) > 0 THEN 1 ELSE 0 END) +
+              (CASE WHEN coalesce((j->'compliance'->'policy_freshness'->>'policy_count')::int, 0) > 0 THEN 1 ELSE 0 END)
+            )::text || '/6 artifacts published • from ' || coalesce(j->'compliance'->>'source_component', 'docs repo')
+          END)
+      ) AS v(signal, present, detail)
+    columns:
+      - sqlId: signal
+        name: Signal
+        width: 260
+      - sqlId: present
+        name: Present
+        width: 90
+        alignment: center
+      - sqlId: detail
+        name: Detail
