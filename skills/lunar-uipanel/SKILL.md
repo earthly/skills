@@ -12,17 +12,19 @@ Write `uiPanels` for Earthly Lunar: YAML panel files whose tabs run SQL over the
 - `lunar` CLI 4.3.0 or later (`lunar version`), connected to the Hub: `lunar whoami` succeeds, after `lunar login` or with `LUNAR_HUB_HOST`/`LUNAR_HUB_TOKEN` set. Do not continue without it. Older CLI versions ignore `uiPanels:` and report the configuration valid.
 - `psql`, for executing the tabs through `lunar sql connection-string`.
 - A Hub that supports the extension-point ID. An unsupported ID fails the whole configuration pull. Until a panel is defined, the tab shows a note naming the `uiPanels.<id>` key to add, which confirms the Hub knows it.
-- The extension point to fill, the tabs it gets (`table` or `markdown`) and the Component JSON path behind each value. Check paths against a real release with `lunar component get-json <component-id> --git-sha <sha> --pretty`. [references/component-json/structure.md](references/component-json/structure.md) lists what the lunar-lib collectors write.
+- The extension point(s) to fill.
 
 Clone the configuration repository into a temporary directory (`mktemp -d`), work there, and delete it when done. The current directory is not necessarily that repository.
 
 ## Writing the Panel
 
+The goal is to render what this deployment actually collects. Learn the Component JSON structure from real releases with `lunar component get-json <component-id> --git-sha <sha> --pretty`, across a few components if they differ, and use [references/component-json/structure.md](references/component-json/structure.md) to recognise what the lunar-lib collectors write. Then propose, for each extension point, the tabs (`table` or `markdown`) and the Component JSON path behind each value, with the components where you saw the data. Create the file only after the user confirms the proposal.
+
 Start from the closest file in [examples/](examples/): `release-evidence.yml` (one row per signal), `release-artifacts.yml` (one row per element of a Component JSON array) or `release-notes.yml` (the releases since the previous approved deployment, as a table tab and a Markdown tab). Keep their shape:
 
 - Resolve the release with a CTE over `public.components` matching `:component` and `:sha` (exact, or a prefix of six or more characters), `pr IS NULL`, `ORDER BY timestamp DESC LIMIT 1`. Not `components_latest`: the release being viewed need not be the newest commit.
 - `coalesce` the resolved JSON to `'{}'::jsonb`, so a tab still renders rows saying what is missing.
-- Every tab references `:component` and `:sha`, and nothing else. In particular never `:from_sha`: current Hubs reject it.
+- Every tab references `:component` and `:sha`.
 - Only `public.*` views, filtered by `:component`. Cells render as text, so use symbols (`✅`, `❌`, `—`), not icons.
 
 Then wire the file into `lunar-config.yml`:
