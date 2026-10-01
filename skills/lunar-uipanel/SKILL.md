@@ -28,10 +28,9 @@ Clone the configuration repository into a temporary directory (`mktemp -d`), wor
      <extension-point-id>: uipanels/<extension-point-id>.yml
    ```
 
-[examples/](examples/) holds a ready-made panel file per extension point, named after it. Start from the one for the point you are filling.
-
 Implementation tips:
 
+- Use [examples/](examples/) as reference: a ready-made panel file per extension point, named after it.
 - Resolve the row for the parameters with a CTE over `public.components` matching `:component` and `:sha` (exact, or a prefix of six or more characters), `pr IS NULL`, `ORDER BY timestamp DESC LIMIT 1`. Not `components_latest`: the commit being viewed need not be the newest one.
 - `coalesce` the resolved JSON to `'{}'::jsonb`, so a tab still renders rows saying what is missing.
 - Every tab references `:component` and `:sha`.
