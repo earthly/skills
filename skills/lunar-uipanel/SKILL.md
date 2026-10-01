@@ -20,7 +20,7 @@ Clone the configuration repository into a temporary directory (`mktemp -d`), wor
 
 The goal is to render what this deployment actually collects. Learn the Component JSON structure from real releases with `lunar component get-json <component-id> --git-sha <sha> --pretty`, across a few components if they differ, and use [references/component-json/structure.md](references/component-json/structure.md) to recognise what the lunar-lib collectors write. Then propose, for each extension point, the tabs (`table` or `markdown`) and the Component JSON path behind each value, with the components where you saw the data. Create the file only after the user confirms the proposal.
 
-Start from the closest file in [examples/](examples/): `release-evidence.yml` (one row per signal), `release-artifacts.yml` (one row per element of a Component JSON array) or `release-notes.yml` (the releases since the previous approved deployment, as a table tab and a Markdown tab). Keep their shape:
+The extension points and their parameters are the table in [references/uipanels.md](references/uipanels.md). [examples/](examples/) holds a ready-made panel file per extension point, named after it; start from the one for the point you are filling and keep its shape:
 
 - Resolve the release with a CTE over `public.components` matching `:component` and `:sha` (exact, or a prefix of six or more characters), `pr IS NULL`, `ORDER BY timestamp DESC LIMIT 1`. Not `components_latest`: the release being viewed need not be the newest commit.
 - `coalesce` the resolved JSON to `'{}'::jsonb`, so a tab still renders rows saying what is missing.
