@@ -149,7 +149,7 @@ Controls how Lunar renders the query result. A `table` tab displays each returne
 * Type: `string`
 * Required
 
-The read-only SQL query. Unqualified table names resolve in `public`, where Lunar exposes the documented [SQL API](/sql-api/sql-api.md) views. Qualify names in other schemas.
+The read-only SQL query. Unqualified table names resolve in `public`, where Lunar exposes the documented [SQL API](https://docs-lunar.earthly.dev/sql-api/sql-api.md) views. Qualify names in other schemas.
 
 Refer to extension-point parameters as `:name`. Lunar substitutes each parameter as a quoted SQL string literal, so its value remains data. A `::type` cast is not a parameter.
 
@@ -255,7 +255,7 @@ The URL must start with `http://`, `https://`, or `/` for a path on the Grafana 
 
 Tabs use Grafana's database connection and inherit the bundled dashboards' read access. This includes:
 
-* the documented [SQL API](/sql-api/sql-api.md) views in `public`, including [`public.components`](/sql-api/views/components.md) and `public.checks`;
+* the documented [SQL API](https://docs-lunar.earthly.dev/sql-api/sql-api.md) views in `public`, including [`public.components`](https://docs-lunar.earthly.dev/sql-api/views/components.md) and `public.checks`;
 * views and helper functions in the `grafana` schema;
 * the internal Hub schemas used by the bundled dashboards.
 
@@ -267,13 +267,13 @@ Lunar runs tab queries read-only.
 
 ## Validation
 
-Use [`lunar hub pull --dry-run`](/configuration/lunar-config/validation.md) to run the same panel-file checks without publishing the configuration. A validation error stops the pull, and the last published configuration stays active.
+Use [`lunar hub pull --dry-run`](https://docs-lunar.earthly.dev/configuration/lunar-config/validation.md) to run the same panel-file checks without publishing the configuration. A validation error stops the pull, and the last published configuration stays active.
 
 ## Query limits
 
 A table tab returns at most 200 rows and indicates when the result is truncated. This limit controls what reaches the browser, not the database work. Add an `ORDER BY` clause when row order matters.
 
-A query that omits its `:component` filter can scan a whole table whenever someone views the panel. Self-hosted operators can limit query duration; see [Limit Grafana query time](/install/lunar-hub/self-hosted/day-2-operations.md#limit-grafana-query-time).
+A query that omits its `:component` filter can scan a whole table whenever someone views the panel. Self-hosted operators can limit query duration; see [Limit Grafana query time](https://docs-lunar.earthly.dev/install/lunar-hub/self-hosted/day-2-operations.md#limit-grafana-query-time).
 
 
 ---
