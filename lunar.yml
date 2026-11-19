@@ -1,0 +1,6 @@
+domain: engineering.lunar.public
+codeowners:
+  - vladaionescu
+
+description: Public Earthly agent skills (Lunar, Earthfile, etc.)
+tags: [soc2]
