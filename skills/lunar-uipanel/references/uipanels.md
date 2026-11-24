@@ -1,4 +1,4 @@
-> For the complete documentation index, see [llms.txt](https://docs-lunar.earthly.dev/llms.txt). Markdown versions of documentation pages are available by appending `.md` to page URLs; this page is available as [Markdown](https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md).
+> For the complete documentation index, see [llms.txt](https://docs-lunar.earthly.dev/llms.txt). Markdown versions of documentation pages are available by appending `.md` to page URLs; this page is available as [Markdown](https://docs-lunar.earthly.dev/configuration/lunar-config/uipanels.md). Agents can also search and read this documentation through its [MCP server](https://docs-lunar.earthly.dev/~gitbook/mcp).
 
 # uiPanels
 
